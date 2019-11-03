@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <!-- 声明对象 -->
+        <variable
+            name="user"
+            type="com.example.myapplication.UserInfo" />
+        <variable
+            name="Activity"
+            type="com.example.myapplication.MainActivity" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/container"
+        tools:context="com.example.myapplication.MainActivity"
+        android:orientation="vertical"
+        android:gravity="center_horizontal|top">
+        <EditText
+            android:id="@+id/name_et"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:singleLine="true"
+            android:text="@={user.name}"
+            android:hint="用户名"/>
+        <EditText
+            android:id="@+id/pwd_et"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="@={user.pwd}"
+            android:inputType="numberPassword"
+            android:hint="密码"/>
+        <TextView
+            android:id="@+id/login_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{user.loginTime}"/>
+        <Button
+            android:id="@+id/login_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{Activity.userLogin}"
+            android:text="登录"/>
+    </LinearLayout>
+</layout>

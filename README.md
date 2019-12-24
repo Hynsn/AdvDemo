@@ -33,8 +33,8 @@ android {
 3、数据绑定：我们先要创建UserInfo实体类，再修改test_main.xml文件。数据绑定又包括单向和双向，单向绑定即当UserInfo数据发生改变时，控件(demo中的login_time_tv)会自动更新数据；双向绑定常用于输入框、ListView删除等View视图发生改变时，控件中对应的数据也需发生变化的情况。
 
 ```java
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 
 import com.android.databinding.library.baseAdapters.BR;
 
@@ -138,9 +138,8 @@ public class UserInfo extends BaseObservable {
 #### Activity中如何使用DataBinding？
 
 ```java
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.View;

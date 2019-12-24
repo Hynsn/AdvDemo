@@ -1,9 +1,7 @@
 package com.example.myapplication;
 
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
-
-import com.android.databinding.library.baseAdapters.BR;
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 
 public class UserInfo extends BaseObservable {
     private String pwd;

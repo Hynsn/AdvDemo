@@ -145,7 +145,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.myapplication.databinding.TestMainBinding;
+import com.example.databinding.databinding.TestMainBinding;
 
 public class MainActivity extends Activity {
     final static String TAG = "Main";

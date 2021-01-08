@@ -8,16 +8,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.databinding.entity.YnoteInfo;
+import com.example.R;
+import com.example.databinding.entity.NoteInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
 
-    private List<YnoteInfo> mDeviceList;
+    private List<NoteInfo> mDeviceList;
 
-    public NoteAdapter(List<YnoteInfo> list) {
+    public NoteAdapter(List<NoteInfo> list) {
         if(mDeviceList==null)
             mDeviceList = new ArrayList<>();
 
@@ -25,7 +26,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
             mDeviceList.addAll(list);
     }
 
-    public void setDataSet(List<YnoteInfo> list){
+    public void setDataSet(List<NoteInfo> list){
         if(list!=null) {
             mDeviceList.addAll(list);
             notifyDataSetChanged();
@@ -42,7 +43,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull NoteAdapter.ViewHolder holder, int position) {
-        YnoteInfo info = mDeviceList.get(position);
+        NoteInfo info = mDeviceList.get(position);
 
         holder.nameTV.setText(info.noteName);
         holder.updateTimeTV.setText(info.updateTime);

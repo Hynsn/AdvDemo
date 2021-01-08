@@ -1,20 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/main_notelist_rv"
+
+    <data>
+        <variable
+            name="Activity"
+            type="com.example.MainActivity" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="30dp"
-        app:backgroundTint="#FFEB3B"
-        app:srcCompat="@drawable/add_circle_outline_64px" />
-
-</RelativeLayout>
+        <Button
+            android:id="@+id/btn_databinding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{Activity.test}"
+            android:text="DataBinding"
+            android:textSize="18sp" />
+        <Button
+            android:id="@+id/btn_timeline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{Activity.test}"
+            android:text="TimeLine"
+            android:textSize="18sp" />
+        <Button
+            android:id="@+id/btn_crashed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{Activity.test}"
+            android:text="testCrash"
+            android:textSize="18sp" />
+    </LinearLayout>
+</layout>

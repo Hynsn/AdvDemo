@@ -9,14 +9,14 @@
             type="com.example.databinding.entity.UserInfo" />
         <variable
             name="Activity"
-            type="com.example.databinding.MainActivity" />
+            type="com.example.databinding.DBLoginActivity" />
     </data>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/container"
-        tools:context="com.example.databinding.MainActivity"
+        tools:context="com.example.databinding.DBLoginActivity"
         android:orientation="vertical"
         android:gravity="center_horizontal|top">
         <EditText

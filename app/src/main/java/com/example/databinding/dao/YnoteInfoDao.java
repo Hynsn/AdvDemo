@@ -6,21 +6,21 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.databinding.entity.YnoteInfo;
+import com.example.databinding.entity.NoteInfo;
 
 import java.util.List;
 
 @Dao
 public interface YnoteInfoDao {
-    @Query("SELECT * FROM noteinfo")
-    List<YnoteInfo> getAll();
+    @Query("SELECT * FROM NoteInfo")
+    List<NoteInfo> getAll();
 
     @Insert
-    void insertAll(YnoteInfo... ynoteInfos);
+    void insertAll(NoteInfo... noteInfos);
 
     @Delete
-    void delete(YnoteInfo info);
+    void delete(NoteInfo info);
 
     @Update
-    void updateUsers(YnoteInfo... users);
+    void updateUsers(NoteInfo... users);
 }

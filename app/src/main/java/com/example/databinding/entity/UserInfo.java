@@ -3,7 +3,7 @@ package com.example.databinding.entity;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
-import com.example.databinding.BR;
+import com.example.BR;
 
 public class UserInfo extends BaseObservable {
     private String pwd;

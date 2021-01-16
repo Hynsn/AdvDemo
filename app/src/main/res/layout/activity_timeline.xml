@@ -17,17 +17,39 @@
             android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_next"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity.click}"
+                android:text="下一步" />
+            <Button
+                android:id="@+id/btn_reset"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity.click}"
+                android:text="恢复" />
+        </LinearLayout>
+        <com.example.customview.NumberText
+            android:id="@+id/tv_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:background="@null"
+            android:textSize="96sp"
+            android:letterSpacing="0.2"
+            android:textColor="#FF00FF"
+            android:singleLine="true"
+            android:text="测试数据"/>
         <Button
-            android:id="@+id/next_btn"
+            android:id="@+id/btn_del"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{Activity.click}"
-            android:text="下一步" />
-        <Button
-            android:id="@+id/reset_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{Activity.click}"
-            android:text="恢复" />
+            android:text="退格" />
     </LinearLayout>
 </layout>

@@ -22,8 +22,6 @@ public class TimeLineActivity extends BaseActivity<ActivityTimelineBinding> {
     protected int getLayout() {
         return R.layout.activity_timeline;
     }
-
-    @SuppressLint("RtlHardcoded")
     @Override
     protected void bindView() {
         stepSeconds = new ArrayList<>();
@@ -42,7 +40,6 @@ public class TimeLineActivity extends BaseActivity<ActivityTimelineBinding> {
         stepSeconds.add(4);
 
         binding.timePb.setStep(9,stepSeconds);
-        binding.tvNumber.setGravity(Gravity.RIGHT);
     }
 
     public void click(View v){
@@ -59,12 +56,7 @@ public class TimeLineActivity extends BaseActivity<ActivityTimelineBinding> {
                 }
                 break;
             case R.id.btn_del:
-                Editable editable = binding.tvNumber.getText();
-                binding.tvNumber.setSelection(editable.length());
-                int start = binding.tvNumber.getSelectionStart();
-                if (start > 0) {
-                    editable.delete(start - 1, start);
-                }
+                binding.ntText.del();
                 break;
         }
     }

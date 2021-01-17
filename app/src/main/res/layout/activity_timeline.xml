@@ -34,17 +34,10 @@
                 android:onClick="@{Activity.click}"
                 android:text="恢复" />
         </LinearLayout>
-        <com.example.customview.NumberText
-            android:id="@+id/tv_number"
+        <com.example.customview.NumText
+            android:id="@+id/nt_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:cursorVisible="false"
-            android:background="@null"
-            android:textSize="96sp"
-            android:letterSpacing="0.2"
-            android:textColor="#FF00FF"
-            android:singleLine="true"
-            android:text="测试数据"/>
+            android:layout_height="wrap_content"/>
         <Button
             android:id="@+id/btn_del"
             android:layout_width="match_parent"

@@ -1,9 +1,9 @@
 package com.example.customview;
 
-import android.annotation.SuppressLint;
-import android.text.Editable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 
 import com.example.R;
@@ -40,6 +40,8 @@ public class TimeLineActivity extends BaseActivity<ActivityTimelineBinding> {
         stepSeconds.add(4);
 
         binding.timePb.setStep(9,stepSeconds);
+
+        updateAlarmMinuteView(mBuilder.toString());
     }
 
     public void click(View v){
@@ -57,7 +59,39 @@ public class TimeLineActivity extends BaseActivity<ActivityTimelineBinding> {
                 break;
             case R.id.btn_del:
                 binding.ntText.del();
+
+                if(mBuilder.length() > 0){
+                    mBuilder.deleteCharAt(mBuilder.length() - 1);
+                    updateAlarmMinuteView(mBuilder.toString());
+                }
+                break;
+            case R.id.btn_append:
+                int max = 57,min = 48;
+                int random = (int) (Math.random()*(max-min)+min);
+
+                binding.ntText.appCode(random);
+
+                mBuilder.appendCodePoint(random);
+                if(mBuilder.length() > 3){
+                    mBuilder.deleteCharAt(0);
+                }
+                updateAlarmMinuteView(mBuilder.toString());
                 break;
         }
+    }
+    private StringBuilder mBuilder = new StringBuilder();
+
+    private void updateAlarmMinuteView(String text){
+        String format = String.format("%0" + 3 + "d", Integer.parseInt(TextUtils.isEmpty(text) ? "0": text));
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+        builder.append(format+"\b");
+        int lastIndex = format.lastIndexOf('0');
+        Log.i(TAG, "updateAlarmMinuteView: "+format+","+lastIndex);
+        for(int i=0; i < format.length() ; i++){
+            NumSpan hotSpan = new NumSpan(getApplicationContext(), lastIndex < i ? R.color.numColor:R.color.zeroColor);
+            Log.i(TAG, "updateAlarmMinuteView: "+i+","+(i+1));
+            builder.setSpan(hotSpan, i, i+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        binding.tvNumb.setText(builder);
     }
 }

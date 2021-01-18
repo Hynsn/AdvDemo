@@ -70,6 +70,14 @@ public class NumText extends View {
         }
     }
 
+    public void appCode(int code){
+        mBuilder.appendCodePoint(code);
+        if(mBuilder.length() > numLen){
+            mBuilder.deleteCharAt(0);
+        }
+        invalidate();
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);

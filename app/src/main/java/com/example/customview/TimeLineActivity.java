@@ -5,6 +5,8 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 
 import com.example.R;
 import com.example.base.BaseActivity;
@@ -77,7 +79,26 @@ public class TimeLineActivity extends BaseActivity<ActivityTimelineBinding> {
                 }
                 updateAlarmMinuteView(mBuilder.toString());
                 break;
+            case R.id.btn_show:
+                translateVisibility(binding.ntText,true,true);
+                break;
+            case R.id.btn_hide:
+                translateVisibility(binding.ntText,false,false);
+                break;
         }
+    }
+    private void translateVisibility(View view,boolean visible,boolean downup){
+        // 下降 fY -0.5f tY 0
+        // 上升 fY 0 tY -0.5f
+        float fY = downup ? -0.5f : 0.0f;
+        float tY = downup ? 0.0f : 0.5f;
+        TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0.0f,
+                Animation.RELATIVE_TO_SELF,0.0f,
+                Animation.RELATIVE_TO_SELF,fY,
+                Animation.RELATIVE_TO_SELF,tY);
+        animation.setDuration(400);
+        view.startAnimation(animation);
+        view.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
     private StringBuilder mBuilder = new StringBuilder();
 

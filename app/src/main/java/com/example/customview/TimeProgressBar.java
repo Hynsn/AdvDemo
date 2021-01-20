@@ -42,7 +42,7 @@ public class TimeProgressBar extends View {
         initPoint();
     }
 
-    private int sumSeconds = 0;
+    private int sumSeconds = 1;
 
     public void setStep(int preCookCounter,List<Integer> stepSeconds){
         this.cookStepSum = stepSeconds.size();

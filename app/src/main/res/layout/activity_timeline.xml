@@ -83,5 +83,10 @@
                 android:onClick="@{Activity.click}"
                 android:text="隐藏" />
         </LinearLayout>
+        <Button
+            android:id="@+id/btn_jni"
+            android:onClick="@{Activity.click}"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
     </LinearLayout>
 </layout>

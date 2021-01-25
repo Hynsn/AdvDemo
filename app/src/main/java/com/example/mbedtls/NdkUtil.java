@@ -1,8 +1,8 @@
-package com.example;
+package com.example.mbedtls;
 
 public class NdkUtil {
     static {
         System.loadLibrary("native-lib");
     }
-    public native String stringFromJNI();
+    public native String version();
 }

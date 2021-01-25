@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
-import com.example.NdkUtil;
+import com.example.mbedtls.NdkUtil;
 import com.example.R;
 import com.example.base.BaseActivity;
 import com.example.databinding.ActivityTimelineBinding;
@@ -45,8 +45,6 @@ public class TimeLineActivity extends BaseActivity<ActivityTimelineBinding> {
         binding.timePb.setStep(9,stepSeconds);
 
         updateAlarmMinuteView(mBuilder.toString());
-
-        binding.btnJni.setText(new NdkUtil().stringFromJNI());
     }
 
     public void click(View v){
@@ -87,9 +85,6 @@ public class TimeLineActivity extends BaseActivity<ActivityTimelineBinding> {
                 break;
             case R.id.btn_hide:
                 translateVisibility(binding.ntText,false,false);
-                break;
-            case R.id.btn_jni:
-                new NdkUtil().stringFromJNI();
                 break;
         }
     }

@@ -11,7 +11,7 @@ const char * LOG_TGA = "LOG_TGA";
 using namespace std;
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_example_NdkUtil_stringFromJNI(
+Java_com_example_mbedtls_NdkUtil_version(
         JNIEnv* env, jobject /* this */) {
     __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "测试事件");
     __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "number: %d",mbedtls_version_get_number());

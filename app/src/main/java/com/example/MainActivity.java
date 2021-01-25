@@ -12,6 +12,7 @@ import com.example.crash.CrashActivity;
 import com.example.customview.TimeLineActivity;
 import com.example.databinding.DBLoginActivity;
 import com.example.databinding.MainBinding;
+import com.example.mbedtls.MbedtlsActivity;
 
 public class MainActivity extends FragmentActivity {
     MainBinding binding;
@@ -30,12 +31,16 @@ public class MainActivity extends FragmentActivity {
                 intent.setComponent(new ComponentName(this, DBLoginActivity.class));
                 startActivity(intent);
                 break;
-            case R.id.btn_timeline:
+            case R.id.btn_customview:
                 intent.setComponent(new ComponentName(this, TimeLineActivity.class));
                 startActivity(intent);
                 break;
             case R.id.btn_crashed:
                 intent.setComponent(new ComponentName(this, CrashActivity.class));
+                startActivity(intent);
+                break;
+            case R.id.btn_mbedtls:
+                intent.setComponent(new ComponentName(this, MbedtlsActivity.class));
                 startActivity(intent);
                 break;
         }

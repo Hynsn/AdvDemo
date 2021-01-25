@@ -12,7 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
+        <Button
+            android:id="@+id/btn_customview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{Activity.test}"
+            android:text="Customview"
+            android:textSize="18sp" />
         <Button
             android:id="@+id/btn_databinding"
             android:layout_width="match_parent"
@@ -21,18 +27,18 @@
             android:text="DataBinding"
             android:textSize="18sp" />
         <Button
-            android:id="@+id/btn_timeline"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{Activity.test}"
-            android:text="TimeLine"
-            android:textSize="18sp" />
-        <Button
             android:id="@+id/btn_crashed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{Activity.test}"
             android:text="testCrash"
+            android:textSize="18sp" />
+        <Button
+            android:id="@+id/btn_mbedtls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{Activity.test}"
+            android:text="testMbedtls"
             android:textSize="18sp" />
     </LinearLayout>
 </layout>

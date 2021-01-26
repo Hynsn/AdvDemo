@@ -50,6 +50,8 @@ public class NumText extends View {
         bgRectf.bottom = getHeight();
 
         float baseline = bgRectf.centerY() + distance;
+
+        int leftIndex = leftZeroIndex(format);
         for (int i = 0; i < numLen; i++){
             bgRectf.left = (numSize + space) * i;
             bgRectf.right = bgRectf.left + numSize + 20;
@@ -58,9 +60,19 @@ public class NumText extends View {
             canvas.drawRoundRect(bgRectf, bgRadius, bgRadius, mPaint);// 绘制背景 rx ry 圆角的X y轴半径
 
             //绘制数字
-            mPaint.setColor( i <= format.lastIndexOf('0') ? Color.WHITE : Color.BLACK);
+            mPaint.setColor( i <= leftIndex ? Color.WHITE : Color.BLACK);
             canvas.drawText(format.toCharArray(), i, 1, bgRectf.centerX() +space/2.f, baseline, mPaint);
         }
+    }
+
+    private int leftZeroIndex(String str){
+        int lastIndex = -1;
+        char[] chars = str.toCharArray();
+        for (int i = 0; i < str.length(); i++) {
+            if(chars[i] != '0') break;
+            lastIndex = i;
+        }
+        return lastIndex;
     }
 
     public void del(){

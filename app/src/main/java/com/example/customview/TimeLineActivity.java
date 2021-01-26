@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
-import com.example.mbedtls.NdkUtil;
 import com.example.R;
 import com.example.base.BaseActivity;
 import com.example.databinding.ActivityTimelineBinding;
@@ -75,7 +74,7 @@ public class TimeLineActivity extends BaseActivity<ActivityTimelineBinding> {
                 binding.ntText.appCode(random);
 
                 mBuilder.appendCodePoint(random);
-                if(mBuilder.length() > 3){
+                if(mBuilder.length() > numbLen){
                     mBuilder.deleteCharAt(0);
                 }
                 updateAlarmMinuteView(mBuilder.toString());
@@ -102,18 +101,31 @@ public class TimeLineActivity extends BaseActivity<ActivityTimelineBinding> {
         view.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
     private StringBuilder mBuilder = new StringBuilder();
+    private final int numbLen = 4;
 
     private void updateAlarmMinuteView(String text){
-        String format = String.format("%0" + 3 + "d", Integer.parseInt(TextUtils.isEmpty(text) ? "0": text));
+        String format = String.format("%0" + numbLen + "d", Integer.parseInt(TextUtils.isEmpty(text) ? "0": text));
         SpannableStringBuilder builder = new SpannableStringBuilder();
         builder.append(format+"\b");
-        int lastIndex = format.lastIndexOf('0');
+
+        int lastIndex = leftZeroIndex(format);
+
         Log.i(TAG, "updateAlarmMinuteView: "+format+","+lastIndex);
         for(int i=0; i < format.length() ; i++){
             NumSpan hotSpan = new NumSpan(getApplicationContext(), lastIndex < i ? R.color.numColor:R.color.zeroColor);
+            hotSpan.setRightMarginDpValue(10);
             Log.i(TAG, "updateAlarmMinuteView: "+i+","+(i+1));
             builder.setSpan(hotSpan, i, i+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         binding.tvNumb.setText(builder);
+    }
+    private int leftZeroIndex(String str){
+        int lastIndex = -1;
+        char[] chars = str.toCharArray();
+        for (int i = 0; i < str.length(); i++) {
+            if(chars[i] != '0') break;
+            lastIndex = i;
+        }
+        return lastIndex;
     }
 }

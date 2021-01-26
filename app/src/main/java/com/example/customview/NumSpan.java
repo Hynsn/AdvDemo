@@ -60,10 +60,10 @@ public class NumSpan extends ReplacementSpan {
      */
     private void initDefaultValue(Context context, int fontColorResId) {
         this.mContext = context.getApplicationContext();
-        this.mBgHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 120f, mContext.getResources().getDisplayMetrics());
+        this.mBgHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100f, mContext.getResources().getDisplayMetrics());
         this.mRightMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, mContext.getResources().getDisplayMetrics());
         this.mRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, mContext.getResources().getDisplayMetrics());
-        this.mTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 80, mContext.getResources().getDisplayMetrics());
+        this.mTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 60, mContext.getResources().getDisplayMetrics());
         this.mTextColorResId = fontColorResId;
 
         Log.i(TAG, "initDefaultValue: "+mTextSize+","+mBgHeight);

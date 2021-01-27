@@ -13,10 +13,10 @@ import java.lang.reflect.Method;
 public abstract class BaseActivity<V extends ViewDataBinding> extends AppCompatActivity {
     final static String TAG = BaseActivity.class.getSimpleName();
     protected V binding;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = DataBindingUtil.setContentView(this, getLayout());
         try {
             Method setMethod = binding.getClass().getMethod("setActivity",getClass());

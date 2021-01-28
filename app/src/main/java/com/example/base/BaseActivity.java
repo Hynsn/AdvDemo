@@ -19,15 +19,16 @@ public abstract class BaseActivity<V extends ViewDataBinding> extends AppCompatA
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, getLayout());
         try {
-            Method setMethod = binding.getClass().getMethod("setActivity",getClass());
-            setMethod.invoke(binding,this);
+            Method setMethod = binding.getClass().getMethod("setActivity", getClass());
+            setMethod.invoke(binding, this);
             Log.i(TAG, "invoke success");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(binding!=null) bindView();
+        if (binding != null) bindView();
     }
 
     protected abstract int getLayout();
+
     protected abstract void bindView();
 }

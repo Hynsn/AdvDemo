@@ -11,13 +11,46 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.example.navigation.detail.DetailFragment">
-        <ImageButton
+        <TextView
+            android:id="@+id/tv_detail1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="详情子页"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_detail2"/>
+        <TextView
+            android:id="@+id/tv_detail2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="详情子页"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_detail3"/>
+        <TextView
+            android:id="@+id/tv_detail3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="详情子页"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/sb_progress"/>
+        <SeekBar
+            android:id="@+id/sb_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <Button
             android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:background="@drawable/ic_arrow_back_black_24dp"
+            android:drawableStart="@drawable/ic_arrow_back_black_24dp"
+            android:text="退出"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/sb_progress" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

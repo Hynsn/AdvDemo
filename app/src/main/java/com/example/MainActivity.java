@@ -13,9 +13,11 @@ import com.example.customview.TimeLineActivity;
 import com.example.databinding.DBLoginActivity;
 import com.example.databinding.MainBinding;
 import com.example.mbedtls.MbedtlsActivity;
+import com.example.navigation.NavigationActivity;
 
 public class MainActivity extends FragmentActivity {
     MainBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,16 +25,20 @@ public class MainActivity extends FragmentActivity {
         binding.setActivity(this);
     }
 
-    public void test(View v){
+    public void test(View v) {
         Intent intent = new Intent();
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        switch (v.getId()){
+        switch (v.getId()) {
+            case R.id.btn_customview:
+                intent.setComponent(new ComponentName(this, TimeLineActivity.class));
+                startActivity(intent);
+                break;
             case R.id.btn_databinding:
                 intent.setComponent(new ComponentName(this, DBLoginActivity.class));
                 startActivity(intent);
                 break;
-            case R.id.btn_customview:
-                intent.setComponent(new ComponentName(this, TimeLineActivity.class));
+            case R.id.btn_navigation:
+                intent.setComponent(new ComponentName(this, NavigationActivity.class));
                 startActivity(intent);
                 break;
             case R.id.btn_crashed:

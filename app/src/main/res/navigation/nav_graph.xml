@@ -8,27 +8,35 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.navigation.home.HomeFragment"
-        android:label="HomeFragment" >
+        android:label="Home" >
         <action
             android:id="@+id/action_navigation_home_to_detailFragment"
-            app:destination="@id/detailFragment" />
+            app:destination="@id/detailFragment" >
+            <argument
+                android:name="detail1"
+                android:defaultValue="详情一" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.example.navigation.dashboard.DashboardFragment"
-        android:label="DashboardFragment" />
+        android:label="Dashboard" />
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.navigation.notifications.NotificationsFragment"
-        android:label="NotificationsFragment" />
+        android:label="Notifications" />
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.example.navigation.detail.DetailFragment"
-        android:label="frag_detail"
+        android:label="Detail"
         tools:layout="@layout/frag_detail" >
         <action
             android:id="@+id/action_detailFragment_to_navigation_home"
             app:destination="@id/navigation_home" />
+        <argument
+            android:name="detail1"
+            app:argType="string"
+            android:defaultValue="默认值" />
     </fragment>
 
 </navigation>

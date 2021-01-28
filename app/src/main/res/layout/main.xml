@@ -27,6 +27,13 @@
             android:text="DataBinding"
             android:textSize="18sp" />
         <Button
+            android:id="@+id/btn_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{Activity.test}"
+            android:text="Navigation"
+            android:textSize="18sp" />
+        <Button
             android:id="@+id/btn_crashed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -10,11 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.lang.reflect.Method;
 
-public abstract class BaseFragment <V extends ViewDataBinding, VM extends FviewModel> extends Fragment {
+public abstract class BaseFragment<V extends ViewDataBinding, VM extends FviewModel> extends Fragment {
     final static String TAG = BaseActivity.class.getSimpleName();
     protected V binding;
     protected VM vm;
@@ -22,18 +23,18 @@ public abstract class BaseFragment <V extends ViewDataBinding, VM extends FviewM
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ViewModelProvider provider =  new ViewModelProvider(this);
+        ViewModelProvider provider = new ViewModelProvider(this);
         vm = getVm(provider);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if(binding==null){
-            binding = getBinding(inflater,container,savedInstanceState);
+        if (binding == null) {
+            binding = getBinding(inflater, container, savedInstanceState);
             try {
-                Method setMethod = binding.getClass().getMethod("setActivity",getClass());
-                setMethod.invoke(binding,this);
+                Method setMethod = binding.getClass().getMethod("setActivity", getClass());
+                setMethod.invoke(binding, this);
                 Log.i(TAG, "invoke success");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -47,14 +48,14 @@ public abstract class BaseFragment <V extends ViewDataBinding, VM extends FviewM
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initData();
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedState) {
+        super.onViewCreated(view, savedState);
+        initData(getViewLifecycleOwner(),savedState);
     }
 
     @Override
     public void onDestroy() {
-        if(binding!=null) {
+        if (binding != null) {
             ViewGroup parent = (ViewGroup) binding.getRoot().getParent();
             if (parent != null) parent.removeView(binding.getRoot());
             binding = null;
@@ -67,5 +68,6 @@ public abstract class BaseFragment <V extends ViewDataBinding, VM extends FviewM
     protected abstract VM getVm(ViewModelProvider provider);
 
     protected abstract void bindView();
-    protected abstract void initData();
+
+    protected abstract void initData(LifecycleOwner owner, Bundle savedInstanceState);
 }

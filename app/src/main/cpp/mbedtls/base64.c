@@ -221,8 +221,8 @@ int mbedtls_base64_decode( unsigned char *dst, size_t dlen, size_t *olen,
     return( 0 );
 }
 
-#if defined(MBEDTLS_SELF_TEST)
-
+//#if defined(MBEDTLS_SELF_TEST)
+#if 0
 static const unsigned char base64_test_dec[64] =
 {
     0x24, 0x48, 0x6E, 0x56, 0x87, 0x62, 0x5A, 0xBD,

@@ -10,6 +10,7 @@ aux_source_directory( ./mbedtls/ MBEDTLS_LIB )
 
 file(GLOB MBEDTLS_FILES "mbedtls/*.c")
 file(GLOB CPP_FILES "*.cpp")
+file(GLOB C_FILES "*.c")
 
 list(APPEND NATIVE_SRC ${MBEDTLS_LIB})
 
@@ -22,9 +23,9 @@ add_library( # Sets the name of the library.
              native-lib
              # Sets the library as a shared library.
              SHARED
-
              # Provides a relative path to your source file(s).
             ${MBEDTLS_FILES}
+            ${C_FILES}
              ${CPP_FILES}
              ${NATIVE_SRC} )
 

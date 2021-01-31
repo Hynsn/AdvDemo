@@ -12,25 +12,57 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
         <TextView
             android:id="@+id/tv_version"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp" />
-
-        <Button
-            android:id="@+id/btn_maincrash"
+        <EditText
+            android:id="@+id/et_top"
+            android:layout_width="match_parent"
+            android:gravity="top"
+            android:hint="输入加密文本"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{Activity.click}"
-            android:text="加密" />
-
-        <Button
-            android:id="@+id/btn_threadcrash"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_encrypt"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity.click}"
+                android:text="加密" />
+            <Button
+                android:id="@+id/btn_decrypt"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity.click}"
+                android:text="解密" />
+            <Button
+                android:id="@+id/btn_clear"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity.click}"
+                android:text="清空" />
+            <Button
+                android:id="@+id/btn_copy"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity.click}"
+                android:text="复制结果" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_bottom"
+            android:textIsSelectable="true"
+            android:textSize="24sp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{Activity.click}"
-            android:text="解密" />
+            android:layout_weight="1"
+            android:layout_height="0dp"/>
     </LinearLayout>
 </layout>

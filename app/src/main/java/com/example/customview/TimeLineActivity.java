@@ -100,6 +100,7 @@ public class TimeLineActivity extends BaseActivity<ActivityTimelineBinding> {
         view.startAnimation(animation);
         view.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
+
     private StringBuilder mBuilder = new StringBuilder();
     private final int numbLen = 4;
 

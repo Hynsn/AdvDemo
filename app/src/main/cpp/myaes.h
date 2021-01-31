@@ -6,6 +6,7 @@
 #define TESTDEMO_MYAES_H
 #include <stddef.h>
 #include <string.h>
+#include <math.h>
 
 #include "mbedtls/include/base64.h"
 #include "mbedtls/include/aes.h"
@@ -216,31 +217,26 @@ exit:
 #define ECBBLOCK_SIZE 16
 char ecb_key[20] = {0};
 
-/* AES_encrypt加密：arg-密码 arv-明文 */
-int aes_ecb_encryption(const char *key, const char *pt) {
+int aes_ecb_encryption(unsigned char** dst,const char *key, const char *src,size_t slen) {
     char des[33];
-    unsigned char tmp_buf[350]; // 明文
-    size_t pt_len;
+    int ret = -1;
+
+    size_t ecb_time, pt_remain,dlen;
+    u_char pt_cover;
+
+    u_char * tmp_buf;
     mbedtls_aes_context ctx;
-    size_t ecb_time, pt_remain;
-    unsigned char pt_cover;
-    int ret = -1; // 返回
 
     size_t block_len;
-
-    memset(tmp_buf, 0, sizeof(tmp_buf));
     memset(ecb_key, 0,sizeof(ecb_key));
 
     mbedtls_aes_init( &ctx );
 
-    strcpy(reinterpret_cast<char *>(tmp_buf), pt);
     strcpy(ecb_key, key);
 
-    pt_len = strlen((const char *)(tmp_buf));
-
-    ecb_time = pt_len / ECBBLOCK_SIZE; // 取整
-    pt_remain = pt_len % ECBBLOCK_SIZE; // 取余
-    pt_cover = (unsigned char)(ECBBLOCK_SIZE - pt_remain); // 16-余数
+    ecb_time = slen / ECBBLOCK_SIZE;
+    pt_remain = slen % ECBBLOCK_SIZE;
+    pt_cover = ECBBLOCK_SIZE - pt_remain;
     ret = mbedtls_aes_setkey_enc(&ctx, reinterpret_cast<const unsigned char *>(ecb_key), 128 );
 
     if (ret != 0) {
@@ -252,62 +248,75 @@ int aes_ecb_encryption(const char *key, const char *pt) {
         ecb_time++;
     }
     block_len = ecb_time * ECBBLOCK_SIZE;
-    for (size_t i = pt_len; i < block_len; ++i) {
-        tmp_buf[i] = pt_cover;
+    tmp_buf = (u_char *)malloc(sizeof(u_char) * (block_len));
+    memset(tmp_buf,0,block_len);
+    for (size_t i = 0; i < block_len; i++) {
+        if(i>=slen) tmp_buf[i] = pt_cover;
+        else tmp_buf[i] = src[i];
     }
     for(int j = 0; j < ecb_time; j++){
         ret = mbedtls_aes_crypt_ecb(&ctx, 1, &tmp_buf[16 * j], &tmp_buf[16 * j]);
     }
     tmp_buf[block_len] = '\0';
 
-    size_t len;
-    unsigned char buffer[128];
-    memset(buffer, 0,sizeof(buffer));
+    int base_len = ceil((float)block_len / 3) * 4 +1;
+    u_char *base64_buf = (u_char *)malloc(sizeof(u_char) * (base_len));
+    memset(base64_buf, 0, base_len);
 
-    mbedtls_base64_encode(buffer, sizeof(buffer), &len, tmp_buf, block_len);
+    ret = mbedtls_base64_encode(base64_buf, base_len, &dlen, tmp_buf, block_len);
+    *dst = base64_buf;
+    if(tmp_buf != nullptr){
+        free(tmp_buf);
+    }
+    if(ret == 0){
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "encode success base64_len: %d",base_len);
+    }
+    mbedtls_aes_free( &ctx );
     /*memset(des,0, 33);
     hex2_string(const_cast<unsigned char *>(ecb_outbuf), 16, des, sizeof(des));
     __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "buf: %s ",des);*/
-    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "buf: %s  key: %s etlen: %d ptlen: %d",buffer,ecb_key,len,block_len);
-
-    return ret;
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "buf: %skey: %s etlen: %d ptlen: %d slen: %d", base64_buf, ecb_key, dlen, block_len, slen);
+    return ret==0 ? dlen : -1;
 }
 
-/* AES_decrypt解密：arg-密钥 arv-密文 argc-len */
-//const unsigned char *src
-int aes_ecb_decryption(const char *key, const unsigned char *et, size_t et_len) {
-    unsigned char tmp_buf[350];
+int aes_ecb_decryption(unsigned char** dst, const char *key, const unsigned char *src, size_t slen) {
+    unsigned char * tmp_buf;
     mbedtls_aes_context ctx;
     int ecb_time;
+    size_t len;
     int ret = -1;
-
-    memset(tmp_buf, 0, sizeof(tmp_buf));
     memset(ecb_key, 0,sizeof(ecb_key));
 
     strcpy(ecb_key, key);
-
-    ecb_time = et_len / ECBBLOCK_SIZE;
+    int buf_len = ((slen / 4) * 3) + 1;
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "buf_len: %d slen: %d",buf_len,slen);
+    ecb_time = slen / ECBBLOCK_SIZE;
     ret = mbedtls_aes_setkey_dec(&ctx, reinterpret_cast<const unsigned char *>(ecb_key), 128);
-    size_t len;
-    mbedtls_base64_decode(tmp_buf, sizeof( tmp_buf ), &len, et, et_len );
+    tmp_buf = (unsigned char *)malloc(sizeof(char) * buf_len);
+    memset(tmp_buf,0,buf_len);
+    mbedtls_base64_decode(tmp_buf, buf_len, &len, src, slen );
 
     if (ret != 0) {
         __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "aes_ecb init failed.");
         return ret;
     }
 
-    if((et_len < ECBBLOCK_SIZE) && (et_len != 0)) {
+    if((slen < ECBBLOCK_SIZE) && (slen != 0)) {
         __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "[decrypt] pt_len <16 and >0 return -1");
         return ret;
     }
     else{
-        for(int j = 0; j < ecb_time; j++){
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "start-->");
+        for(int j = 0; j < ecb_time && (j*16 < len); j++){
             ret = mbedtls_aes_crypt_ecb(&ctx, 0, &tmp_buf[16 * j], &tmp_buf[16 * j]);
         }
+        __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "end-->");
+        *dst = tmp_buf;
     }
-    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "etlen: %d buf: %s key: %s et %s", len, et, ecb_key, tmp_buf);
+    mbedtls_aes_free( &ctx );
+    __android_log_print(ANDROID_LOG_VERBOSE, LOG_TGA, "etlen: %d buf: %s \n et %s",len, src, tmp_buf);
 
-    return ret;
+    return ret==0 ? len : -1;
 }
 
 #endif //TESTDEMO_MYAES_H

@@ -10,7 +10,6 @@ import com.example.R;
 import com.example.base.BaseActivity;
 import com.example.databinding.ActivityMbedtlsBinding;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 public class MbedtlsActivity extends BaseActivity<ActivityMbedtlsBinding> {
@@ -22,22 +21,28 @@ public class MbedtlsActivity extends BaseActivity<ActivityMbedtlsBinding> {
 
     @Override
     protected void bindView() {
-        setTitle("mbed.ver:"+new AesUtil().version());
+        setTitle("mbed.ver:"+AesUtil.getInstance().version());
     }
     public void click(View v) {
         switch (v.getId()){
             case R.id.btn_encrypt:
                 String text1 = binding.etTop.getText().toString().trim();
                 byte[] bytes1 = text1.getBytes(StandardCharsets.UTF_8);
-                byte[] encrypt = new AesUtil().encrypt(bytes1,bytes1.length);
+                byte[] encrypt = AesUtil.getInstance().encrypt(bytes1,bytes1.length);
                 String str1 = new String(encrypt, 0, encrypt.length, StandardCharsets.ISO_8859_1);
                 binding.tvBottom.setText(str1);
                 break;
             case R.id.btn_decrypt:
                 String text2 = binding.etTop.getText().toString().trim();
                 byte[] bytes2 = text2.getBytes(StandardCharsets.UTF_8);
-                byte[] decrypt = new AesUtil().decrypt(bytes2,bytes2.length);
-                String str2 = new String(decrypt, 0, decrypt.length, StandardCharsets.UTF_8);
+                byte[] decrypt = AesUtil.getInstance().decrypt(bytes2,bytes2.length);
+                String str2 = null;
+                if(decrypt!=null) {
+                    str2 = new String(decrypt, 0, decrypt.length, StandardCharsets.UTF_8);
+                }
+                else {
+                    Toast.makeText(this, "解密失败!", Toast.LENGTH_SHORT).show();
+                }
                 binding.tvBottom.setText(str2);
                 break;
             case R.id.btn_clear:

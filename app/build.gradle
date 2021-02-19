@@ -51,5 +51,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.0'
     implementation 'androidx.navigation:navigation-ui:2.3.0'
 
+    implementation 'org.nanohttpd:nanohttpd:2.2.0'
+
     //debugImplementation 'com.huya.mobile:Uinspector:1.0.10'
 }

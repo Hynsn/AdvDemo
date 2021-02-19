@@ -13,9 +13,7 @@ using namespace std;
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_mbedtls_AesUtil_version(
         JNIEnv *env, jobject /* this */) {
-    char * ver;
-    mbedtls_version_get_string(ver);
-    return env->NewStringUTF((const char *) (ver));
+    return env->NewStringUTF(MBEDTLS_VERSION_STRING);
 }
 extern "C" JNIEXPORT jbyteArray JNICALL
 Java_com_example_mbedtls_AesUtil_encrypt(

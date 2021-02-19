@@ -3,11 +3,22 @@ package com.example;
 import android.app.Application;
 import android.content.Context;
 
+import com.example.webview.HttpServer;
+
 public class TestApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                try {
+                    HttpServer server = new HttpServer(8080);
+                    server.start();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }}).start();
     }
 
     @Override

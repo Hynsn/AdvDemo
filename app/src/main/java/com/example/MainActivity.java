@@ -14,6 +14,7 @@ import com.example.databinding.DBLoginActivity;
 import com.example.databinding.MainBinding;
 import com.example.mbedtls.MbedtlsActivity;
 import com.example.navigation.NavigationActivity;
+import com.example.webview.WebviewActivity;
 
 public class MainActivity extends FragmentActivity {
     MainBinding binding;
@@ -33,6 +34,10 @@ public class MainActivity extends FragmentActivity {
                 intent.setComponent(new ComponentName(this, TimeLineActivity.class));
                 startActivity(intent);
                 break;
+            case R.id.btn_webview:
+                intent.setComponent(new ComponentName(this, WebviewActivity.class));
+                startActivity(intent);
+            break;
             case R.id.btn_databinding:
                 intent.setComponent(new ComponentName(this, DBLoginActivity.class));
                 startActivity(intent);

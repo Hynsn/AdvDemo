@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="Activity"
+            type="com.example.webview.WebviewActivity" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <WebView
+            android:id="@+id/webv"
+            android:scrollbars="none"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_calljs"
+                android:text="js"
+                android:onClick="@{Activity.click}"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/btn_detail"
+                android:text="详情"
+                android:onClick="@{Activity.click}"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/btn_home"
+                android:text="首页"
+                android:onClick="@{Activity.click}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/btn_h5"
+                android:text="H5"
+                android:onClick="@{Activity.click}"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/btn_webmsg"
+                android:text="Msg"
+                android:onClick="@{Activity.click}"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example">
-
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name=".TestApp"
         android:allowBackup="true"
@@ -11,6 +11,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".crash.CrashActivity" />
+        <activity android:name=".webview.WebviewActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".databinding.DBLoginActivity" />
         <activity android:name=".databinding.DBNoteActivity" />
         <activity android:name=".customview.TimeLineActivity">
@@ -20,7 +29,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
-        <activity android:name=".mbedtls.MbedtlsActivity" />
+        <activity android:name=".mbedtls.MbedtlsActivity" >
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
         <activity android:name=".navigation.NavigationActivity">
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,12 +48,12 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="fullSensor">
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
     </application>
 

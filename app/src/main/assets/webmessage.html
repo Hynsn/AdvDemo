@@ -6,24 +6,30 @@
 </head>
 <body>
 
-<p>计数:
+<p>接收:
+    <br/>
     <output id="result"></output>
 </p>
-<button onclick="startWorker()">开始 Worker</button>
-<button onclick="stopWorker()">停止 Worker</button>
-<button onclick="sendMsg()">发送消息</button>
+<button onclick="sendMessage('内部消息')">发送消息</button>
+<button onclick="winSendMessage('windows消息')">windows消息</button>
 <button onclick="fetchTest()">fetch</button>
-
-<div id="color">Frame Color</div>
-<br/><br/>
 <script>
-window.addEventListener("message", function(event) {
-    // 把父窗口发送过来的数据显示在子窗口中
-    document.getElementById("result").innerHTML += event.data+"<br/>";
-}, false );
-
 var w;
 
+window.addEventListener("message", function(event) {
+    document.getElementById("result").innerHTML += event.data+"window<br/>";
+}, false );
+
+//window.onload = startWorker();
+//window.onunload = stopWorker();
+window.onload = function() {
+　　startWorker();
+}
+/*
+window.onunload = function() {
+　　stopWorker();
+}
+*/
 function startWorker() {
     if(typeof(Worker)!=="undefined"){
         if(typeof(w)=="undefined"){
@@ -33,7 +39,7 @@ function startWorker() {
             console.log("defined");
         }
         w.addEventListener('message', function(e) {
-          document.getElementById("result").innerHTML=event.data;
+          document.getElementById("result").innerHTML += event.data+"worker<br/>";
         }, false);
         /*w.onmessage = function (event) {
         document.getElementById("result").innerHTML=event.data;
@@ -44,25 +50,28 @@ function startWorker() {
     }
 }
 
-function stopWorker()
-{
-w.terminate();
+function stopWorker(){
+    w.terminate();
 }
 
 function sendMessage(arg){
     w.postMessage(arg);
 }
 
+function winSendMessage(arg){
+    window.postMessage(arg,location.origin);
+}
+
 function fetchTest(){
-    /*fetch('https://api.github.com/users/ruanyf')
+/*
+    fetch('https://api.github.com/users/ruanyf')
     .then(response => response.json())
     .then(json => w.postMessage(json))
-    .catch(err => console.log('Request Failed', err));*/
-
-    fetch('http://192.168.1.100:8080/',{mode:'no-cors',}).then(
+    .catch(err => console.log('Request Failed', err));
+*/
+    fetch('http://127.0.0.1:8080').then(
     function(response) {
-        w.postMessage(response);
-        return response;
+        return response.json();
     })
     .then(
     function(data) {

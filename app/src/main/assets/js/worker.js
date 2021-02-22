@@ -1,13 +1,3 @@
-//var i=0;
-//
-//function timedCount()
-//{
-//    i=i+1;
-//    postMessage(i);
-//    setTimeout("timedCount()",500);
-//}
-//
-//timedCount();
 
 //self.addEventListener('message', function(e) {
 //  var data = e.data;

@@ -7,7 +7,6 @@ import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 import android.webkit.WebMessage;
-import android.webkit.WebMessagePort;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -15,13 +14,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+
 import com.example.R;
 import com.example.base.BaseActivity;
 import com.example.databinding.ActivityWebviewBinding;
 
 import org.json.JSONObject;
-
-import androidx.annotation.RequiresApi;
 
 
 public class WebviewActivity extends BaseActivity<ActivityWebviewBinding> {
@@ -106,31 +105,26 @@ public class WebviewActivity extends BaseActivity<ActivityWebviewBinding> {
             });
         }
     }
-
-    int i = 0;
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public void click(View v){
         switch (v.getId()){
-            case R.id.btn_calljs:
-                i++;
-                /*binding.webv.evaluateJavascript("javascript:callJS()", new ValueCallback<String>() {
-                    @Override
-                    public void onReceiveValue(String value) {
-                        //此处为 js 返回的结果
-                        Log.i(TAG, "onReceiveValue: "+value);
-                    }
-                });*/
+            case R.id.btn_webmsg:
                 try {
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("cmd","张三");
                     jsonObject.put("msg","170cm");
-                    binding.webv.evaluateJavascript("javascript:sendMessage("+jsonObject+")", new ValueCallback<String>() {
-                        @Override
-                        public void onReceiveValue(String value) {
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        String url = "file:///android_asset/webmessage.html";
+                        binding.webv.postWebMessage(new WebMessage(jsonObject.toString()), Uri.parse(url));
+                    }
+                    else {
+                        binding.webv.evaluateJavascript("javascript:sendMessage(" + jsonObject + ")", new ValueCallback<String>() {
+                            @Override
+                            public void onReceiveValue(String value) {
                             //此处为 js 返回的结果
-                            Log.i(TAG, "onReceiveValue: "+value);
-                        }
-                    });
+                            Log.i(TAG, "onReceiveValue: " + value);
+                            }
+                        });
+                    }
                 }catch (Exception e){
 
                 }
@@ -138,22 +132,11 @@ public class WebviewActivity extends BaseActivity<ActivityWebviewBinding> {
             case R.id.btn_detail:
                 binding.webv.loadUrl("file:///android_asset/detail.html");
                 break;
-            case R.id.btn_home:
+            case R.id.btn_list:
                 binding.webv.loadUrl("file:///android_asset/list.html");
                 break;
             case R.id.btn_h5:
                 binding.webv.loadUrl("file:///android_asset/webmessage.html");
-                break;
-            case R.id.btn_webmsg:
-                String url = "file:///android_asset/webmessage.html";
-                binding.webv.postWebMessage(new WebMessage("test"), Uri.parse(url));
-                WebMessagePort[] ports = binding.webv.createWebMessageChannel();
-                ports[0].setWebMessageCallback(new WebMessagePort.WebMessageCallback() {
-                    @Override
-                    public void onMessage(WebMessagePort port, WebMessage message) {
-                        super.onMessage(port, message);
-                    }
-                });
                 break;
         }
     }

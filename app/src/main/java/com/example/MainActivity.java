@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.crash.CrashActivity;
-import com.example.customview.TimeLineActivity;
+import com.example.customview.CustomViewActivity;
 import com.example.databinding.DBLoginActivity;
 import com.example.databinding.MainBinding;
 import com.example.mbedtls.MbedtlsActivity;
@@ -31,7 +31,7 @@ public class MainActivity extends FragmentActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         switch (v.getId()) {
             case R.id.btn_customview:
-                intent.setComponent(new ComponentName(this, TimeLineActivity.class));
+                intent.setComponent(new ComponentName(this, CustomViewActivity.class));
                 startActivity(intent);
                 break;
             case R.id.btn_webview:

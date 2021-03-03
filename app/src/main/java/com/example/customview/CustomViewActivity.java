@@ -10,19 +10,19 @@ import android.view.animation.TranslateAnimation;
 
 import com.example.R;
 import com.example.base.BaseActivity;
-import com.example.databinding.ActivityTimelineBinding;
+import com.example.databinding.ActivityCustomviewBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TimeLineActivity extends BaseActivity<ActivityTimelineBinding> {
-    final static String TAG = TimeLineActivity.class.getSimpleName();
+public class CustomViewActivity extends BaseActivity<ActivityCustomviewBinding> {
+    final static String TAG = CustomViewActivity.class.getSimpleName();
     private int progress = 0;
     List<Integer> stepSeconds;
 
     @Override
     protected int getLayout() {
-        return R.layout.activity_timeline;
+        return R.layout.activity_customview;
     }
     @Override
     protected void bindView() {

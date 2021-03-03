@@ -1,6 +1,7 @@
 package com.example.customview;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -8,38 +9,71 @@ import android.graphics.RectF;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
+
+import com.example.R;
 
 import androidx.annotation.Nullable;
 
 public class NumText extends View {
     private final StringBuilder mBuilder = new StringBuilder("768");
-    private RectF bgRectf = new RectF();
-    private final Paint mPaint = new Paint();
+    private RectF bgRectf;
+    private Paint mPaint;
 
     private int bgColor = Color.parseColor("#FF4C6D99");
     private int bgRadius= 30;
 
     private int numLen = 4;
-    private int space = 40;
-    private int numSize = 90;
+
+    private float space;
+    private float padding;
+    private float numSize;
+
+    private void init(Context c,AttributeSet attr){
+        if(mPaint==null){
+            mPaint = new Paint();
+        }
+        if(bgRectf==null)
+            bgRectf  = new RectF();
+        if(attr!=null){
+            TypedArray arr;
+            arr = c.obtainStyledAttributes(attr, R.styleable.nt);
+            numSize = arr.getDimension(R.styleable.nt_size,90f);
+            space = arr.getDimension(R.styleable.nt_space,5f);
+            padding = arr.getDimension(R.styleable.nt_padding,10f);
+        }
+        else {
+            numSize = 90f;
+            space = 5f;
+            padding = 10f;
+        }
+        mPaint.setTextSize(numSize);
+        mPaint.setTextAlign(Paint.Align.RIGHT);
+    }
 
     public NumText(Context context) {
         super(context);
+        init(context,null);
     }
 
     public NumText(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        init(context,attrs);
     }
 
     public NumText(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init(context,attrs);
+    }
+
+    @Override
+    public void onDrawForeground(Canvas canvas) {
+        super.onDrawForeground(canvas);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        mPaint.setTextSize(numSize);
-        mPaint.setTextAlign(Paint.Align.RIGHT);
 
         String format = String.format("%0" + numLen + "d", Integer.parseInt(TextUtils.isEmpty(mBuilder.toString()) ? "0": mBuilder.toString()));
         //计算baseline
@@ -53,15 +87,16 @@ public class NumText extends View {
 
         int leftIndex = leftZeroIndex(format);
         for (int i = 0; i < numLen; i++){
-            bgRectf.left = (numSize + space) * i;
-            bgRectf.right = bgRectf.left + numSize + 20;
+            float width = mPaint.measureText(format.toCharArray(), i, 1) + padding;
+            bgRectf.left = (width + space) * i;
+            bgRectf.right = bgRectf.left + width;
 
             mPaint.setColor(bgColor);
             canvas.drawRoundRect(bgRectf, bgRadius, bgRadius, mPaint);// 绘制背景 rx ry 圆角的X y轴半径
 
             //绘制数字
             mPaint.setColor( i <= leftIndex ? Color.WHITE : Color.BLACK);
-            canvas.drawText(format.toCharArray(), i, 1, bgRectf.centerX() +space/2.f, baseline, mPaint);
+            canvas.drawText(format.toCharArray(), i, 1, bgRectf.left+width - padding * 0.5f, baseline, mPaint);
         }
     }
 
@@ -93,20 +128,11 @@ public class NumText extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
-        int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
-        int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
-        int heithtSpecSize = MeasureSpec.getSize(heightMeasureSpec);
-
-        int minWidth = 400;
-        int minHeight = 200;
-        if (widthSpecMode == MeasureSpec.AT_MOST && heightSpecMode == MeasureSpec.AT_MOST) {
-            setMeasuredDimension(minWidth, minHeight);
-        } else if (widthSpecMode == MeasureSpec.AT_MOST) {
-            setMeasuredDimension(minWidth, heithtSpecSize);
-        } else if (heightSpecMode == MeasureSpec.AT_MOST) {
-            setMeasuredDimension(widthSpecSize, minHeight);
-        }
+        int wSpecSize = MeasureSpec.getSize(widthMeasureSpec);
+        int hSpecMode = MeasureSpec.getMode(heightMeasureSpec);
+        int hSpecSize = MeasureSpec.getSize(heightMeasureSpec);
+        // match_parent和确定值
+        int height = (int) (mPaint.getTextSize() + mPaint.getStrokeWidth()*2);
+        setMeasuredDimension(wSpecSize,hSpecMode==MeasureSpec.EXACTLY ? hSpecSize : height);
     }
 }

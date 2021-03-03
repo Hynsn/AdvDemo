@@ -14,20 +14,20 @@
         <activity android:name=".webview.WebviewActivity"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".databinding.DBLoginActivity" />
-        <activity android:name=".databinding.DBNoteActivity" />
-        <activity android:name=".customview.TimeLineActivity">
             <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
+        </activity>
+        <activity android:name=".databinding.DBLoginActivity" />
+        <activity android:name=".databinding.DBNoteActivity" />
+        <activity android:name=".customview.CustomViewActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".mbedtls.MbedtlsActivity" >
             <!--<intent-filter>

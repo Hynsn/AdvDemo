@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="nt">
+        <attr name="size" format="dimension"/>
+        <attr name="space" format="dimension"/>
+        <attr name="padding" format="dimension"/>
+    </declare-styleable>
+</resources>

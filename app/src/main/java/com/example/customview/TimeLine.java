@@ -13,7 +13,7 @@ import com.example.R;
 
 import java.util.List;
 
-public class TimeProgressBar extends View {
+public class TimeLine extends View {
     private int cookStepSum = 10;//圆的总数
     private int preCookCounter = 3;
 
@@ -27,17 +27,17 @@ public class TimeProgressBar extends View {
 
     private List<Integer> lineIntervals;
 
-    public TimeProgressBar(Context context) {
+    public TimeLine(Context context) {
         super(context);
         initPoint();
     }
 
-    public TimeProgressBar(Context context, AttributeSet attrs) {
+    public TimeLine(Context context, AttributeSet attrs) {
         super(context, attrs);
         initPoint();
     }
 
-    public TimeProgressBar(Context context, AttributeSet attrs, int defStyleAttr) {
+    public TimeLine(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initPoint();
     }
@@ -101,7 +101,7 @@ public class TimeProgressBar extends View {
      */
     private int playDrawableHeight = playDrawable.getIntrinsicHeight();
 
-    final static String TAG = TimeProgressBar.class.getSimpleName();
+    final static String TAG = TimeLine.class.getSimpleName();
 
     @Override
     protected void onDraw(Canvas canvas) {

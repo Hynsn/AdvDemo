@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.example.customview.TimeProgressBar
+        <com.example.customview.TimeLine
             android:id="@+id/time_pb"
             android:background="@color/colorPrimary"
             android:layout_width="match_parent"

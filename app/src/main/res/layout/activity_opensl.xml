@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="Activity"
+            type="com.example.opensl.OpenslActivity" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".opensl.OpenslActivity">
+
+        <Button
+            android:id="@+id/btn_assetsfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="播放 assets 文件"
+            android:textAllCaps="false"
+            android:onClick="@{Activity.click}"/>
+        <Button
+            android:id="@+id/btn_uri"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="播放 uri 连接"
+            android:textAllCaps="false"
+            android:onClick="@{Activity.click}" />
+
+        <Button
+            android:id="@+id/btn_sdfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="从C++层播放PCM数据文件"
+            android:textAllCaps="false"
+            android:onClick="@{Activity.click}" />
+
+        <Button
+            android:id="@+id/btn_bytes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="从java层获取PCM数据播放"
+            android:textAllCaps="false"
+            android:onClick="@{Activity.click}"/>
+    </LinearLayout>
+</layout>

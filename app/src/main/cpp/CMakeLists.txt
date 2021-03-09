@@ -7,12 +7,13 @@ cmake_minimum_required(VERSION 3.4.1)
 
 aux_source_directory( . NATIVE_SRC )
 aux_source_directory( ./mbedtls/ MBEDTLS_LIB )
+aux_source_directory( ./opensl_test/ OPENSL_TEST )
 
 file(GLOB MBEDTLS_FILES "mbedtls/*.c")
 file(GLOB CPP_FILES "*.cpp")
 file(GLOB C_FILES "*.c")
 
-list(APPEND NATIVE_SRC ${MBEDTLS_LIB})
+list(APPEND NATIVE_SRC ${MBEDTLS_LIB} ${OPENSL_TEST})
 
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
@@ -48,7 +49,8 @@ find_library( # Sets the name of the path variable.
 
 target_link_libraries( # Specifies the target library.
                        native-lib
-
+                        OpenSLES
+                        android
                        # Links the target library to the log library
                        # included in the NDK.
                        ${log-lib} )

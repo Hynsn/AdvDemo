@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="Activity"
+            type="com.example.aidl.AidlActivity" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".aidl.AidlActivity">
+
+        <Button
+            android:id="@+id/btn_connect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{Activity.click}"
+            android:text="Connect" />
+
+        <Button
+            android:id="@+id/btn_disconnect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{Activity.click}"
+            android:text="disConnect" />
+
+        <Button
+            android:id="@+id/btn_isconnect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{Activity.click}"
+            android:text="isConnect" />
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{Activity.click}"
+            android:text="send" />
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{Activity.click}"
+            android:text="register" />
+        <Button
+            android:id="@+id/btn_unregister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{Activity.click}"
+            android:text="unregister" />
+    </LinearLayout>
+</layout>

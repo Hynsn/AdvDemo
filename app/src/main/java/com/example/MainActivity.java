@@ -8,12 +8,14 @@ import android.view.View;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.aidl.AidlActivity;
 import com.example.crash.CrashActivity;
 import com.example.customview.CustomViewActivity;
 import com.example.databinding.DBLoginActivity;
 import com.example.databinding.MainBinding;
 import com.example.mbedtls.MbedtlsActivity;
 import com.example.navigation.NavigationActivity;
+import com.example.opensl.OpenslActivity;
 import com.example.webview.WebviewActivity;
 
 public class MainActivity extends FragmentActivity {
@@ -32,28 +34,29 @@ public class MainActivity extends FragmentActivity {
         switch (v.getId()) {
             case R.id.btn_customview:
                 intent.setComponent(new ComponentName(this, CustomViewActivity.class));
-                startActivity(intent);
                 break;
             case R.id.btn_webview:
                 intent.setComponent(new ComponentName(this, WebviewActivity.class));
-                startActivity(intent);
-            break;
+                break;
             case R.id.btn_databinding:
                 intent.setComponent(new ComponentName(this, DBLoginActivity.class));
-                startActivity(intent);
                 break;
             case R.id.btn_navigation:
                 intent.setComponent(new ComponentName(this, NavigationActivity.class));
-                startActivity(intent);
                 break;
             case R.id.btn_crashed:
                 intent.setComponent(new ComponentName(this, CrashActivity.class));
-                startActivity(intent);
                 break;
             case R.id.btn_mbedtls:
                 intent.setComponent(new ComponentName(this, MbedtlsActivity.class));
-                startActivity(intent);
+                break;
+            case R.id.btn_opensl:
+                intent.setComponent(new ComponentName(this, OpenslActivity.class));
+                break;
+            case R.id.btn_ipcaidl:
+                intent.setComponent(new ComponentName(this, AidlActivity.class));
                 break;
         }
+        startActivity(intent);
     }
 }

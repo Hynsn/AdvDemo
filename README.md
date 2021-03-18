@@ -18,3 +18,7 @@ Bundle和Argument、ViewModel中使用LiveData
 打不死的小强
 #### Mbedtls
 AES+Base64加解密
+#### OpenSL
+NDK使用OpenSL播放音频
+#### AIDL
+Android中IPC通信Binder

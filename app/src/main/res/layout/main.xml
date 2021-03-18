@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{Activity.test}"
+            android:textAllCaps="false"
             android:text="Customview"
             android:textSize="18sp" />
         <Button
@@ -24,6 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{Activity.test}"
+            android:textAllCaps="false"
             android:text="WebView"
             android:textSize="18sp"/>
         <Button
@@ -31,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{Activity.test}"
+            android:textAllCaps="false"
             android:text="DataBinding"
             android:textSize="18sp" />
         <Button
@@ -38,6 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{Activity.test}"
+            android:textAllCaps="false"
             android:text="Navigation"
             android:textSize="18sp" />
         <Button
@@ -45,6 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{Activity.test}"
+            android:textAllCaps="false"
             android:text="testCrash"
             android:textSize="18sp" />
         <Button
@@ -52,7 +57,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{Activity.test}"
+            android:textAllCaps="false"
             android:text="testMbedtls"
+            android:textSize="18sp" />
+        <Button
+            android:id="@+id/btn_opensl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{Activity.test}"
+            android:textAllCaps="false"
+            android:text="testOpenSL"
+            android:textSize="18sp" />
+        <Button
+            android:id="@+id/btn_ipcaidl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{Activity.test}"
+            android:textAllCaps="false"
+            android:text="testAIDL"
             android:textSize="18sp" />
     </LinearLayout>
 </layout>

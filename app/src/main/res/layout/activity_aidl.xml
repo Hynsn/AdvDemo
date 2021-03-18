@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{Activity.click}"
+            android:textAllCaps="false"
             android:text="Connect" />
 
         <Button
@@ -27,6 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{Activity.click}"
+            android:textAllCaps="false"
             android:text="disConnect" />
 
         <Button
@@ -34,24 +36,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{Activity.click}"
+            android:textAllCaps="false"
             android:text="isConnect" />
         <Button
             android:id="@+id/btn_send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{Activity.click}"
+            android:textAllCaps="false"
             android:text="send" />
         <Button
             android:id="@+id/btn_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{Activity.click}"
+            android:textAllCaps="false"
             android:text="register" />
         <Button
             android:id="@+id/btn_unregister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{Activity.click}"
+            android:textAllCaps="false"
             android:text="unregister" />
     </LinearLayout>
 </layout>

@@ -1,6 +1,10 @@
 package com.example.threadlocal;
 
+import com.example.cachepool.CachePool;
+
 import org.junit.Test;
+
+import java.util.Arrays;
 
 public class ThreadLocalTest {
     class Bank {
@@ -63,5 +67,31 @@ public class ThreadLocalTest {
     public void test() {
         ThreadLocalTest st = new ThreadLocalTest();
         st.useThread();
+    }
+    @Test
+    public void binarySearchTest(){
+        int[] arry = {1,4,6,8,10};
+        int ret = Arrays.binarySearch(arry,5);
+        System.out.println("ret: "+ret);
+
+
+        Rect[] d = new Rect[5];
+        for (int i = 0; i < d.length; i++) {
+            d[i] = new Rect(i*10,i*10);
+        }
+        for (int i = 0; i < d.length; i++) {
+            System.out.println("d: "+d[i].toString());
+        }
+    }
+
+    @Test
+    public void cachePoolTest(){
+        CachePool.SimpleCachePool<Rect> cachePool = new CachePool.SimpleCachePool<>(10);
+        Rect rect = cachePool.obtain();
+        if(rect==null){
+            rect = new Rect(10,10);
+        }
+
+        cachePool.recycle(rect);
     }
 }

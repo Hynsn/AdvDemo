@@ -1,5 +1,7 @@
 package com.example.navigation;
 
+import android.widget.EditText;
+
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -17,6 +19,7 @@ public class NavigationActivity extends BaseActivity<ActivityNavigationBinding> 
 
     @Override
     protected void bindView() {
+//        EditText
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
                 .build();

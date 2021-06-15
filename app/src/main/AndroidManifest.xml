@@ -74,9 +74,11 @@
             </intent-filter>
             -->
         </activity>
+        <activity android:name=".coroutine.CoroutineActivity"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:configChanges="orientation|screenSize"
             android:screenOrientation="fullSensor">
 
             <intent-filter>

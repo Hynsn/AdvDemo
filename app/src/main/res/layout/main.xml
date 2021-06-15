@@ -7,74 +7,85 @@
             name="Activity"
             type="com.example.MainActivity" />
     </data>
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <Button
-            android:id="@+id/btn_customview"
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{Activity.test}"
-            android:textAllCaps="false"
-            android:text="Customview"
-            android:textSize="18sp" />
-        <Button
-            android:id="@+id/btn_webview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{Activity.test}"
-            android:textAllCaps="false"
-            android:text="WebView"
-            android:textSize="18sp"/>
-        <Button
-            android:id="@+id/btn_databinding"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{Activity.test}"
-            android:textAllCaps="false"
-            android:text="DataBinding"
-            android:textSize="18sp" />
-        <Button
-            android:id="@+id/btn_navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{Activity.test}"
-            android:textAllCaps="false"
-            android:text="Navigation"
-            android:textSize="18sp" />
-        <Button
-            android:id="@+id/btn_crashed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{Activity.test}"
-            android:textAllCaps="false"
-            android:text="testCrash"
-            android:textSize="18sp" />
-        <Button
-            android:id="@+id/btn_mbedtls"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{Activity.test}"
-            android:textAllCaps="false"
-            android:text="testMbedtls"
-            android:textSize="18sp" />
-        <Button
-            android:id="@+id/btn_opensl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{Activity.test}"
-            android:textAllCaps="false"
-            android:text="testOpenSL"
-            android:textSize="18sp" />
-        <Button
-            android:id="@+id/btn_ipcaidl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{Activity.test}"
-            android:textAllCaps="false"
-            android:text="testAIDL"
-            android:textSize="18sp" />
-    </LinearLayout>
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/btn_customview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity.test}"
+                android:textAllCaps="false"
+                android:text="Customview"
+                android:textSize="18sp" />
+            <Button
+                android:id="@+id/btn_webview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity.test}"
+                android:textAllCaps="false"
+                android:text="WebView"
+                android:textSize="18sp"/>
+            <Button
+                android:id="@+id/btn_databinding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity.test}"
+                android:textAllCaps="false"
+                android:text="DataBinding"
+                android:textSize="18sp" />
+            <Button
+                android:id="@+id/btn_navigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity.test}"
+                android:textAllCaps="false"
+                android:text="Navigation"
+                android:textSize="18sp" />
+            <Button
+                android:id="@+id/btn_crashed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity.test}"
+                android:textAllCaps="false"
+                android:text="testCrash"
+                android:textSize="18sp" />
+            <Button
+                android:id="@+id/btn_mbedtls"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity.test}"
+                android:textAllCaps="false"
+                android:text="testMbedtls"
+                android:textSize="18sp" />
+            <Button
+                android:id="@+id/btn_opensl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity.test}"
+                android:textAllCaps="false"
+                android:text="testOpenSL"
+                android:textSize="18sp" />
+            <Button
+                android:id="@+id/btn_ipcaidl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity.test}"
+                android:textAllCaps="false"
+                android:text="testAIDL"
+                android:textSize="18sp" />
+            <Button
+                android:id="@+id/btn_ktcoroutine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity.test}"
+                android:textAllCaps="false"
+                android:text="ktcoroutine"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </ScrollView>
 </layout>

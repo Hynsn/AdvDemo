@@ -2,13 +2,19 @@ package com.example;
 
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.aidl.AidlActivity;
+import com.example.coroutine.CoroutineActivity;
 import com.example.crash.CrashActivity;
 import com.example.customview.CustomViewActivity;
 import com.example.databinding.DBLoginActivity;
@@ -19,6 +25,7 @@ import com.example.opensl.OpenslActivity;
 import com.example.webview.WebviewActivity;
 
 public class MainActivity extends FragmentActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
     MainBinding binding;
 
     @Override
@@ -26,6 +33,28 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.main);
         binding.setActivity(this);
+
+        Message message = Message.obtain();
+        Handler handler = new Handler(getMainLooper());
+        Message msg = handler.obtainMessage();
+        msg.arg1 = 2;
+        handler.sendMessage(msg);
+
+        Log.i(TAG, "onCreate: "+",hash: "+System.identityHashCode(this));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        Log.i(TAG, "onRestoreInstanceState: "+",hash: "+System.identityHashCode(this));
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        Log.i(TAG, "onConfigurationChanged: "+",hash: "+System.identityHashCode(this));
     }
 
     public void test(View v) {
@@ -55,6 +84,9 @@ public class MainActivity extends FragmentActivity {
                 break;
             case R.id.btn_ipcaidl:
                 intent.setComponent(new ComponentName(this, AidlActivity.class));
+                break;
+            case R.id.btn_ktcoroutine:
+                intent.setComponent(new ComponentName(this, CoroutineActivity.class));
                 break;
         }
         startActivity(intent);

@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.R;
 import com.example.base.BaseFragment;
 import com.example.databinding.FragDetailBinding;
 import com.example.navigation.NavigationVM;
@@ -29,10 +30,16 @@ public class DetailFragment extends BaseFragment<FragDetailBinding, DetailVM> {
         return provider.get(DetailVM.class);
     }
 
-    @Override
+/*    @Override
     protected FragDetailBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return FragDetailBinding.inflate(inflater, container, false);
+    }*/
+
+    @Override
+    protected int layoutId() {
+        return R.layout.frag_detail;
     }
+
     private NavigationVM naviVM;
 
     @Override

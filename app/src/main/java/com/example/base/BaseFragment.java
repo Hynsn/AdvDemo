@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
@@ -31,7 +32,10 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends FviewMo
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (binding == null) {
-            binding = getBinding(inflater, container, savedInstanceState);
+
+            binding = DataBindingUtil.inflate(inflater, layoutId(), container, false);
+
+            //binding = getBinding(inflater, container, savedInstanceState);
             try {
                 Method setMethod = binding.getClass().getMethod("setActivity", getClass());
                 setMethod.invoke(binding, this);
@@ -63,7 +67,9 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends FviewMo
         super.onDestroy();
     }
 
-    protected abstract V getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState);
+    protected abstract int layoutId();
+
+    //protected abstract V getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState);
 
     protected abstract VM getVm(ViewModelProvider provider);
 

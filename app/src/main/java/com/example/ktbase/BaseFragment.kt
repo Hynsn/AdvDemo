@@ -9,23 +9,23 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 
-abstract class BaseFragment<V:ViewDataBinding,VM:BaseVM<Fragment>> : Fragment() {
-    protected lateinit var binding:V
-    protected var vm:VM = TODO()
+abstract class BaseFragment<VB:ViewDataBinding,VM:BaseVM<Fragment>> : Fragment() {
+    lateinit var bind:VB
+    lateinit var vm:VM
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var provider = ViewModelProvider(this)
+        val provider = ViewModelProvider(this)
         vm = getVm(provider)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        if (binding == null) {
-            binding = getBinding(inflater, container, savedInstanceState)
+        if (bind == null) {
+            bind = getBinding(inflater, container, savedInstanceState)
             try {
-                val setMethod = binding.javaClass.getMethod("setActivity", javaClass)
-                setMethod.invoke(binding, this)
+                val setMethod = bind.javaClass.getMethod("setActivity", javaClass)
+                setMethod.invoke(bind, this)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -33,7 +33,7 @@ abstract class BaseFragment<V:ViewDataBinding,VM:BaseVM<Fragment>> : Fragment() 
             vm.registLifeOwner(viewLifecycleOwner)
             vm.setView(this)
         }
-        return binding.root
+        return bind.root
     }
 
     override fun onViewCreated(view: View, savedState: Bundle?) {
@@ -42,16 +42,16 @@ abstract class BaseFragment<V:ViewDataBinding,VM:BaseVM<Fragment>> : Fragment() 
     }
 
     override fun onDestroy() {
-        val parent = binding?.root.parent as ViewGroup
-        parent?.removeView(binding.root)
+        val parent = bind?.root.parent as ViewGroup
+        parent?.removeView(bind.root)
         super.onDestroy()
     }
 
-    protected abstract fun getBinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): V
+    abstract fun getBinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): VB
 
-    protected abstract fun getVm(provider: ViewModelProvider?): VM
+    abstract fun getVm(provider: ViewModelProvider?): VM
 
-    protected abstract fun bindView()
+    abstract fun bindView()
 
-    protected abstract fun initData(owner: LifecycleOwner?, savedInstanceState: Bundle?)
+    abstract fun initData(owner: LifecycleOwner?, savedInstanceState: Bundle?)
 }

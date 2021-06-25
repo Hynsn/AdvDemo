@@ -22,9 +22,14 @@ import com.example.navigation.NavigationVM;
 public class HomeFragment extends BaseFragment<FragHomeBinding,HomeViewModel> {
     private NavigationVM naviVM;
 
-    @Override
+    /*@Override
     protected FragHomeBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return FragHomeBinding.inflate(inflater,container,false);
+    }*/
+
+    @Override
+    protected int layoutId() {
+        return R.layout.frag_home;
     }
 
     @Override

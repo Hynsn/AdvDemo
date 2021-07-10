@@ -107,7 +107,7 @@ public class CustomViewActivity extends BaseActivity<ActivityCustomviewBinding> 
     private void updateAlarmMinuteView(String text){
         String format = String.format("%0" + numbLen + "d", Integer.parseInt(TextUtils.isEmpty(text) ? "0": text));
         SpannableStringBuilder builder = new SpannableStringBuilder();
-        builder.append(format+"\b");
+        builder.append(format).append("\b");
 
         int lastIndex = leftZeroIndex(format);
 

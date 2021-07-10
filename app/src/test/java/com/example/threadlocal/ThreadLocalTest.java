@@ -91,7 +91,16 @@ public class ThreadLocalTest {
         if(rect==null){
             rect = new Rect(10,10);
         }
-
         cachePool.recycle(rect);
+    }
+
+    @Test
+    public void getOddTime(){
+        int[] ints = {1,3,2,3,1};
+        int res = ints[0];
+        for (int i = 1; i < ints.length; i++) {
+            res ^= ints[i];
+        }
+        System.out.println("res: "+res);
     }
 }

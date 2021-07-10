@@ -25,7 +25,8 @@
             android:layout_margin="30dp"
             android:onClick="@{Activity.addNote}"
             app:backgroundTint="#FFEB3B"
-            app:srcCompat="@drawable/add_circle_outline_64px" />
+            app:srcCompat="@drawable/add_circle_outline_64px"
+            android:contentDescription="TODO" />
 
     </RelativeLayout>
 </layout>

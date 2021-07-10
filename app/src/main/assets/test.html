@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DOM demo</title>
+    <style>
+        .outside{
+            /*上下居中*/
+            display: table-cell;
+            vertical-align: middle;
+            width: 300px;
+            /* 百分比只是从内向外占比 1%百分比=实际像素 */
+            height: 400px;
+        }
+        .inside{
+            width:280px;
+            height: 24px;
+            margin:0 auto;/*相对于外层水平居中*/
+            font-size: larger;
+            text-align: end;
+        }
+        .div1{
+            text-align: center;/*内容水平居中*/
+            background-color:#FF0000
+        }
+        .div2{
+            text-align: center;
+            background-color:#0000FF
+        }
+        .div3{
+            text-align: center;
+            background-color:#00FF00
+        }
+
+        .btn {
+            position: relative;
+            display: inline-block;
+            background: #D0EEFF;
+            border: 1px solid #99D3F5;
+            border-radius: 4px;
+            padding: 4px 12px;
+            overflow: hidden;
+            color: #1E88C7;
+            text-decoration: none;
+            text-indent: 0;
+            line-height: 12px;
+        }
+        .btn input {
+            position: absolute;
+            font-size: medium;
+            right: 0;
+            top: 0;
+            opacity: 0;
+        }
+        .btn:hover {
+            background: #AADFFD;
+            border-color: #78C3F3;
+            color: #004974;
+            text-decoration: none;
+        }
+    </style>
+    <script>
+        /*
+         显示隐藏div
+         */
+        var shift = true;
+        function displayShift(){
+            var div2 = document.getElementById("div2");
+            shift = !shift;
+            if (shift){
+                div2.style.display = "block";
+            }else {
+                div2.style.display = "none";
+            }
+        }
+        function visibilityShift(){
+            var div3 = document.getElementById("div3");
+            shift = !shift;
+            if (shift){
+                div3.style.visibility = "visible";
+            }else {
+                div3.style.visibility = "hidden";
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="outside">
+    <div id="div1" class="inside">
+        <div class="div1">DIV1</div>
+    </div>
+    <div id="div2" class="inside">
+        <div class="div2">DIV2</div>
+    </div>
+    <div id="div3" class="inside">
+        <div class="div3">DIV3</div>
+    </div>
+    <div id="div4" class="inside">
+        <span>display</span>
+        <input class="btn" type="button" value="点击" onclick="displayShift()">
+    </div>
+    <div id="div5" class="inside">
+        <span>visibility</span>
+        <input class="btn" type="button" value="点击" onclick="visibilityShift()">
+    </div>
+</div>
+</body>
+</html>

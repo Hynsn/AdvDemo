@@ -1,6 +1,8 @@
 package com.example.navigation.home;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +20,11 @@ import com.example.R;
 import com.example.base.BaseFragment;
 import com.example.databinding.FragHomeBinding;
 import com.example.navigation.NavigationVM;
+import com.example.navigation.detail.DetailFragment;
 
 public class HomeFragment extends BaseFragment<FragHomeBinding,HomeViewModel> {
+    final String TAG = HomeFragment.class.getSimpleName();
+
     private NavigationVM naviVM;
 
     /*@Override
@@ -42,6 +47,7 @@ public class HomeFragment extends BaseFragment<FragHomeBinding,HomeViewModel> {
         naviVM = new ViewModelProvider(getActivity()).get(NavigationVM.class);
 
         binding.btnJoin.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("RestrictedApi")
             @Override
             public void onClick(View v) {
                 NavController controller = Navigation.findNavController(v);
@@ -79,7 +85,15 @@ public class HomeFragment extends BaseFragment<FragHomeBinding,HomeViewModel> {
             @Override
             public void onChanged(Integer s) {
                 binding.textView.setText(s+"");
+                binding.seekBar.setProgress(s);
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        Log.i(TAG, "onDestroyView: ");
     }
 }

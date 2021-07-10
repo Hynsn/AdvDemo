@@ -46,7 +46,6 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends FviewMo
             bindView();
 
             vm.registLifeOwner(getViewLifecycleOwner());
-            vm.setView(this);
         }
         return binding.getRoot();
     }

@@ -30,13 +30,19 @@
         android:name="com.example.navigation.detail.DetailFragment"
         android:label="Detail"
         tools:layout="@layout/frag_detail" >
-        <action
+        <!--<action
             android:id="@+id/action_detailFragment_to_navigation_home"
             app:destination="@id/navigation_home" />
         <argument
             android:name="detail1"
             app:argType="string"
-            android:defaultValue="默认值" />
+            android:defaultValue="默认值" />-->
+    </fragment>
+    <fragment
+        android:id="@+id/setFrag"
+        android:name="com.example.navigation.setting.SettingFragment"
+        android:label="set"
+        tools:layout="@layout/frag_detail" >
     </fragment>
 
 </navigation>

@@ -41,6 +41,7 @@ public class MainActivity extends FragmentActivity {
         handler.sendMessage(msg);
 
         Log.i(TAG, "onCreate: "+",hash: "+System.identityHashCode(this));
+        Log.v("","");
     }
 
     @Override

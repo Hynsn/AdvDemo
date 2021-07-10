@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import java.lang.reflect.Method
 
-abstract class BaseFragment<VB:ViewDataBinding,VM:BaseVM<Fragment>> : Fragment() {
+abstract class BaseFragment<VB:ViewDataBinding,VM:BaseVM> : Fragment() {
     lateinit var bind:VB
     lateinit var vm:VM
 
@@ -21,18 +24,17 @@ abstract class BaseFragment<VB:ViewDataBinding,VM:BaseVM<Fragment>> : Fragment()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        if (bind == null) {
-            bind = getBinding(inflater, container, savedInstanceState)
-            try {
-                val setMethod = bind.javaClass.getMethod("setActivity", javaClass)
-                setMethod.invoke(bind, this)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            bindView()
-            vm.registLifeOwner(viewLifecycleOwner)
-            vm.setView(this)
+        bind =  DataBindingUtil.inflate(inflater, layoutId,container,false)
+//      bind = getBinding(inflater, container, savedInstanceState)
+        try {
+            val setMethod: Method = bind::class.java.getMethod("setFrag")
+            setMethod.invoke(bind, this)
+        } catch (e: Exception) {
+            //e.printStackTrace()
         }
+        bindView()
+        bind.lifecycleOwner = this
+        vm.registLifeOwner(viewLifecycleOwner)
         return bind.root
     }
 
@@ -42,16 +44,23 @@ abstract class BaseFragment<VB:ViewDataBinding,VM:BaseVM<Fragment>> : Fragment()
     }
 
     override fun onDestroy() {
-        val parent = bind?.root.parent as ViewGroup
+        val parent = bind.root.parent as? ViewGroup
         parent?.removeView(bind.root)
         super.onDestroy()
     }
 
-    abstract fun getBinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): VB
+    protected fun navigateUp(v:View){
+        val controller = Navigation.findNavController(v)
+        controller.navigateUp()
+    }
 
-    abstract fun getVm(provider: ViewModelProvider?): VM
+    abstract val layoutId: Int
 
-    abstract fun bindView()
+    //abstract fun getBinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): VB
 
-    abstract fun initData(owner: LifecycleOwner?, savedInstanceState: Bundle?)
+    protected abstract fun getVm(provider: ViewModelProvider?): VM
+
+    protected abstract fun bindView()
+
+    protected abstract fun initData(owner: LifecycleOwner?, savedInstanceState: Bundle?)
 }

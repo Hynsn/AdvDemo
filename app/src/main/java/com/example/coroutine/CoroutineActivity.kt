@@ -29,7 +29,7 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             launch(Dispatchers.Default) {
                 curThread()
                 Looper.prepare()
-                Toast.makeText(baseContext,"测试",0).show()
+                Toast.makeText(baseContext,"测试",Toast.LENGTH_SHORT).show()
                 Looper.loop()
             }
             curThread()

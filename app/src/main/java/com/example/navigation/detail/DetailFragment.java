@@ -1,6 +1,7 @@
 package com.example.navigation.detail;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import com.example.databinding.FragDetailBinding;
 import com.example.navigation.NavigationVM;
 
 public class DetailFragment extends BaseFragment<FragDetailBinding, DetailVM> {
+
+    final String TAG = DetailFragment.class.getSimpleName();
 
     public static DetailFragment newInstance() {
         return new DetailFragment();
@@ -55,6 +58,13 @@ public class DetailFragment extends BaseFragment<FragDetailBinding, DetailVM> {
                 controller.navigateUp();
             }
         });
+        binding.btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController controller = Navigation.findNavController(v);
+                controller.navigate(R.id.setFrag);
+            }
+        });
 
         String detail1 = getArguments().getString("detail1");
         String detail2 = getArguments().getString("detail2");
@@ -85,7 +95,30 @@ public class DetailFragment extends BaseFragment<FragDetailBinding, DetailVM> {
             @Override
             public void onChanged(Integer s) {
                 binding.tvDetail3.setText(s+"");
+                binding.sbProgress.setProgress(s);
             }
         });
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.i(TAG, "onCreateView: ");
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        Log.i(TAG, "onDestroyView: ");
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        Log.i(TAG, "onDestroy: ");
     }
 }

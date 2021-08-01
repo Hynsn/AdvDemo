@@ -39,7 +39,6 @@ public class MainActivity extends FragmentActivity {
         Message msg = handler.obtainMessage();
         msg.arg1 = 2;
         handler.sendMessage(msg);
-
         Log.i(TAG, "onCreate: "+",hash: "+System.identityHashCode(this));
         Log.v("","");
     }
@@ -56,6 +55,7 @@ public class MainActivity extends FragmentActivity {
         super.onConfigurationChanged(newConfig);
 
         Log.i(TAG, "onConfigurationChanged: "+",hash: "+System.identityHashCode(this));
+        Log.i("","");
     }
 
     public void test(View v) {

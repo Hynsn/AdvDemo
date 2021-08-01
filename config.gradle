@@ -1,0 +1,17 @@
+ext{
+    ext.kotlin_version = '1.5.20'
+
+    droid = [
+        compileSdk: 30,
+        buildTools: "25.0.2",
+        targetSdk: 30,
+        minSdk: 21,
+        Code: 1,
+        Name: "1.0"
+    ]
+    ver = [
+        "room" : '2.2.5',
+        "navi" : '2.3.5',
+        "legacy" : '1.0.0'
+    ]
+}

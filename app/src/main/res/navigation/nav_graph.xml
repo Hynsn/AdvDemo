@@ -44,5 +44,9 @@
         android:label="set"
         tools:layout="@layout/frag_detail" >
     </fragment>
+    <activity
+        android:id="@+id/naviLoadActivity"
+        android:name="com.example.navigation.NaviLoadActivity"
+        android:label="NaviLoadActivity" />
 
 </navigation>

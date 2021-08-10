@@ -14,7 +14,7 @@ public class CrashActivity extends BaseActivity<ActivityCrashBinding> {
 
     @Override
     protected void bindView() {
-        TestDataModel.getInstance().activities.add(this);
+//        TestDataModel.getInstance().activities.add(this);
     }
 
     public void click(View v){

@@ -74,6 +74,7 @@
             </intent-filter>
             -->
         </activity>
+        <activity android:name=".navigation.NaviLoadActivity"/>
         <activity android:name=".coroutine.CoroutineActivity"/>
         <activity
             android:name=".MainActivity"

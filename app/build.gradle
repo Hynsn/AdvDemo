@@ -58,16 +58,18 @@ dependencies {
     testImplementation "androidx.room:room-testing:$room_version"
     implementation "androidx.legacy:legacy-support-v4:${rootProject.ext.ver["legacy"]}"
 
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'com.google.android.material:material:1.1.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation "androidx.fragment:fragment-ktx:1.3.0"
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.0'
+    implementation "androidx.appcompat:appcompat:${rootProject.ext.ver["appcompat"]}"
+    implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.ver["constraintlayout"]}"
+    testImplementation "junit:junit:${rootProject.ext.ver["junit"]}"
+    androidTestImplementation "androidx.test:runner:${rootProject.ext.ver["runner"]}"
+    androidTestImplementation "androidx.test.espresso:${rootProject.ext.ver["espresso"]}"
+    implementation "com.google.android.material:material:${rootProject.ext.ver["material"]}"
+    implementation "androidx.fragment:fragment-ktx:${rootProject.ext.ver["fragment"]}"
+
+    def lifecycle_ver = rootProject.ext.ver["lifecycle"]
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_ver"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_ver"
 
     // 升级版本解决闪烁问题，2.3.1修复
     def navi_version = rootProject.ext.ver["navi"]
@@ -75,13 +77,15 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment:$navi_version"
     implementation "androidx.navigation:navigation-ui:$navi_version"
 
-    implementation 'org.nanohttpd:nanohttpd:2.2.0'
+    implementation "org.nanohttpd:nanohttpd:${rootProject.ext.ver["nanohttpd"]}"
 
     //debugImplementation 'com.huya.mobile:Uinspector:1.0.10'
 
     // kt
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1"
+    def kt_coroutines = rootProject.ext.ver["kt-coroutines"]
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kt_coroutines"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kt_coroutines"
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 

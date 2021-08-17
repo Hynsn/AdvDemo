@@ -3,8 +3,8 @@ package com.example.opensl;
 import android.content.res.AssetManager;
 import android.view.View;
 
+import com.base.base.BaseActivity;
 import com.example.R;
-import com.example.base.BaseActivity;
 import com.example.databinding.ActivityOpenslBinding;
 
 public class OpenslActivity extends BaseActivity<ActivityOpenslBinding> {

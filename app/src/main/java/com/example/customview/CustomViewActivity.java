@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
+import com.base.base.BaseActivity;
 import com.example.R;
-import com.example.base.BaseActivity;
 import com.example.databinding.ActivityCustomviewBinding;
 
 import java.util.ArrayList;

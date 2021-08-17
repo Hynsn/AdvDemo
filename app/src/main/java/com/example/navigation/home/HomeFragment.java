@@ -3,24 +3,19 @@ package com.example.navigation.home;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.SeekBar;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.base.base.BaseFragment;
 import com.example.R;
-import com.example.base.BaseFragment;
 import com.example.databinding.FragHomeBinding;
 import com.example.navigation.NavigationVM;
-import com.example.navigation.detail.DetailFragment;
 
 public class HomeFragment extends BaseFragment<FragHomeBinding,HomeViewModel> {
     final String TAG = HomeFragment.class.getSimpleName();

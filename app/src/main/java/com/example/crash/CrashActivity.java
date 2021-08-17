@@ -2,8 +2,8 @@ package com.example.crash;
 
 import android.view.View;
 
+import com.base.base.BaseActivity;
 import com.example.R;
-import com.example.base.BaseActivity;
 import com.example.databinding.ActivityCrashBinding;
 
 public class CrashActivity extends BaseActivity<ActivityCrashBinding> {

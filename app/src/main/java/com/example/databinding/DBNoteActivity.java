@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import com.base.base.BaseActivity;
 import com.example.R;
-import com.example.base.BaseActivity;
 import com.example.databinding.entity.NoteInfo;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.base;
+package com.base.base;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;

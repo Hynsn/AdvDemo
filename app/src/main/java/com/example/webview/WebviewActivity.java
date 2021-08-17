@@ -16,8 +16,8 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
+import com.base.base.BaseActivity;
 import com.example.R;
-import com.example.base.BaseActivity;
 import com.example.databinding.ActivityWebviewBinding;
 
 import org.json.JSONObject;

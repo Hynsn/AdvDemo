@@ -1,23 +1,15 @@
 package com.example.navigation;
 
-import android.annotation.SuppressLint;
 import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
 
-import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.FragmentNavigator;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.base.base.BaseActivity;
 import com.example.R;
-import com.example.base.BaseActivity;
 import com.example.databinding.ActivityNavigationBinding;
-import com.example.navigation.detail.DetailFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class NavigationActivity extends BaseActivity<ActivityNavigationBinding> {
     final String TAG = NavigationActivity.class.getSimpleName();

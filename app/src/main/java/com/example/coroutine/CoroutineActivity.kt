@@ -7,7 +7,6 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.R
-import kotlinx.android.synthetic.main.activity_coroutine.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -25,7 +24,7 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         setContentView(R.layout.activity_coroutine)
         curThread()
 
-        button.setOnClickListener {
+        /*button.setOnClickListener {
             launch(Dispatchers.Default) {
                 curThread()
                 Looper.prepare()
@@ -33,6 +32,6 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 Looper.loop()
             }
             curThread()
-        }
+        }*/
     }
 }

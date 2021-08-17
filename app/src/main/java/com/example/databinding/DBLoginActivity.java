@@ -9,8 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.base.base.BaseActivity;
 import com.example.R;
-import com.example.base.BaseActivity;
 import com.example.databinding.entity.UserInfo;
 
 public class DBLoginActivity extends BaseActivity<ActivityDataBindingLoginBinding> {

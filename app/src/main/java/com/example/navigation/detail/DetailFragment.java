@@ -15,8 +15,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.base.base.BaseFragment;
 import com.example.R;
-import com.example.base.BaseFragment;
 import com.example.databinding.FragDetailBinding;
 import com.example.navigation.NavigationVM;
 

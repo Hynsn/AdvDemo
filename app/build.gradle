@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 
 android {
     compileSdkVersion rootProject.ext.droid["compileSdk"]
@@ -52,6 +52,7 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'])
+    implementation project(path: ':base')
     def room_version = rootProject.ext.ver["room"]
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
@@ -62,7 +63,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.ver["constraintlayout"]}"
     testImplementation "junit:junit:${rootProject.ext.ver["junit"]}"
     androidTestImplementation "androidx.test:runner:${rootProject.ext.ver["runner"]}"
-    androidTestImplementation "androidx.test.espresso:${rootProject.ext.ver["espresso"]}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:${rootProject.ext.ver["espresso"]}"
     implementation "com.google.android.material:material:${rootProject.ext.ver["material"]}"
     implementation "androidx.fragment:fragment-ktx:${rootProject.ext.ver["fragment"]}"
 
@@ -87,6 +88,11 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kt_coroutines"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:${rootProject.ext.ver["quickadapter"]}"
+
+    implementation "com.google.code.gson:gson:${rootProject.ext.ver["gson"]}"
+
+
 }
 
 tasks.whenTaskAdded { task ->

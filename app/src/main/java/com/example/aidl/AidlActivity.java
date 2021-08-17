@@ -11,12 +11,12 @@ import android.os.RemoteException;
 import android.view.View;
 import android.widget.Toast;
 
+import com.base.base.BaseActivity;
 import com.example.IConnectionInterface;
 import com.example.IMessageService;
 import com.example.IServiceManager;
 import com.example.MessageReceiveListener;
 import com.example.R;
-import com.example.base.BaseActivity;
 import com.example.databinding.ActivityAidlBinding;
 
 public class AidlActivity extends BaseActivity<ActivityAidlBinding> {

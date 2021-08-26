@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.base.base.BaseActivity
 import com.example.test.databinding.ActivityMainBinding
 import com.google.gson.Gson
+import utils.Screen
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -18,6 +19,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private lateinit var foodList: ArrayList<FoodObj>
 
     var chosedIndex = 0
+
+    val ChosedMode = "Beef"
 
     override fun getLayout(): Int {
         return R.layout.activity_main
@@ -34,7 +37,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         val gson = Gson()
         val config = gson.fromJson(sb.toString(),Config::class.java)
 
-        foodList = getFoodList(config,"Fish") as ArrayList<FoodObj>
+        foodList = getFoodList(config,ChosedMode) as ArrayList<FoodObj>
 
         updatePrepareName(chosedIndex)
 
@@ -48,6 +51,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         chosedAdapter.data = list
         binding.rvChosed.layoutManager =  LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
         binding.rvChosed.adapter = chosedAdapter
+        val leftRight = Screen.dip2px(this,0f)
+        val bottomTop = Screen.dip2px(this,12f)
+        binding.rvChosed.addItemDecoration(DonenessChosedAdapter.ItemDecoration(leftRight,bottomTop))
         chosedAdapter.setOnItemClickListener { _, view, pos ->
             for (i in (chosedAdapter.data.size-1) downTo pos) {
                 chosedAdapter.data.removeAt(i)
@@ -68,7 +74,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     fun initPrepareView(config:Config){
         prepareAdapter = DonenessPrepareAdapter()
-        prepareAdapter.data = getFoodItem(config,"Fish",chosedIndex,null) as MutableList<SubFoodObj>
+        prepareAdapter.data = getFoodItem(config,ChosedMode,chosedIndex,null) as MutableList<SubFoodObj>
         prepareAdapter.setOnItemClickListener { adapter, view, pos ->
             Log.i("TAG", "bindView: ${adapter.data[pos]}")
             val foodObj = prepareAdapter.data[pos]
@@ -105,12 +111,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
         binding.rvPrepare.layoutManager = GridLayoutManager(this,3)
         binding.rvPrepare.adapter = prepareAdapter
+        val leftRight = Screen.dip2px(this,7f)
+        val bottomTop = Screen.dip2px(this,20f)
+        binding.rvPrepare.addItemDecoration(DonenessPrepareAdapter.ItemDecoration(leftRight,bottomTop))
     }
 
     fun updatePrepareAdapter(config: Config,i: Int,dependKey: String?){
         prepareAdapter.data.clear()
         Log.i("TAG", "updatePrepareAdapter: $dependKey")
-        getFoodItem(config,"Fish",i,dependKey)?.let {
+        getFoodItem(config,ChosedMode,i,dependKey)?.let {
             prepareAdapter.data.addAll(it)
         }
         prepareAdapter.notifyDataSetChanged()

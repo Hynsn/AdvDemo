@@ -1,4 +1,4 @@
-package com.example.test;
+package com.example.codeorder;
 
 public class B extends A{
     private int hash = 0;

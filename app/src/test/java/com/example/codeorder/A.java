@@ -1,4 +1,4 @@
-package com.example.test;
+package com.example.codeorder;
 
 public class A {
     private int hash = 0;

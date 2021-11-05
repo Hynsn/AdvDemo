@@ -1,11 +1,9 @@
 package com.example.databinding;
 
-import com.example.test.A;
-import com.example.test.B;
+import com.example.codeorder.A;
+import com.example.codeorder.B;
 
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

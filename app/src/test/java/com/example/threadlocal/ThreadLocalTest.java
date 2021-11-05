@@ -1,6 +1,6 @@
 package com.example.threadlocal;
 
-import com.example.cachepool.CachePool;
+import com.example.objpool.CachePool;
 
 import org.junit.Test;
 
@@ -82,16 +82,6 @@ public class ThreadLocalTest {
         for (int i = 0; i < d.length; i++) {
             System.out.println("d: "+d[i].toString());
         }
-    }
-
-    @Test
-    public void cachePoolTest(){
-        CachePool.SimpleCachePool<Rect> cachePool = new CachePool.SimpleCachePool<>(10);
-        Rect rect = cachePool.obtain();
-        if(rect==null){
-            rect = new Rect(10,10);
-        }
-        cachePool.recycle(rect);
     }
 
     @Test

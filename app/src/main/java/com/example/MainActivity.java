@@ -19,6 +19,7 @@ import com.example.crash.CrashActivity;
 import com.example.customview.CustomViewActivity;
 import com.example.databinding.DBLoginActivity;
 import com.example.databinding.MainBinding;
+import com.example.gson.GsonActivity;
 import com.example.mbedtls.MbedtlsActivity;
 import com.example.navigation.NavigationActivity;
 import com.example.opensl.OpenslActivity;
@@ -88,6 +89,9 @@ public class MainActivity extends FragmentActivity {
                 break;
             case R.id.btn_ktcoroutine:
                 intent.setComponent(new ComponentName(this, CoroutineActivity.class));
+                break;
+            case R.id.btn_gson:
+                intent.setComponent(new ComponentName(this, GsonActivity.class));
                 break;
         }
         startActivity(intent);

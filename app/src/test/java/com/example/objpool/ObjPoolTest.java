@@ -1,6 +1,8 @@
 package com.example.objpool;
 
 import com.example.threadlocal.Rect;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.junit.Test;
 
@@ -21,5 +23,27 @@ public class ObjPoolTest {
             rect = new Rect(10,10);
         }
         cachePool.recycle(rect);
+    }
+    @Test
+    public void gsonTest(){
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(TestBean.class,new TestTypeAdapter())
+                .create();
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 100000; i++) {
+            TestBean bean = gson.fromJson("{\"title\":\"json在线解析（简版） -JSON在线解析\",\"url\":\"https://www.sojson.com/simple_json.html\",\"keywords\":\"json在线解析\"}",TestBean.class);
+            //System.out.println(bean);
+        }
+        System.out.println("gsonTest: "+(System.currentTimeMillis()-start));
+    }
+    @Test
+    public void gsonTest2(){
+        Gson gson = new Gson();
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 100000; i++) {
+            TestBean bean = gson.fromJson("{\"title\":\"json在线解析（简版） -JSON在线解析\",\"url\":\"https://www.sojson.com/simple_json.html\",\"keywords\":\"json在线解析\"}",TestBean.class);
+            //System.out.println(bean);
+        }
+        System.out.println("gsonTest: "+(System.currentTimeMillis()-start));
     }
 }

@@ -91,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:onClick="@{Activity.test}"
                 android:textAllCaps="false"
-                android:text="ktcoroutine"
+                android:text="Gson"
                 android:textSize="18sp" />
         </LinearLayout>
     </ScrollView>

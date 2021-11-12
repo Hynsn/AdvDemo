@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 
 class SetVM : BaseVM() {
     // TODO: Implement the ViewModel
-    private val mutableLiveData: MutableLiveData<Boolean>? = null
+//    private val mutableLiveData: MutableLiveData<Boolean>? = null
     override fun registLifeOwner(owner: LifecycleOwner?) {
 //        mutableLiveData!!.observe(owner!!, Observer { })
     }

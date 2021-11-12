@@ -3,7 +3,7 @@ ext{
 
     droid = [
         compileSdk: 30,
-        buildTools: "25.0.2",
+        buildTools: "30.0.3",
         targetSdk: 30,
         minSdk: 21,
         Code: 1,

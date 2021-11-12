@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
 
+apply plugin: 'com.uber.okbuck'
+
 android {
     compileSdkVersion rootProject.ext.droid["compileSdk"]
     defaultConfig {
@@ -16,6 +18,11 @@ android {
             cmake {
                 cppFlags ""
                 abiFilters "arm64-v8a", "armeabi-v7a"
+            }
+        }
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
     }
@@ -43,6 +50,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
 }
 repositories {
     flatDir {

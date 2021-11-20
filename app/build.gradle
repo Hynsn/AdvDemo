@@ -96,7 +96,7 @@ dependencies {
 
     implementation "com.google.code.gson:gson:${rootProject.ext.ver["gson"]}"
 
-
+    implementation project(':ndklib')
 }
 
 tasks.whenTaskAdded { task ->

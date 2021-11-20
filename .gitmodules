@@ -1,0 +1,3 @@
+[submodule "subndk"]
+	path = subndk
+	url = https://github.com/Hynsn/NdkTab.git

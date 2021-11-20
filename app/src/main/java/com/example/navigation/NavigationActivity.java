@@ -1,7 +1,10 @@
 package com.example.navigation;
 
+import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -14,6 +17,7 @@ import com.example.databinding.ActivityNavigationBinding;
 public class NavigationActivity extends BaseActivity<ActivityNavigationBinding> {
     final String TAG = NavigationActivity.class.getSimpleName();
 
+    private ActivityVM naviVM;
     @Override
     protected int getLayout() {
         return R.layout.activity_navigation;
@@ -21,6 +25,10 @@ public class NavigationActivity extends BaseActivity<ActivityNavigationBinding> 
 
     @Override
     protected void bindView() {
+        naviVM = new ViewModelProvider(this).get(ActivityVM.class);
+        Log.i(TAG, "bindView: "+System.identityHashCode(naviVM));
+
+        naviVM.getName().postValue("我是传过来的");
 //        EditText
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
@@ -28,6 +36,9 @@ public class NavigationActivity extends BaseActivity<ActivityNavigationBinding> 
         final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+        naviVM.getName().observe(this,s -> {
+            Log.i(TAG, "bindView: "+s);
+        });
     }
 
     @Override

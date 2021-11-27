@@ -1,4 +1,4 @@
-[submodule "subndk"]
-	path = ../subndk
+[submodule "NdkTab"]
+	path = NdkTab
 	url = https://gitee.com/hynson/NdkTab.git
 	branch = dev

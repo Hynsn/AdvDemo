@@ -23,6 +23,7 @@ import com.example.gson.GsonActivity;
 import com.example.mbedtls.MbedtlsActivity;
 import com.example.navigation.NavigationActivity;
 import com.example.opensl.OpenslActivity;
+import com.example.topbar.TopBarActivity;
 import com.example.webview.WebviewActivity;
 
 public class MainActivity extends FragmentActivity {
@@ -90,8 +91,8 @@ public class MainActivity extends FragmentActivity {
             case R.id.btn_ktcoroutine:
                 intent.setComponent(new ComponentName(this, CoroutineActivity.class));
                 break;
-            case R.id.btn_gson:
-                intent.setComponent(new ComponentName(this, GsonActivity.class));
+            case R.id.btn_topbar:
+                intent.setComponent(new ComponentName(this, TopBarActivity.class));
                 break;
         }
         startActivity(intent);

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/fab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:src="@drawable/ic_notifications_black_24dp"
+            android:visibility="gone"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" >
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="1"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="2"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="3"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="4"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/edt_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="80dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/edt_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:minWidth="80dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edt_name" />
+        <Button
+            android:id="@+id/btn_save"
+            android:text="Save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -93,6 +93,14 @@
                 android:textAllCaps="false"
                 android:text="Gson"
                 android:textSize="18sp" />
+            <Button
+                android:id="@+id/btn_float_key"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity.test}"
+                android:textAllCaps="false"
+                android:text="Gson"
+                android:textSize="18sp" />
         </LinearLayout>
     </ScrollView>
 </layout>

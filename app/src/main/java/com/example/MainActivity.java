@@ -19,6 +19,7 @@ import com.example.crash.CrashActivity;
 import com.example.customview.CustomViewActivity;
 import com.example.databinding.DBLoginActivity;
 import com.example.databinding.MainBinding;
+import com.example.floatkkey.FloatKeyActivity;
 import com.example.gson.GsonActivity;
 import com.example.mbedtls.MbedtlsActivity;
 import com.example.navigation.NavigationActivity;
@@ -93,7 +94,50 @@ public class MainActivity extends FragmentActivity {
             case R.id.btn_gson:
                 intent.setComponent(new ComponentName(this, GsonActivity.class));
                 break;
+            case R.id.btn_float_key:
+                intent.setComponent(new ComponentName(this, FloatKeyActivity.class));
+                break;
         }
         startActivity(intent);
     }
+//    public void showGuideView() {
+//    View view = getWindow().getDecorView().findViewById(R.id.activity_main);
+//    if (view == null) return;
+//
+//    ViewParent viewParent = view.getParent();
+//    if (viewParent instanceof FrameLayout) {
+//        final FrameLayout frameParent = (FrameLayout) viewParent;//整个父布局
+//
+//        final LinearLayout linearLayout = new LinearLayout(this);//新建一个LinearLayout
+//        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//        linearLayout.setOrientation(LinearLayout.VERTICAL);
+//        linearLayout.setBackgroundResource(#88000000);//背景设置灰色透明
+//        linearLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+//        linearLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                frameParent.removeView(linearLayout);
+//            }
+//        });
+//
+//        Rect rect = new Rect();
+//        Point point = new Point();
+//        nearby.getGlobalVisibleRect(rect, point);//获得nearby这个控件的宽高以及XY坐标 nearby这个控件对应就是需要高亮显示的地方
+//
+//        ImageView topGuideview = new ImageView(this);
+//        topGuideview.setLayoutParams(new ViewGroup.LayoutParams(rect.width(), rect.height()));           topGuideview.setBackgroundResource(R.drawable.iv_topguide);
+//
+//        Rect rt = new Rect();
+//        getWindow().getDecorView().getWindowVisibleDisplayFrame(rt);
+//        topGuideview.setY(point.y - rt.top);//rt.top是手机状态栏的高度
+//        ImageView bottomGuideview = new ImageView(this);
+//        bottomGuideview.setLayoutParams(new ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT));
+//        bottomGuideview.setBackgroundResource(R.drawable.iv_bottomguide);
+//        bottomGuideview.setY(point.y + topGuideview.getHeight());
+//
+//        linearLayout.addView(topGuideview);
+//        linearLayout.addView(bottomGuideview);
+//        frameParent.addView(linearLayout);
+//    }
+
 }

@@ -9,6 +9,4 @@
 .externalNativeBuild
 .idea/
 app/.cxx/
-.idea/gradle.xml
-.idea/jarRepositories.xml
-.idea/runConfigurations.xml
+.idea

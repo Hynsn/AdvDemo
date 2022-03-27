@@ -1,4 +1,4 @@
 [submodule "subndk"]
 	path = subndk
-	url = git@git.zhlh6.cn:Hynsn/NdkTab.git
+	url = https://github.com.cnpmjs.org/Hynsn/NdkTab.git
 	branch = dev

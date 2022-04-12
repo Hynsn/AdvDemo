@@ -10,6 +10,7 @@ import android.view.animation.TranslateAnimation;
 
 import com.base.base.BaseActivity;
 import com.example.R;
+import com.example.customview.weight.NumSpan;
 import com.example.databinding.ActivityCustomviewBinding;
 
 import java.util.ArrayList;

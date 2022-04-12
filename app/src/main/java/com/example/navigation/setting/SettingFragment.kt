@@ -16,8 +16,8 @@ import com.example.navigation.NavigationVM
 
 class SettingFragment : BaseFragment<FragDetailBinding, SetVM>() {
     val TAG: String? = SettingFragment::class.simpleName
-    override fun getVm(provider: ViewModelProvider?): SetVM {
-        return provider!!.get(SetVM::class.java)
+    override fun getVm(provider: ViewModelProvider): SetVM {
+        return provider.get(SetVM::class.java)
     }
 
     /*    @Override

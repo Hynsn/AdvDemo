@@ -12,31 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <com.example.customview.weight.TimeLine
-            android:id="@+id/time_pb"
-            android:background="@color/colorPrimary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/btn_next"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:onClick="@{Activity.click}"
-                android:text="下一步" />
-            <Button
-                android:id="@+id/btn_reset"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:onClick="@{Activity.click}"
-                android:text="恢复" />
-        </LinearLayout>
         <com.example.customview.weight.NumText
             android:id="@+id/nt_text"
             cview:size="80dp"

@@ -58,7 +58,7 @@ abstract class BaseFragment<VB:ViewDataBinding,VM:BaseVM> : Fragment() {
 
     //abstract fun getBinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): VB
 
-    protected abstract fun getVm(provider: ViewModelProvider?): VM
+    protected abstract fun getVm(provider: ViewModelProvider): VM
 
     protected abstract fun bindView()
 

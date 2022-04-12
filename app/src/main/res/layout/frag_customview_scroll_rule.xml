@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#888888"
+        android:orientation="vertical"
+        tools:ignore="MissingDefaultResource">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_radius_20_color_fa">
+
+            <TextView
+                android:id="@+id/tv_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="#002c5b"
+                android:textSize="24sp"
+                tools:text="00:30" />
+
+            <com.example.customview.weight.RulerView
+                android:id="@+id/ruler_weight"
+                app:layout_constraintTop_toBottomOf="@id/tv_text"
+                app:ruler_space="50dp"
+                app:ruler_radius="2.5dp"
+                app:ruler_line_size="0.5dp"
+                app:text_color="#73000000"
+                app:text_size="12sp"
+                app:ruler_color="#002c5b"
+                app:text_ruler_space="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                app:layout_constraintTop_toTopOf="@id/ruler_weight"
+                app:layout_constraintBottom_toBottomOf="@id/ruler_weight"
+                app:layout_constraintStart_toStartOf="@id/ruler_weight"
+                app:layout_constraintEnd_toEndOf="@id/ruler_weight"
+                android:background="@drawable/ic_rule_point"
+                android:layout_width="12dp"
+                android:layout_height="12dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_radius_20_color_fa"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="#002c5b"
+                android:textSize="24sp"
+                tools:text="00:30" />
+
+            <com.example.customview.weight.RulerView
+                android:id="@+id/ruler_time"
+                app:layout_constraintTop_toBottomOf="@id/tv_time"
+                app:ruler_space="50dp"
+                app:ruler_radius="2.5dp"
+                app:ruler_line_size="0.5dp"
+                app:text_color="#73000000"
+                app:text_size="12sp"
+                app:ruler_color="#002c5b"
+                app:text_ruler_space="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                app:layout_constraintTop_toTopOf="@id/ruler_time"
+                app:layout_constraintBottom_toBottomOf="@id/ruler_time"
+                app:layout_constraintStart_toStartOf="@id/ruler_time"
+                app:layout_constraintEnd_toEndOf="@id/ruler_time"
+                android:background="@drawable/ic_rule_point"
+                android:layout_width="12dp"
+                android:layout_height="12dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</layout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_customview"
+    app:startDestination="@id/customViewFragment">
+
+    <fragment
+        android:id="@+id/timelineFragment"
+        android:name="com.example.customview.TimelineFragment"
+        android:label="TimelineFragment" />
+    <fragment
+        android:id="@+id/numTextFragment"
+        android:name="com.example.customview.NumTextFragment"
+        android:label="NumTextFragment" />
+    <fragment
+        android:id="@+id/rulerViewFragment"
+        android:name="com.example.customview.RulerViewFragment"
+        android:label="RulerViewFragment" />
+    <fragment
+        android:id="@+id/customViewFragment"
+        android:name="com.example.customview.CustomViewFragment"
+        android:label="CustomViewFragment" />
+</navigation>

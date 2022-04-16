@@ -4,15 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.viewbinding.ViewBinding
 import java.lang.reflect.Method
 
-abstract class BaseFragment<VB:ViewDataBinding,VM:BaseVM> : Fragment() {
+abstract class BaseFragment<VB:ViewBinding,VM:BaseVM> : Fragment() {
     lateinit var bind:VB
     lateinit var vm:VM
 
@@ -24,8 +23,7 @@ abstract class BaseFragment<VB:ViewDataBinding,VM:BaseVM> : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        bind =  DataBindingUtil.inflate(inflater, layoutId,container,false)
-//      bind = getBinding(inflater, container, savedInstanceState)
+      bind = getBinding(inflater, container, savedInstanceState)
         try {
             val setMethod: Method = bind::class.java.getMethod("setFrag")
             setMethod.invoke(bind, this)
@@ -33,7 +31,6 @@ abstract class BaseFragment<VB:ViewDataBinding,VM:BaseVM> : Fragment() {
             //e.printStackTrace()
         }
         bindView()
-        bind.lifecycleOwner = this
         vm.registLifeOwner(viewLifecycleOwner)
         return bind.root
     }
@@ -56,7 +53,7 @@ abstract class BaseFragment<VB:ViewDataBinding,VM:BaseVM> : Fragment() {
 
     abstract val layoutId: Int
 
-    //abstract fun getBinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): VB
+    abstract fun getBinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): VB
 
     protected abstract fun getVm(provider: ViewModelProvider): VM
 

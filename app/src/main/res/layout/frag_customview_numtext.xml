@@ -1,66 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:cview="http://schemas.android.com/apk/res-auto">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cview="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="UsingOnClickInXml"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <data>
-        <variable
-            name="Activity"
-            type="com.example.customview.CustomViewActivity" />
-    </data>
-
-    <LinearLayout
+    <com.example.customview.weight.NumText
+        android:id="@+id/nt_text"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <com.example.customview.weight.NumText
-            android:id="@+id/nt_text"
-            cview:size="80dp"
-            cview:space="5dp"
-            cview:padding="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/tv_numb"
-            android:textSize="80sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        cview:padding="20dp"
+        cview:size="80dp"
+        cview:space="5dp" />
+
+    <TextView
+        android:id="@+id/tv_numb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="80sp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <Button
             android:id="@+id/btn_append"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:onClick="@{Activity.click}"
+            android:layout_weight="1"
             android:text="追加" />
+
         <Button
             android:id="@+id/btn_del"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:onClick="@{Activity.click}"
+            android:layout_weight="1"
             android:text="退格" />
     </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_show"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/btn_show"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:onClick="@{Activity.click}"
-                android:text="显示" />
-            <Button
-                android:id="@+id/btn_hide"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:onClick="@{Activity.click}"
-                android:text="隐藏" />
-        </LinearLayout>
+            android:layout_weight="1"
+            android:text="显示" />
+
+        <Button
+            android:id="@+id/btn_hide"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="隐藏" />
     </LinearLayout>
-</layout>
+</LinearLayout>

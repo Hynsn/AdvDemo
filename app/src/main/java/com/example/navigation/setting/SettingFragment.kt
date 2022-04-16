@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
-import androidx.fragment.app.viewModels
 
 import com.example.R
 import com.example.databinding.FragDetailBinding
@@ -20,10 +19,12 @@ class SettingFragment : BaseFragment<FragDetailBinding, SetVM>() {
         return provider.get(SetVM::class.java)
     }
 
-    /*    @Override
-    protected FragDetailBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return FragDetailBinding.inflate(inflater, container, false);
-    }*/
+    override fun getBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = FragDetailBinding.inflate(inflater,container,false)
+
     private var naviVM: NavigationVM? = null
 //    val viewmodel: NavigationVM by viewModels()
 

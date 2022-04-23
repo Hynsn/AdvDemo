@@ -1,4 +1,4 @@
-package com.example
+package com.example.main
 
 import android.content.Context
 import android.content.Intent
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.example.R
 
 class TestItemAdapter(private val context: Context, var testItemList: List<TestItem>) :
     RecyclerView.Adapter<TestItemAdapter.TestViewHolder>() {

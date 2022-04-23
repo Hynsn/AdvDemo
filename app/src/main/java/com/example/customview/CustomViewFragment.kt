@@ -7,8 +7,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.R
-import com.example.TestItem
-import com.example.TestItemAdapter
+import com.example.main.TestItem
+import com.example.main.TestItemAdapter
 import com.example.databinding.FragCustomviewBinding
 import com.example.ktbase.BaseFragment
 

@@ -25,27 +25,27 @@
             <Button
                 android:id="@+id/btn_list"
                 android:text="列表"
-                android:onClick="@{Activity.click}"
+                android:onClick="@{Activity::click}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <Button
                 android:id="@+id/btn_detail"
                 android:text="详情"
-                android:onClick="@{Activity.click}"
+                android:onClick="@{Activity::click}"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"/>
             <Button
                 android:id="@+id/btn_h5"
                 android:text="H5"
-                android:onClick="@{Activity.click}"
+                android:onClick="@{Activity::click}"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"/>
             <Button
                 android:id="@+id/btn_webmsg"
                 android:text="Msg"
-                android:onClick="@{Activity.click}"
+                android:onClick="@{Activity::click}"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"/>

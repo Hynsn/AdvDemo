@@ -1,4 +1,4 @@
-package com.example;
+package com.example.main;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.R;
 import com.example.aidl.AidlActivity;
 import com.example.coroutine.CoroutineActivity;
 import com.example.crash.CrashActivity;
@@ -20,7 +21,6 @@ import com.example.customview.CustomViewActivity;
 import com.example.databinding.DBLoginActivity;
 import com.example.databinding.MainBinding;
 import com.example.floatkkey.FloatKeyActivity;
-import com.example.gson.GsonActivity;
 import com.example.mbedtls.MbedtlsActivity;
 import com.example.navigation.NavigationActivity;
 import com.example.opensl.OpenslActivity;

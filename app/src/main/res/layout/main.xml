@@ -4,7 +4,7 @@
     <data>
         <variable
             name="Activity"
-            type="com.example.MainActivity" />
+            type="com.example.main.MainActivity" />
     </data>
     <ScrollView
         android:layout_width="match_parent"

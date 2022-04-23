@@ -27,28 +27,28 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:onClick="@{Activity.click}"
+                android:onClick="@{Activity::click}"
                 android:text="加密" />
             <Button
                 android:id="@+id/btn_decrypt"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:onClick="@{Activity.click}"
+                android:onClick="@{Activity::click}"
                 android:text="解密" />
             <Button
                 android:id="@+id/btn_clear"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:onClick="@{Activity.click}"
+                android:onClick="@{Activity::click}"
                 android:text="清空" />
             <Button
                 android:id="@+id/btn_copy"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:onClick="@{Activity.click}"
+                android:onClick="@{Activity::click}"
                 android:text="复制结果" />
         </LinearLayout>
         <TextView

@@ -3,7 +3,7 @@
     package="com.example">
 
     <application
-        android:name=".TestApp"
+        android:name=".main.TestApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -80,7 +80,7 @@
         <activity android:name=".floatkkey.FloatKeyActivity" />
         <activity android:name=".topbar.TopBarActivity"/>
         <activity
-            android:name=".MainActivity"
+            android:name=".main.MainActivity"
             android:label="@string/app_name"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="fullSensor">

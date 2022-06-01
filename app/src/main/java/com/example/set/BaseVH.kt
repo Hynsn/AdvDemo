@@ -12,7 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
  * Hynsonhou  2022/6/1   1.0       首次创建
  */
 abstract class BaseVH<T:BaseBean>(itemView: View) : RecyclerView.ViewHolder(itemView){
-    abstract var a:T
-    val resId:Int = a.layout
+    var root:View = itemView
+    abstract var a:T?
+    val resId:Int? = a?.type
     abstract fun bindData()
 }

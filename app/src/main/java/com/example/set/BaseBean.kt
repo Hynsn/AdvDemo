@@ -9,5 +9,5 @@ package com.example.set
  * Hynsonhou  2022/6/1   1.0       首次创建
  */
 open class BaseBean(
-    open val layout:Int
+    open var type:Int
 )

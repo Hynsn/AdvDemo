@@ -109,6 +109,14 @@
                 android:textAllCaps="false"
                 android:text="TopBar"
                 android:textSize="18sp" />
+            <Button
+                android:id="@+id/btn_setting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity.test}"
+                android:textAllCaps="false"
+                android:text="Setting"
+                android:textSize="18sp" />
         </LinearLayout>
     </ScrollView>
 </layout>

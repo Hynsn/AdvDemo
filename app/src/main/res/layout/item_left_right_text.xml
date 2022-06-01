@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_item"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingVertical="@dimen/dp_10">
 
     <TextView
         android:id="@+id/tv_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -17,8 +19,8 @@
 
     <ImageView
         android:id="@+id/iv_icon"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginEnd="20dp"
         android:importantForAccessibility="no"
         android:src="@drawable/add_circle_outline_64px"

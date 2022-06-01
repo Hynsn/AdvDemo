@@ -24,6 +24,7 @@ import com.example.floatkkey.FloatKeyActivity;
 import com.example.mbedtls.MbedtlsActivity;
 import com.example.navigation.NavigationActivity;
 import com.example.opensl.OpenslActivity;
+import com.example.set.SettingActivity;
 import com.example.topbar.TopBarActivity;
 import com.example.webview.WebviewActivity;
 
@@ -97,6 +98,9 @@ public class MainActivity extends FragmentActivity {
                 break;
             case R.id.btn_float_key:
                 intent.setComponent(new ComponentName(this, FloatKeyActivity.class));
+                break;
+            case R.id.btn_setting:
+                intent.setComponent(new ComponentName(this, SettingActivity.class));
                 break;
         }
         startActivity(intent);

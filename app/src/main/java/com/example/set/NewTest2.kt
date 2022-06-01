@@ -14,14 +14,14 @@ import com.example.R
  * Hynsonhou  2022/6/1   1.0       首次创建
  */
 
-data class NewTest1(
+data class NewTest2(
     override var type: Int,
     var name: String,
     val action: () -> (String),
 ) : BaseBean(type){
 }
 
-class NewTest(itemView: View) : BaseVH<NewTest1>(itemView) {
+class NewTest2VH(itemView: View) : BaseVH<NewTest1>(itemView) {
 
     override fun bindData() {
         a?.run {

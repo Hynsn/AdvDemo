@@ -25,6 +25,7 @@ ext{
         "nanohttpd": '2.2.0',
         "gson":'2.8.6',
         "quickadapter":'3.0.4',
-            "glide":'4.11.0'
+        "glide":'4.11.0',
+        "spi":'1.0.1'
     ]
 }

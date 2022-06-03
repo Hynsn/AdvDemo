@@ -4,8 +4,9 @@ import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.base.base.BaseActivity
 import com.example.R
-import com.example.databinding.ActivityDataBindingBinding
 import com.example.databinding.ActivitySettingBinding
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Author: Hynsonhou
@@ -20,14 +21,15 @@ class SettingActivity: BaseActivity<ActivitySettingBinding>() {
 
     override fun bindView() {
         val itemList: MutableList<BaseBean> = ArrayList()
-        itemList.add(NewTest1(1,"测试") {
+        itemList.add(NewTest1(name = "测试1") {
+//            test()
             Log.i(TAG,"测试代码")
-            ""
         })
-        itemList.add(NewTest1(2,"测试1") { "" })
-        itemList.add(NewTest1(3,"测试2") { "" })
-//        itemList.add(BaseBean(R.layout.activity_aidl))
-        itemList.add(NewTest1(4,"测试3") { "" })
+        itemList.add(NewTest1(name = "测试2"))
+        itemList.add(NewTest1(name = "测试3") {  })
+        itemList.add(NewTest2(name = "测试5",value = "哈哈") { "" })
+        itemList.add(NewTest1(name = "测试6") {  })
+        itemList.add(NewTest2(name = "测试7",value = "哈哈") { "" })
 
         val itemAdapter = ItemAdapter(this, itemList)
         binding.rvSet.apply {
@@ -37,6 +39,13 @@ class SettingActivity: BaseActivity<ActivitySettingBinding>() {
                 false
             )
             adapter = itemAdapter
+        }
+    }
+
+    private fun test(){
+        val clazz = ServiceLoader.load(VHInf::class.java).toList()
+        clazz.forEach { it ->
+            Log.i(TAG,"test:${it.type}")
         }
     }
 

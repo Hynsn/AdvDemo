@@ -43,3 +43,17 @@ class NewTestVH2 : BaseVH<NewTest2VH>() {
         return NewTest2VH(getView(parent, type.layout))
     }
 }
+
+// 两种维护需求
+// 1.设置页配置化，如下
+// 2.方便新增不同样式的Item(ViewHolder)
+
+//// 实体
+//abstract val bean:T
+//// 视图
+//abstract val layout:Int
+//// 供适配器绑定
+//abstract fun bindView()
+
+// view可能公用，事件类型可能不一样
+// 需要绑定view和事件类型，多对多的关系

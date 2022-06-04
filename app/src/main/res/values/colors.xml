@@ -8,4 +8,8 @@
     <color name="zeroColor">#5E7BA3</color>
     <color name="numColor">#FFFFFF</color>
 
+    <color name="color_ff">#FFFFFF</color>
+    <color name="color_d900">#d9000000</color>
+    <color name="color_7300">#73000000</color>
+
 </resources>

@@ -98,8 +98,9 @@ dependencies {
     implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:${rootProject.ext.ver["quickadapter"]}"
 
     implementation "com.google.code.gson:gson:${rootProject.ext.ver["gson"]}"
+    implementation "com.google.auto.service:auto-service:${rootProject.ext.ver["spi"]}"
 
-    implementation project(':ndklib')
+//    implementation project(':ndklib')
 }
 
 tasks.whenTaskAdded { task ->

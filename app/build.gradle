@@ -68,7 +68,7 @@ dependencies {
 
     implementation "androidx.appcompat:appcompat:${rootProject.ext.ver["appcompat"]}"
     implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.ver["constraintlayout"]}"
-    testImplementation "junit:junit:${rootProject.ext.ver["junit"]}"
+    testImplementation "junit:junit:$ver.junit"
     androidTestImplementation "androidx.test:runner:${rootProject.ext.ver["runner"]}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${rootProject.ext.ver["espresso"]}"
     implementation "com.google.android.material:material:${rootProject.ext.ver["material"]}"
@@ -82,8 +82,8 @@ dependencies {
     // 升级版本解决闪烁问题，2.3.1修复
     def navi_version = rootProject.ext.ver["navi"]
 
-    implementation "androidx.navigation:navigation-fragment:$navi_version"
-    implementation "androidx.navigation:navigation-ui:$navi_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:$navi_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$navi_version"
 
     implementation "org.nanohttpd:nanohttpd:${rootProject.ext.ver["nanohttpd"]}"
 
@@ -105,7 +105,7 @@ dependencies {
 
 tasks.whenTaskAdded { task ->
     if (task.name.contains("lint") || task.name.contains("lintVitalRelease")) {
-        println("lint#lintVitalRelease")
-        //task.enabled = false
+        //println("lint#lintVitalRelease")
+        task.enabled = false
     }
 }

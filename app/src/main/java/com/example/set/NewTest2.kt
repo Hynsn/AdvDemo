@@ -15,8 +15,8 @@ import com.google.auto.service.AutoService
  * <author>  <time>     <version> <desc>
  * Hynsonhou  2022/6/1   1.0       首次创建
  */
+
 data class NewTest2(
-    override val type: Int = ViewEum.Type2.ordinal,
     var name: String,
     var value: String,
     val action: () -> (String),
@@ -35,12 +35,11 @@ class NewTest2VH(itemView: View) : BaseHolder<NewTest2>(itemView) {
 }
 
 @AutoService(VHInf::class)
-class NewTestVH2 : BaseVH<NewTest2VH>() {
-    override val type: ViewEum
-        get() = ViewEum.Type2
+class NewTestVH2 : VHInf<NewTest2VH> {
+    override val layout = R.layout.item_set_type2
 
     override fun convert(parent: ViewGroup): NewTest2VH {
-        return NewTest2VH(getView(parent, type.layout))
+        return NewTest2VH(getView(parent, layout))
     }
 }
 

@@ -2,8 +2,6 @@ package com.example.set
 
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import com.example.R
 import com.google.auto.service.AutoService
 
@@ -17,7 +15,7 @@ import com.google.auto.service.AutoService
  */
 
 data class NewTest1(
-    override val type: Int = ViewEum.Type1.ordinal,
+    val a:Int = 0
 ) : BaseBean()
 
 class NewTest(itemView: View) : BaseHolder<NewTest1>(itemView) {
@@ -30,12 +28,11 @@ class NewTest(itemView: View) : BaseHolder<NewTest1>(itemView) {
 }
 
 @AutoService(VHInf::class)
-class NewTestVH1 : BaseVH<NewTest>() {
-    override val type: ViewEum
-        get() = ViewEum.Type1
+class NewTestVH1 : VHInf<NewTest> {
+    override val layout = R.layout.item_set_type1
 
     override fun convert(parent: ViewGroup): NewTest {
-        return NewTest(getView(parent, type.layout))
+        return NewTest(getView(parent, layout))
     }
 
 }

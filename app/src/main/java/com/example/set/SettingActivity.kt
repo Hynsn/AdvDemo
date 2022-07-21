@@ -1,9 +1,13 @@
 package com.example.set
 
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.base.base.BaseActivity
 import com.example.R
 import com.example.databinding.ActivitySettingBinding
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.LinkedHashSet
 
 /**
  * Author: Hynsonhou
@@ -13,29 +17,43 @@ import com.example.databinding.ActivitySettingBinding
  * <author>  <time>     <version> <desc>
  * Hynsonhou  2022/6/1   1.0       首次创建
  */
-class SettingActivity: BaseActivity<ActivitySettingBinding>() {
+class SettingActivity : BaseActivity<ActivitySettingBinding>() {
     override fun getLayout() = R.layout.activity_setting
 
     override fun bindView() {
+
         val itemList: MutableList<BaseBean> = ArrayList()
         itemList.add(NewTest1())
-        itemList.add(NewTest2(name = "DeviceName",value = "358") { "" })
-        itemList.add(NewTest2(name = "Icon",value = "图") { "" })
+        itemList.add(NewTest2(name = "DeviceName", value = "358") { "" })
+        itemList.add(NewTest2(name = "Icon", value = "图") { "" })
         itemList.add(NewTest1())
 
-        itemList.add(NewTest2(name = "Voice Commands",value = "") { "" })
-        itemList.add(NewTest3(name = "DeviceInfo",value = "跳转到另外一个页面") { "" })
+        itemList.add(NewTest2(name = "Voice Commands", value = "") { "" })
+        itemList.add(NewTest3(name = "DeviceInfo", value = "跳转到另外一个页面") { "" })
         itemList.add(NewTest1())
 
-        itemList.add(NewTest4(name = "Unit",value = "华氏度/摄氏度") { "" })
-        itemList.add(NewTest4(name = "Permission",value = "获取权限") { "" })
+        itemList.add(NewTest4(name = "Unit", value = "华氏度/摄氏度") { "" })
+        itemList.add(NewTest4(name = "Permission", value = "获取权限") { "" })
         itemList.add(NewTest1())
 
-        itemList.add(NewTest4(name = "Add to Home Screen",value = "快捷方式") { "" })
-        itemList.add(NewTest4(name = "WiFi Settings",value = "快捷方式") { "" })
-        itemList.add(NewTest4(name = "Share Device",value = "快捷方式") { "" })
+        itemList.add(NewTest4(name = "Add to Home Screen", value = "快捷方式") { "" })
+        itemList.add(NewTest4(name = "WiFi Settings", value = "快捷方式") { "" })
+        itemList.add(NewTest4(name = "Share Device", value = "快捷方式") { "" })
         itemList.add(NewTest1())
         itemList.add(NewTest5 { "" })
+
+        val hash = LinkedHashSet<String>()
+
+        itemList.forEach {
+            (it::class.qualifiedName)?.let {
+                hash.add(it)
+            }
+        }
+        itemList.forEach {
+            it.type = hash.indexOf(it::class.qualifiedName)
+        }
+
+        Log.i(TAG,"list: ${hash.toList()}")
 
         val itemAdapter = ItemAdapter(this, itemList)
         binding.rvSet.apply {
@@ -48,7 +66,7 @@ class SettingActivity: BaseActivity<ActivitySettingBinding>() {
         }
     }
 
-    companion object{
+    companion object {
         val TAG = SettingActivity::class.java.simpleName
     }
 }

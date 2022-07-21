@@ -1,15 +1,19 @@
 package com.example.set
 
 import android.content.Context
+import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
 class ItemAdapter(private val context: Context, var testItemList: List<BaseBean>) :
     RecyclerView.Adapter<BaseHolder<BaseBean>>() {
+    val vhList: List<VHInf<*>> = ServiceLoader.load(VHInf::class.java).toList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseHolder<BaseBean> {
-        val viewHold = ServiceLoader.load(VHInf::class.java).toList()[viewType]
+        val viewHold = vhList[viewType]
+        Log.i(TAG,"className:${viewHold::class.simpleName}")
+
         return viewHold.convert(parent) as BaseHolder<BaseBean>
     }
 
@@ -25,6 +29,9 @@ class ItemAdapter(private val context: Context, var testItemList: List<BaseBean>
 
     override fun getItemViewType(position: Int): Int {
         return testItemList[position].type
+    }
+    companion object{
+        val TAG = ItemAdapter::class.simpleName
     }
 }
 

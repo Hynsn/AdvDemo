@@ -6,10 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
-class ItemAdapter(private val context: Context, var testItemList: List<BaseBean>) :
+class ItemAdapter(private val context: Context,val vhList:List<VHInf<*>>, var testItemList: List<BaseBean>) :
     RecyclerView.Adapter<BaseHolder<BaseBean>>() {
-    val vhList: List<VHInf<*>> = ServiceLoader.load(VHInf::class.java).toList()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseHolder<BaseBean> {
         val viewHold = vhList[viewType]
         Log.i(TAG,"className:${viewHold::class.simpleName}")

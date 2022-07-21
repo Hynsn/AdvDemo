@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.example.R
 import com.google.auto.service.AutoService
+import kotlin.reflect.KClass
 
 /**
  * Author: Hynsonhou
@@ -33,6 +34,7 @@ class NewTest3VH(itemView: View) : BaseHolder<NewTest3>(itemView) {
 @AutoService(VHInf::class)
 class NewTestVH3 : VHInf<NewTest3VH> {
     override val layout = R.layout.item_set_type3
+    override val clazz: Class<*> = NewTest3::class.java
 
     override fun convert(parent: ViewGroup): NewTest3VH {
         return NewTest3VH(getView(parent, layout))

@@ -30,6 +30,7 @@ class NewTest(itemView: View) : BaseHolder<NewTest1>(itemView) {
 @AutoService(VHInf::class)
 class NewTestVH1 : VHInf<NewTest> {
     override val layout = R.layout.item_set_type1
+    override val clazz: Class<*> = NewTest1::class.java
 
     override fun convert(parent: ViewGroup): NewTest {
         return NewTest(getView(parent, layout))

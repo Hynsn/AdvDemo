@@ -39,7 +39,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         itemList.add(NewTest1())
 
         itemList.add(NewTest4(name = "Add to Home Screen", value = "快捷方式") { "" })
-//        itemList.add(NewTest5 { "" })
+        itemList.add(NewTest5 { "" })
         itemList.add(NewTest4(name = "WiFi Settings", value = "快捷方式") { "" })
         itemList.add(NewTest4(name = "Share Device", value = "快捷方式") { "" })
         itemList.add(NewTest1())

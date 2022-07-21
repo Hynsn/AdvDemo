@@ -20,4 +20,8 @@
         android:id="@+id/customViewFragment"
         android:name="com.example.customview.CustomViewFragment"
         android:label="CustomViewFragment" />
+    <fragment
+        android:id="@+id/flowLayoutFragment"
+        android:name="com.example.customview.FlowLayoutFragment"
+        android:label="FlowLayoutFragment" />
 </navigation>

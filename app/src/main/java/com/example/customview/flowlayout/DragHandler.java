@@ -2,6 +2,7 @@ package com.example.customview.flowlayout;
 
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -70,6 +71,8 @@ public class DragHandler {
                 isDrag = false;
                 handled = handleUpEvent();
                 mLastMotionEventY = -1;
+                Log.i("TAGS",flowLayout.getTagInfos().toString());
+
                 break;
             case MotionEvent.ACTION_CANCEL:
                 isDrag = false;
@@ -102,7 +105,7 @@ public class DragHandler {
             }
         } else if (mHoverDrawable != null) {
             mHoverDrawable.handleMoveEvent(event);
-            if (tagInfo != null && tagInfo.type == TagInfo.TYPE_TAG_USER && (tagInfo != lastTagInfo || !tagInfo.rect.contains(clickTag.rect))) {
+            if (tagInfo != null && tagInfo.type != TagType.FIXED && (tagInfo != lastTagInfo || !tagInfo.rect.contains(clickTag.rect))) {
                 switchViews(tagInfo);
             }
             flowLayout.invalidate();
@@ -142,6 +145,7 @@ public class DragHandler {
         }
         mMobileView.setVisibility(View.VISIBLE);
         delete.setVisibility(View.VISIBLE);
+
         delete = null;
         deleteDrawable = null;
         mHoverDrawable = null;
@@ -207,7 +211,7 @@ public class DragHandler {
                 }
             }
 
-            if (resultTagInfo != null && resultTagInfo.type == TagInfo.TYPE_TAG_USER && resultTagInfo.dataPosition != clickPosition) {
+            if (resultTagInfo != null && resultTagInfo.type != TagType.FIXED && resultTagInfo.dataPosition != clickPosition) {
                 if (resultTagInfo.dataPosition == flowLayout.getTagInfos().size() - 1) {
                     flowLayout.getTagInfos().remove(clickTag);
                     flowLayout.getTagInfos().add(clickTag);

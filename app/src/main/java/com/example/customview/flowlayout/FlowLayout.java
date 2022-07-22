@@ -31,7 +31,6 @@ import java.util.List;
 public class FlowLayout extends ViewGroup {
     private final float textSize;
     private final int tagHeight;
-    private final int deleteIconMargin;
     private final int childViewPadding;
     private final int defaultViewBackground;
     private final int selectViewBackground;
@@ -43,7 +42,12 @@ public class FlowLayout extends ViewGroup {
     private int defaultTextColor;
     private DragHandler mDragAndDropHandler;
     private AnimatorSet lastAnimatorSet;
+
+    // 删除
+    private int deleteIconResId;
     public int deleteIconWidth;
+    private final int deleteIconMargin; // 删除图标和标签之间的Margin
+
     private boolean isMeasureSuccess;
     private OnTagClickListener onTagClickListener;
     private List<TextView> recommentLists = new ArrayList<>();
@@ -78,17 +82,18 @@ public class FlowLayout extends ViewGroup {
         childViewPadding = ViewSizeUtil.getCustomDimen(context, a.getInt(R.styleable.flowLayout_childViewPadding, 26));
         textSize = ViewSizeUtil.getCustomDimen(context, a.getInt(R.styleable.flowLayout_flowLayoutTextSize, 14)) * 1.0f / ViewSizeUtil.getDensity(context);
 
-        deleteIconWidth = ViewSizeUtil.getCustomDimen(context,a.getInt(R.styleable.flowLayout_deleteIconWidth, 29));
-        deleteIconMargin = ViewSizeUtil.getCustomDimen(context, a.getInt(R.styleable.flowLayout_deleteIconMargin, 10));
+        deleteIconWidth = ViewSizeUtil.getCustomDimen(context, a.getInt(R.styleable.flowLayout_deleteIconWidth, 16));
+        deleteIconMargin = ViewSizeUtil.getCustomDimen(context, a.getInt(R.styleable.flowLayout_deleteIconMargin, 5));
+        deleteIconResId = a.getResourceId(R.styleable.flowLayout_deleteIcon, R.drawable.icon_delete);
 
 
-//        textViewSpacing = a.getDimensionPixelSize(R.styleable.flowLayout_horizontalSpacingSize, ViewSizeUtil.getCustomDimen(context, 15f));
-//        verticalSpacing = a.getDimensionPixelSize(R.styleable.flowLayout_verticalSpacingSize, ViewSizeUtil.getCustomDimen(context, 15f));
-//        tagHeight = a.getDimensionPixelSize(R.styleable.flowLayout_tagHeight, ViewSizeUtil.getCustomDimen(context, 28f));
-//        childViewPadding = a.getDimensionPixelSize(R.styleable.flowLayout_childViewPadding, ViewSizeUtil.getCustomDimen(context, 26f));
-//        textSize = a.getDimensionPixelSize(R.styleable.flowLayout_flowLayoutTextSize, ViewSizeUtil.getCustomDimen(context, 14f)) / ViewSizeUtil.getDensity(context);
-//        deleteIconWidth = a.getDimensionPixelSize(R.styleable.flowLayout_deleteIconWidth, ViewSizeUtil.getCustomDimen(context, 29f));
-//        deleteIconMargin = a.getDimensionPixelSize(R.styleable.flowLayout_deleteIconMargin, ViewSizeUtil.getCustomDimen(context, 10f));
+        //        textViewSpacing = a.getDimensionPixelSize(R.styleable.flowLayout_horizontalSpacingSize, ViewSizeUtil.getCustomDimen(context, 15f));
+        //        verticalSpacing = a.getDimensionPixelSize(R.styleable.flowLayout_verticalSpacingSize, ViewSizeUtil.getCustomDimen(context, 15f));
+        //        tagHeight = a.getDimensionPixelSize(R.styleable.flowLayout_tagHeight, ViewSizeUtil.getCustomDimen(context, 28f));
+        //        childViewPadding = a.getDimensionPixelSize(R.styleable.flowLayout_childViewPadding, ViewSizeUtil.getCustomDimen(context, 26f));
+        //        textSize = a.getDimensionPixelSize(R.styleable.flowLayout_flowLayoutTextSize, ViewSizeUtil.getCustomDimen(context, 14f)) / ViewSizeUtil.getDensity(context);
+        //        deleteIconWidth = a.getDimensionPixelSize(R.styleable.flowLayout_deleteIconWidth, ViewSizeUtil.getCustomDimen(context, 29f));
+        //        deleteIconMargin = a.getDimensionPixelSize(R.styleable.flowLayout_deleteIconMargin, ViewSizeUtil.getCustomDimen(context, 10f));
 
         selectViewBackground = a.getResourceId(R.styleable.flowLayout_selectViewBackground, R.drawable.tag_select);
         selectTextColor = a.getColor(R.styleable.flowLayout_selectTextColor, 0xffffffff);
@@ -135,7 +140,7 @@ public class FlowLayout extends ViewGroup {
                 initData();
             }
         } else {
-            Toast.makeText(getContext(),R.string.flowLayout_set_edit_tips,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.flowLayout_set_edit_tips, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -143,21 +148,28 @@ public class FlowLayout extends ViewGroup {
     public void addDeleteImageView(int i) {
         ImageView imageView;
         imageView = new ImageView(getContext());
-        imageView.setLayoutParams(new LayoutParams(ViewSizeUtil.getCustomDimen(getContext(), 29f), ViewSizeUtil.getCustomDimen(getContext(), 29f)));
-        imageView.setBackgroundResource(R.drawable.icon_delete);
-        final int finalI = i;
-        imageView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                View view = getChildAt(finalI);
-                TagInfo tagInfo = (TagInfo) view.getTag();
-                deleteTag(tagInfo);
-            }
-        });
+        if (((TagInfo) getChildAt(i).getTag()).type == TagType.DRAG) {
+            imageView.setLayoutParams(new LayoutParams(ViewSizeUtil.getCustomDimen(getContext(), 20f), ViewSizeUtil.getCustomDimen(getContext(), 20f)));
+            imageView.setBackgroundResource(deleteIconResId);
+            final int finalI = i;
+            imageView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    View view = getChildAt(finalI);
+                    TagInfo tagInfo = (TagInfo) view.getTag();
+                    deleteTag(tagInfo);
+                }
+            });
+        }
+        else {
+            imageView.setLayoutParams(new LayoutParams(ViewSizeUtil.getCustomDimen(getContext(), 0f), ViewSizeUtil.getCustomDimen(getContext(), 0f)));
+        }
         setOnLongClick(getChildAt(i), i);
-        if (((TagInfo) getChildAt(i).getTag()).type == TagInfo.TYPE_TAG_SERVICE) {
+
+        if (((TagInfo) getChildAt(i).getTag()).type != TagType.DRAG) {
             imageView.setVisibility(INVISIBLE);
         }
+
         addView(imageView);
         deleteIconImageViews.add(imageView);
     }
@@ -255,7 +267,7 @@ public class FlowLayout extends ViewGroup {
             button = (TextView) getChildAt(i);
         } else {
             button = new TextView(getContext());
-            if (tagInfo.type == TagInfo.TYPE_TAG_SERVICE) {
+            if (tagInfo.type == TagType.FIXED) {
                 recommentLists.add(button);
             }
             if (tagId.equals("-1") && i == 0 && deleteIconImageViews.size() == 0) {
@@ -297,7 +309,7 @@ public class FlowLayout extends ViewGroup {
         if (mDragAndDropHandler != null) {
             final int finalI = i;
             TagInfo tagInfo = (TagInfo) getChildAt(finalI).getTag();
-            if (tagInfo.type == TagInfo.TYPE_TAG_USER) {
+            if (tagInfo.type != TagType.FIXED) {
                 button.setOnLongClickListener(new OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
@@ -330,8 +342,8 @@ public class FlowLayout extends ViewGroup {
                         public void onGetTag(int position, TagInfo tagInfo) {
                             getChildAt(position).measure(MeasureSpec.makeMeasureSpec(tagInfo.rect.width(), MeasureSpec.EXACTLY), childHeightMeasureSpec);
                             if (deleteIconImageViews.size() > 0) {
-//                                tagInfo.rect.top += deleteIconMargin;
-//                                tagInfo.rect.bottom += deleteIconMargin;
+                                //                                tagInfo.rect.top += deleteIconMargin;
+                                //                                tagInfo.rect.bottom += deleteIconMargin;
                                 deleteIconImageViews.get(position).measure(imageMeasureSpec, imageMeasureSpec);
                             }
                         }
@@ -441,10 +453,10 @@ public class FlowLayout extends ViewGroup {
             rect = new Rect();
             tagInfo = (TagInfo) getChildAt(i).getTag();
             getChildAt(i).getHitRect(rect);
-//            if (deleteIconImageViews.size() > 0) {
-//                tagInfo.rect.top += deleteIconMargin;
-//                tagInfo.rect.bottom += deleteIconMargin;
-//            }
+            //            if (deleteIconImageViews.size() > 0) {
+            //                tagInfo.rect.top += deleteIconMargin;
+            //                tagInfo.rect.bottom += deleteIconMargin;
+            //            }
             if (getChildAt(i).isShown()) {
                 if (rect.left != tagInfo.rect.left) {
                     animationList.add(getObjectAnimator(tagInfo.rect.left, "x", getChildAt(i), 250));
@@ -518,8 +530,8 @@ public class FlowLayout extends ViewGroup {
 
     }
 
-//    public void setOnInterceptTouchEventListener(OnInterceptTouchEventListener onInterceptTouchEventListener) {
-//        this.onInterceptTouchEventListener = onInterceptTouchEventListener;
-//    }
+    //    public void setOnInterceptTouchEventListener(OnInterceptTouchEventListener onInterceptTouchEventListener) {
+    //        this.onInterceptTouchEventListener = onInterceptTouchEventListener;
+    //    }
 }
 

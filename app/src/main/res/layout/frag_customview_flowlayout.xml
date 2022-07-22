@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             app:defaultTextColor="@color/colorPrimaryDark"
             app:fixViewTextColor="@color/colorAccent"
+            app:deleteIcon="@drawable/icon_remove"
             app:selectTextColor="#ffF8982D" />
     </ScrollView>
 

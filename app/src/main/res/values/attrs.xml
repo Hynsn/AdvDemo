@@ -21,6 +21,7 @@
         <attr name="horizontalSpacingSize" format="integer" />
         <attr name="deleteIconWidth" format="integer" />
         <attr name="deleteIconMargin" format="integer" />
+        <attr name="deleteIcon" format="reference"/>
         <attr name="tagHeight" format="integer" />
         <attr name="selectViewBackground" format="reference" />
         <attr name="selectTextColor" format="color" />

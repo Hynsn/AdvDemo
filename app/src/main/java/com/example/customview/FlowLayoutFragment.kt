@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.example.R
 import com.example.customview.flowlayout.TagInfo
+import com.example.customview.flowlayout.TagType
 import com.example.databinding.FragCustomviewFlowlayoutBinding
 import com.example.ktbase.BaseFragment
 
@@ -28,11 +29,18 @@ class FlowLayoutFragment : BaseFragment<FragCustomviewFlowlayoutBinding,CustomVi
 
         val tagsDefault = resources.getStringArray(R.array.tags_default)
         val tagsRecommend = resources.getStringArray(R.array.tags_recommend)
-        myTagInfos.addAll(addTags("fix", tagsDefault, TagInfo.TYPE_TAG_SERVICE))
-        myTagInfos.addAll(addTags("default", tagsRecommend, TagInfo.TYPE_TAG_USER))
+//        myTagInfos.addAll(addTags("fix", tagsDefault, TagType.SERVICE))
+        myTagInfos.addAll(addTags("a", tagsRecommend, TagType.DRAG))
+        myTagInfos.addAll(addTags("b", tagsRecommend, TagType.DEFAULT))
+//        myTagInfos.addAll(addTags("fix", tagsDefault, TagType.SERVICE))
+        myTagInfos.addAll(addTags("c", tagsRecommend, TagType.DRAG))
+//        myTagInfos.addAll(addTags("fix", tagsDefault, TagType.SERVICE))
+
+        bind.newsTag.setSelectTagId("a1")
         bind.newsTag.setTags(myTagInfos)
+
     }
-    fun addTags(tagId: String, stringArray: Array<String>, type: Int): List<TagInfo> {
+    fun addTags(tagId: String, stringArray: Array<String>, type: TagType): List<TagInfo> {
         val list: MutableList<TagInfo> = ArrayList<TagInfo>()
         var tagInfo: TagInfo
         var name: String

@@ -24,4 +24,8 @@
         android:id="@+id/flowLayoutFragment"
         android:name="com.hynson.customview.FlowLayoutFragment"
         android:label="FlowLayoutFragment" />
+    <fragment
+        android:id="@+id/pieChartFragment"
+        android:name="com.hynson.chart.PieChartFragment"
+        android:label="PieChartFragment" />
 </navigation>

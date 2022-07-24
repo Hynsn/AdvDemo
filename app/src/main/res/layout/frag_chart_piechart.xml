@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.hynson.chart.PieChart
+        android:id="@+id/pieChart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:pc_circle_width="10dp"
+        app:pc_radius="55dp"
+        app:pc_space="6dp"
+        app:pc_text_color="@color/color_d900"
+        app:pc_text_size="24sp"
+        app:pc_unit="kcal"
+        app:pc_unit_color="@color/color_7300"
+        app:pc_unit_size="12sp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

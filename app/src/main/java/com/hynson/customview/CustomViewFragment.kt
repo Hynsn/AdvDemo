@@ -29,6 +29,7 @@ class CustomViewFragment : BaseFragment<FragCustomviewBinding, CustomViewVM>() {
         itemList.add(TestItem("NumText", R.id.numTextFragment, null, null))
         itemList.add(TestItem("RulerView", R.id.rulerViewFragment, null, null))
         itemList.add(TestItem("FlowLayout", R.id.flowLayoutFragment, null, null))
+        itemList.add(TestItem("PieChart", R.id.pieChartFragment, null, null))
 
         val itemAdapter = TestItemAdapter(requireContext(), itemList)
         bind.rvCustomView.apply {

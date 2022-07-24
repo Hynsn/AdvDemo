@@ -43,8 +43,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     lintOptions {
         checkReleaseBuilds false
@@ -99,6 +99,8 @@ dependencies {
 
     implementation "com.google.code.gson:gson:${rootProject.ext.ver["gson"]}"
     implementation "com.google.auto.service:auto-service:${rootProject.ext.ver["spi"]}"
+
+//    implementation "com.android.tools.build:gradle:7.0.0"
 
 //    implementation project(':ndklib')
 }

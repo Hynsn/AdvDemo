@@ -28,4 +28,8 @@
         android:id="@+id/pieChartFragment"
         android:name="com.hynson.chart.PieChartFragment"
         android:label="PieChartFragment" />
+    <fragment
+        android:id="@+id/BPChartFragment"
+        android:name="com.hynson.chart.BPChartFragment"
+        android:label="BPChartFragment" />
 </navigation>

@@ -43,4 +43,9 @@
         <attr name="pc_default_data_color" format="color"/>
     </declare-styleable>
 
+    <declare-styleable name="BPChartMarkView">
+        <attr name="textColor" format="color"/>
+        <attr name="textSize" format="dimension"/>
+    </declare-styleable>
+
 </resources>

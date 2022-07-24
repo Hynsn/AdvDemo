@@ -10,9 +10,15 @@
 
     <color name="color_ff">#FFFFFF</color>
     <color name="color_d900">#d9000000</color>
+    <color name="color_a600">#a6000000</color>
     <color name="color_7300">#73000000</color>
 
     <color name="color_ffb432">#ffb432</color>
     <color name="color_ff7d5d">#ff7d5d</color>
     <color name="color_00c1bc">#00c1bc</color>
+    <color name="color_73">#737373</color>
+    <color name="color_4daaf7">#4DAAF7</color>
+    <color name="color_ffa94d">#ffa94d</color>
+    <color name="color_ccff">#ccffffff</color>
+    <color name="color_80ff">#80ffffff</color>
 </resources>

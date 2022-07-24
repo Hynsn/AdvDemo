@@ -22,5 +22,4 @@
         app:pc_unit_color="@color/color_7300"
         app:pc_unit_size="12sp" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

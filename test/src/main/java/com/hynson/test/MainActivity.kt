@@ -8,7 +8,6 @@ import com.base.base.BaseActivity
 import com.hynson.test.databinding.ActivityMainBinding
 import com.google.gson.Gson
 import utils.Screen
-import java.util.*
 import kotlin.collections.ArrayList
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
@@ -51,8 +50,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         chosedAdapter.data = list
         binding.rvChosed.layoutManager =  LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
         binding.rvChosed.adapter = chosedAdapter
-        val leftRight = Screen.dip2px(this,0f)
-        val bottomTop = Screen.dip2px(this,12f)
+        val leftRight = Screen.dp2px(this,0f)
+        val bottomTop = Screen.dp2px(this,12f)
         binding.rvChosed.addItemDecoration(DonenessChosedAdapter.ItemDecoration(leftRight,bottomTop))
         chosedAdapter.setOnItemClickListener { _, view, pos ->
             for (i in (chosedAdapter.data.size-1) downTo pos) {
@@ -111,8 +110,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
         binding.rvPrepare.layoutManager = GridLayoutManager(this,3)
         binding.rvPrepare.adapter = prepareAdapter
-        val leftRight = Screen.dip2px(this,7f)
-        val bottomTop = Screen.dip2px(this,20f)
+        val leftRight = Screen.dp2px(this,7f)
+        val bottomTop = Screen.dp2px(this,20f)
         binding.rvPrepare.addItemDecoration(DonenessPrepareAdapter.ItemDecoration(leftRight,bottomTop))
     }
 

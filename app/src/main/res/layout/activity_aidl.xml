@@ -5,7 +5,7 @@
     <data>
         <variable
             name="Activity"
-            type="com.example.aidl.AidlActivity" />
+            type="com.hynson.aidl.AidlActivity" />
     </data>
 
     <LinearLayout

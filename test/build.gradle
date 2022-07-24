@@ -11,7 +11,7 @@ android {
     compileSdkVersion rootProject.ext.droid["compileSdk"]
 
     defaultConfig {
-        applicationId "com.example.test"
+        applicationId "com.hynson.test"
         targetSdkVersion rootProject.ext.droid["targetSdk"]
         minSdkVersion rootProject.ext.droid["minSdk"]
         versionCode 1

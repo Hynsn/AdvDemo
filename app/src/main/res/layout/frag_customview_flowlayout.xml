@@ -19,7 +19,7 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <com.example.customview.flowlayout.FlowLayout
+        <com.hynson.customview.flowlayout.FlowLayout
             android:id="@+id/newsTag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

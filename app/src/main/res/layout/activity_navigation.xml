@@ -5,7 +5,7 @@
     <data>
         <variable
             name="Activity"
-            type="com.example.navigation.NavigationActivity" />
+            type="com.hynson.navigation.NavigationActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.example.customview.weight.TimeLine
+    <com.hynson.customview.weight.TimeLine
         android:id="@+id/time_pb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

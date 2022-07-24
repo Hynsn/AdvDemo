@@ -6,17 +6,17 @@
         <!-- 声明对象 -->
         <variable
             name="user"
-            type="com.example.databinding.entity.UserInfo" />
+            type="com.hynson.databinding.entity.UserInfo" />
         <variable
             name="Activity"
-            type="com.example.databinding.DBLoginActivity" />
+            type="com.hynson.databinding.DBLoginActivity" />
     </data>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/container"
-        tools:context="com.example.databinding.DBLoginActivity"
+        tools:context="com.hynson.databinding.DBLoginActivity"
         android:orientation="vertical"
         android:gravity="center_horizontal|top">
         <EditText

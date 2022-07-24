@@ -5,7 +5,7 @@
     <data>
         <variable
             name="Activity"
-            type="com.example.databinding.DBNoteActivity" />
+            type="com.hynson.databinding.DBNoteActivity" />
     </data>
 
     <RelativeLayout

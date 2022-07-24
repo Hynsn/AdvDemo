@@ -5,7 +5,7 @@
     <data>
         <variable
             name="Activity"
-            type="com.example.opensl.OpenslActivity" />
+            type="com.hynson.opensl.OpenslActivity" />
     </data>
 
     <LinearLayout

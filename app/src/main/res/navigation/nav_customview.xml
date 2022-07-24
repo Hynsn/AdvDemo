@@ -6,22 +6,22 @@
 
     <fragment
         android:id="@+id/timelineFragment"
-        android:name="com.example.customview.TimelineFragment"
+        android:name="com.hynson.customview.TimelineFragment"
         android:label="TimelineFragment" />
     <fragment
         android:id="@+id/numTextFragment"
-        android:name="com.example.customview.NumTextFragment"
+        android:name="com.hynson.customview.NumTextFragment"
         android:label="NumTextFragment" />
     <fragment
         android:id="@+id/rulerViewFragment"
-        android:name="com.example.customview.RulerViewFragment"
+        android:name="com.hynson.customview.RulerViewFragment"
         android:label="RulerViewFragment" />
     <fragment
         android:id="@+id/customViewFragment"
-        android:name="com.example.customview.CustomViewFragment"
+        android:name="com.hynson.customview.CustomViewFragment"
         android:label="CustomViewFragment" />
     <fragment
         android:id="@+id/flowLayoutFragment"
-        android:name="com.example.customview.FlowLayoutFragment"
+        android:name="com.hynson.customview.FlowLayoutFragment"
         android:label="FlowLayoutFragment" />
 </navigation>

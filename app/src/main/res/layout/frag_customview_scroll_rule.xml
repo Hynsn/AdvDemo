@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="00:30" />
 
-        <com.example.customview.weight.RulerView
+        <com.hynson.customview.weight.RulerView
             android:id="@+id/ruler_weight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="00:30" />
 
-        <com.example.customview.weight.RulerView
+        <com.hynson.customview.weight.RulerView
             android:id="@+id/ruler_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

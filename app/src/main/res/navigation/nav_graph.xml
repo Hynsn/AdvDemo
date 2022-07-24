@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.navigation.home.HomeFragment"
+        android:name="com.hynson.navigation.home.HomeFragment"
         android:label="Home" >
         <action
             android:id="@+id/action_navigation_home_to_detailFragment"
@@ -19,15 +19,15 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.navigation.dashboard.DashboardFragment"
+        android:name="com.hynson.navigation.dashboard.DashboardFragment"
         android:label="Dashboard" />
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.example.navigation.notifications.NotificationsFragment"
+        android:name="com.hynson.navigation.notifications.NotificationsFragment"
         android:label="Notifications" />
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.example.navigation.detail.DetailFragment"
+        android:name="com.hynson.navigation.detail.DetailFragment"
         android:label="Detail"
         tools:layout="@layout/frag_detail" >
         <!--<action
@@ -40,13 +40,13 @@
     </fragment>
     <fragment
         android:id="@+id/setFrag"
-        android:name="com.example.navigation.setting.SettingFragment"
+        android:name="com.hynson.navigation.setting.SettingFragment"
         android:label="set"
         tools:layout="@layout/frag_detail" >
     </fragment>
     <activity
         android:id="@+id/naviLoadActivity"
-        android:name="com.example.navigation.NaviLoadActivity"
+        android:name="com.hynson.navigation.NaviLoadActivity"
         android:label="NaviLoadActivity" />
 
 </navigation>

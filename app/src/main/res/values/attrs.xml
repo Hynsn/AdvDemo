@@ -48,4 +48,18 @@
         <attr name="textSize" format="dimension"/>
     </declare-styleable>
 
+    <declare-styleable name="BPYaxisChart">
+        <attr name="centerXColor" format="color"/>
+        <attr name="centerXSize" format="dimension"/>
+        <attr name="YColor" format="color"/>
+        <attr name="YLineSize" format="dimension"/>
+        <attr name="TargetMinColor" format="color"/>
+        <attr name="TargetMaxColor" format="color"/>
+        <attr name="textColorY" format="color"/>
+        <attr name="textSizeY" format="dimension"/>
+        <attr name="targetPaddingEnd" format="dimension"/>
+        <attr name="targetPaddingBottom" format="dimension"/>
+        <attr name="textPaddingLeft" format="dimension"/>
+        <attr name="textPaddingRight" format="dimension"/>
+    </declare-styleable>
 </resources>

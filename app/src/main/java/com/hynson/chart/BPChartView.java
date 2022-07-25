@@ -477,8 +477,8 @@ public class BPChartView extends View {
             computeIndicateLocation(mIndicateLoc, i);
             float left = mIndicateLoc.left + mInterval / 2 + 1; // 加上间隔
             // 获取view的高度 减去所有控件的高度 得到 图表的高度 16代表预留出来的边距
-            int height = getHeight() - mShadowMarginHeight;
-
+            int h = 300;
+            int height = h - mShadowMarginHeight;
             if (yAxisValueList.get(i) >= getMinYAxisValue() && yAxisValueList.get(i) <= getMaxYAxisValue()) { //目标值在最值区间
                 deltaValue = getMaxYAxisValue() - getMinYAxisValue();
                 scale = (yAxisValueList.get(i) - getMinYAxisValue()) / deltaValue; // 通过每个数据除以最大的数据 得到所占比
@@ -522,6 +522,7 @@ public class BPChartView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+//        refreshChartData(mQueryType,mDataType);
         if (xAxisValueList == null || mSysMaxPointList.isEmpty()) {
             return;
         }
@@ -549,17 +550,19 @@ public class BPChartView extends View {
 
     private void drawChartData(Canvas canvas, int position) {
 
+        // 圆点
         canvas.drawCircle(mSysMaxPointList.get(position).x, mSysMaxPointList.get(position).y,
                 Screen.dp2px(getContext(), 4f), mSysPaint);
         canvas.drawCircle(mSysMinPointList.get(position).x, mSysMinPointList.get(position).y,
                 Screen.dp2px(getContext(), 4f), mSysPaint);
-
-        drawDiaData(canvas, position, mDiaMaxPointList);
-        drawDiaData(canvas, position, mDiaMinPointList);
-
+        // 柱状线
         canvas.drawLine(mSysMaxPointList.get(position).x, mSysMaxPointList.get(position).y,
                 mSysMinPointList.get(position).x, mSysMinPointList.get(position).y, mSysLinePaint);
 
+        // 棱型
+        drawDiaData(canvas, position, mDiaMaxPointList);
+        drawDiaData(canvas, position, mDiaMinPointList);
+        Log.i(TAG, "drawChartData" + position + "," + mDiaMaxPointList.toString() + "," + mDiaMinPointList.toString());
         canvas.drawLine(mDiaMaxPointList.get(position).x, mDiaMaxPointList.get(position).y,
                 mDiaMinPointList.get(position).x, mDiaMinPointList.get(position).y, mDiaLinePaint);
     }
@@ -988,10 +991,10 @@ public class BPChartView extends View {
         }
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }
+//    @Override
+//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//    }
 
     private boolean isAlignTop() {
         return (mGravity & Gravity.TOP) == Gravity.TOP;

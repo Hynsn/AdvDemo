@@ -51,8 +51,8 @@ class BPChartFragment : BaseFragment<FragChartBpchartBinding, ChartVM>(), View.O
             timeStr = "2022-01-10"
         )
         val d4 = BPYaxisChart.ChartData(
-            dpInMin = 1, dpInMax = 9,
-            spInMin = 1, spInMax = 20,
+            dpInMin = 1, dpInMax = 10,
+            spInMin = 30, spInMax = 40,
             maxTimestamp = 1657261877, minTimestamp = 1657261836,
             timeStr = "2022-01-11"
         )

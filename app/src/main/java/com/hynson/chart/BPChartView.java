@@ -204,8 +204,6 @@ public class BPChartView extends View {
     private float weekScale = 0.6986f;
     private float monthScale = 0.6986f;
 
-    // 控件高度
-    private int mHeight = 0;
 
     public BPChartView(Context context) {
         this(context, null);
@@ -287,7 +285,6 @@ public class BPChartView extends View {
 
         mIndicateLoc = new RectF();
 
-        mHeight = Screen.dp2px(context,400f);
     }
 
     //设置图表数据
@@ -441,15 +438,20 @@ public class BPChartView extends View {
 
         mInnerWidth = (xAxisValueList.size() - mXAxisBeginRange) * getIndicateWidth() - mInterval; //图表区域总宽度
 
-        mSysMaxPointList = createPointList(ySysMaxAxisValueList);
-        mSysMinPointList = createPointList(ySysMinAxisValueList);
-        mDiaMaxPointList = createPointList(yDiaMaxAxisValueList);
-        mDiaMinPointList = createPointList(yDiaMinAxisValueList);
         setEmpty(false);
         if (needToEnd) {
             smoothScrollTo(chartData.size() - 1);
         }
         invalidate();
+    }
+
+    private void updateViewPoint(){
+        if(mSysMaxPointList.isEmpty()){
+            mSysMaxPointList = createPointList(ySysMaxAxisValueList);
+            mSysMinPointList = createPointList(ySysMinAxisValueList);
+            mDiaMaxPointList = createPointList(yDiaMaxAxisValueList);
+            mDiaMinPointList = createPointList(yDiaMinAxisValueList);
+        }
     }
 
 
@@ -486,13 +488,13 @@ public class BPChartView extends View {
             computeIndicateLocation(mIndicateLoc, i);
             float left = mIndicateLoc.left + mInterval / 2 + 1; // 加上间隔
             // 获取view的高度 减去所有控件的高度 得到 图表的高度 16代表预留出来的边距
-            int h = mHeight;
+            int h = getHeight();
             int height = h - mShadowMarginHeight;
             if (yAxisValueList.get(i) >= getMinYAxisValue() && yAxisValueList.get(i) <= getMaxYAxisValue()) { //目标值在最值区间
                 deltaValue = getMaxYAxisValue() - getMinYAxisValue();
                 scale = (yAxisValueList.get(i) - getMinYAxisValue()) / deltaValue; // 通过每个数据除以最大的数据 得到所占比
 
-                top = (float) (5 * height / 5 - (5 * height / 5 * scale)); // 图表高度减数据高度 得到每个数据的坐标点
+                top = (float) (height - (height * scale)); // 图表高度减数据高度 得到每个数据的坐标点
 
                 top = top + getLineChartPadding(4);
             }
@@ -531,6 +533,7 @@ public class BPChartView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        updateViewPoint();
 //        refreshChartData(mQueryType,mDataType);
         if (xAxisValueList == null || mSysMaxPointList.isEmpty()) {
             return;
@@ -547,9 +550,9 @@ public class BPChartView extends View {
             if (isInVisibleArea(mSysMaxPointList.get(position).x)) {
                 drawIndicate(canvas, position);
                 if (mSysMaxPointList.get(position).y != 0) { // 跳过值为0的点
-                    //drawBarChart(canvas, position);
                     drawChartData(canvas, position);
                 }
+
                 drawXAxisText(canvas, position, xAxisValueList.get(position));
             }
         }
@@ -558,22 +561,30 @@ public class BPChartView extends View {
     }
 
     private void drawChartData(Canvas canvas, int position) {
-
+        int dy = getHeight()+getBottom();
+//        float sysMaxY = mSysMaxPointList.get(position).y + dy;
+//        float sysMinY = mSysMinPointList.get(position).y + dy;
+//        float diaMaxY = mDiaMaxPointList.get(position).y + dy;
+//        float diaMinY = mDiaMinPointList.get(position).y + dy;
+        float sysMaxY = mSysMaxPointList.get(position).y;
+        float sysMinY = mSysMinPointList.get(position).y;
+        float diaMaxY = mDiaMaxPointList.get(position).y;
+        float diaMinY = mDiaMinPointList.get(position).y;
         // 圆点
-        canvas.drawCircle(mSysMaxPointList.get(position).x, mSysMaxPointList.get(position).y,
+        canvas.drawCircle(mSysMaxPointList.get(position).x, sysMaxY,
                 Screen.dp2px(getContext(), 4f), mSysPaint);
-        canvas.drawCircle(mSysMinPointList.get(position).x, mSysMinPointList.get(position).y,
+        canvas.drawCircle(mSysMinPointList.get(position).x, sysMinY,
                 Screen.dp2px(getContext(), 4f), mSysPaint);
         // 柱状线
-        canvas.drawLine(mSysMaxPointList.get(position).x, mSysMaxPointList.get(position).y,
-                mSysMinPointList.get(position).x, mSysMinPointList.get(position).y, mSysLinePaint);
+        canvas.drawLine(mSysMaxPointList.get(position).x, sysMaxY,
+                mSysMinPointList.get(position).x, sysMinY, mSysLinePaint);
 
         // 棱型
         drawDiaData(canvas, position, mDiaMaxPointList);
         drawDiaData(canvas, position, mDiaMinPointList);
         Log.i(TAG, "drawChartData" + position + "," + mDiaMaxPointList.toString() + "," + mDiaMinPointList.toString());
-        canvas.drawLine(mDiaMaxPointList.get(position).x, mDiaMaxPointList.get(position).y,
-                mDiaMinPointList.get(position).x, mDiaMinPointList.get(position).y, mDiaLinePaint);
+        canvas.drawLine(mDiaMaxPointList.get(position).x, diaMaxY,
+                mDiaMinPointList.get(position).x, diaMinY, mDiaLinePaint);
     }
 
     private void drawDiaData(Canvas canvas, int position, List<Point> mPointList) {

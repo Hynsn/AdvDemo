@@ -70,7 +70,6 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
 
     //柱子数量等分屏幕后的每份宽度
     private var mInterval = 0f
-    private var mHeight = 0
     private val barWidth = 30f
 
 
@@ -81,6 +80,12 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
     private var mSysMinPointList = ArrayList<Point>()
     private val mDiaMaxPointList = ArrayList<Point>()
     private val mDiaMinPointList = ArrayList<Point>()
+
+    private var ySysMaxAxisList = ArrayList<Float>()
+    private var ySysMinAxisList = ArrayList<Float>()
+    private val yDiaMaxAxisList = ArrayList<Float>()
+    private val yDiaMinAxisList = ArrayList<Float>()
+
     private var mDateType = DateType.DAY
 
     init {
@@ -98,8 +103,6 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
         targetPaddingEnd = t.getDimension(R.styleable.BPYaxisChart_targetPaddingEnd, 10F)
         targetPaddingBottom = t.getDimension(R.styleable.BPYaxisChart_targetPaddingBottom, 10F)
 
-
-        mHeight = Screen.dp2px(context, 400f)
         mInterval = getInterval(getDivisorCount(DateType.DAY))
     }
 
@@ -150,7 +153,7 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
                 paint.apply {
                     style = Paint.Style.FILL
                     isAntiAlias = true
-                    color = ContextCompat.getColor(context, R.color.color_4daaf7)
+                    color = ContextCompat.getColor(context, R.color.color_ffa94d)
                 }
             }
             PaintType.SYS_LINE -> {
@@ -184,7 +187,7 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-
+        updateViewPoint()
         drawYaxis(canvas)
 
         val count = canvas.save()
@@ -205,35 +208,31 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
     }
 
     private fun drawChartData(canvas: Canvas, position: Int) {
-        Log.i(TAG,"${System.identityHashCode(this)}drawChartData: ${mSysMaxPointList[position]}")
+        Log.i(TAG, "${System.identityHashCode(this)}drawChartData: ${mSysMaxPointList[position]}")
+
+        val sysMaxY = mSysMaxPointList[position].y
+        val sysMinY = mSysMinPointList[position].y
+        val diaMaxY = mDiaMaxPointList[position].y
+        val diaMinY = mDiaMinPointList[position].y
+
+        val sysMaxX = mSysMaxPointList[position].x
+        val sysMinX = mSysMinPointList[position].x
+        val diaMaxX = mDiaMaxPointList[position].x
+        val diaMinX = mDiaMinPointList[position].x
         // 圆点
         setPaintStyle(PaintType.SYS_PAINT)
-        val bottom = (height - paddingBottom).toFloat()
-        canvas.drawCircle(mSysMaxPointList[position].x, mSysMaxPointList[position].y - bottom, dp2px(context, 4f).toFloat(), paint)
-        canvas.drawCircle(mSysMinPointList[position].x, mSysMinPointList[position].y - bottom, dp2px(context, 4f).toFloat(), paint)
+        canvas.drawCircle(sysMaxX, sysMaxY, dp2px(context, 4f).toFloat(), paint)
+        canvas.drawCircle(sysMinX, sysMinY, dp2px(context, 4f).toFloat(), paint)
         // 柱状线
         setPaintStyle(PaintType.SYS_LINE)
-        canvas.drawLine(
-            mSysMaxPointList[position].x,
-            mSysMaxPointList[position].y,
-            mSysMinPointList[position].x,
-            mSysMinPointList[position].y,
-            paint
-        )
-
+        canvas.drawLine(sysMaxX, sysMaxY, sysMinX, sysMinY, paint)
         // 棱型
         setPaintStyle(PaintType.DIA_PAINT)
         drawDiaData(canvas, position, mDiaMaxPointList)
         drawDiaData(canvas, position, mDiaMinPointList)
-        Log.i(TAG, "drawChartData$position,$mDiaMaxPointList,$mDiaMinPointList")
+
         setPaintStyle(PaintType.DIA_LINE)
-        canvas.drawLine(
-            mDiaMaxPointList[position].x,
-            mDiaMaxPointList[position].y,
-            mDiaMinPointList[position].x,
-            mDiaMinPointList[position].y,
-            paint
-        )
+        canvas.drawLine(diaMaxX, diaMaxY, diaMinX, diaMinY, paint)
     }
 
     private fun drawDiaData(canvas: Canvas, position: Int, mPointList: List<Point>) {
@@ -290,7 +289,7 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
         canvas.drawText(text, x, y, paint)
     }
 
-    private fun getXAxisPadding():Float{
+    private fun getXAxisPadding(): Float {
         return textPaddingLeft + maxLengedWidth + textPaddingRight
     }
 
@@ -335,7 +334,13 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
         invalidate()
     }
 
-    private fun drawYaxisLine(canvas: Canvas, yAxis: Float, startX: Float, isTarget: Boolean, color: Int) {
+    private fun drawYaxisLine(
+        canvas: Canvas,
+        yAxis: Float,
+        startX: Float,
+        isTarget: Boolean,
+        color: Int
+    ) {
         if (isTarget) {
             setPaintStyle(PaintType.TARGET_LINE)
             paint.color = color
@@ -434,15 +439,14 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
      * 计算处理数据坐标
      *
      */
-    private fun convertPoint(x: Float, i: Int): Point {
-        val deltaValue: Float = maxYaxis - minYaxis
+    private fun convertPoint(x: Float, i: Int, dy: Float): Point {
         var scale: Float
         var top = 0f
-        val height: Int = mHeight
+        val height: Int = height
         getIndicateLocation(mIndicateRecF, i)
         val left = mIndicateRecF.left + mInterval / 2
         if (x in minYaxis..maxYaxis) {
-            scale = (x - minYaxis) / deltaValue
+            scale = (x - minYaxis) / dy
             top = (height - height * scale)
         }
 
@@ -469,7 +473,7 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
         var top = paddingTop.toFloat()
         var bottom = (height - paddingBottom).toFloat()
         bottom -= mIndicateBottomPadding
-        outRect.set(left,top,right,bottom)
+        outRect.set(left, top, right, bottom)
     }
 
     private fun getInterval(divisor: Int): Float {
@@ -511,28 +515,63 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
         if (mDiaMinPointList.isNotEmpty()) {
             mDiaMinPointList.clear()
         }
+        if (ySysMaxAxisList.isNotEmpty()) {
+            ySysMaxAxisList.clear()
+        }
+        if (ySysMinAxisList.isNotEmpty()) {
+            ySysMinAxisList.clear()
+        }
+        if (yDiaMaxAxisList.isNotEmpty()) {
+            yDiaMaxAxisList.clear()
+        }
+        if (yDiaMinAxisList.isNotEmpty()) {
+            yDiaMinAxisList.clear()
+        }
         var xAxisText = ""
         data.forEachIndexed { index, it ->
             xAxisText = when (type) {
                 DateType.DAY -> {
-                    dateFormatForSecondTimestamp(it.maxTimestamp, VesyncDateFormatUtils.DatePattern_M_d)
+                    dateFormatForSecondTimestamp(
+                        it.maxTimestamp,
+                        VesyncDateFormatUtils.DatePattern_M_d
+                    )
                 }
                 DateType.WEEK -> {
                     getSundayToSaturdayOfWeek(it.maxTimestamp * 1000)
                 }
                 DateType.MONTH -> {
-                    dateFormatForSecondTimestamp(it.maxTimestamp, VesyncDateFormatUtils.DatePattern_M)
+                    dateFormatForSecondTimestamp(
+                        it.maxTimestamp,
+                        VesyncDateFormatUtils.DatePattern_M
+                    )
                 }
             }
             xAxisLegentList.add(index, xAxisText)
-            mSysMaxPointList.add(convertPoint(it.spInMax.toFloat(), index))
-            mSysMinPointList.add(convertPoint(it.spInMin.toFloat(), index))
-            mDiaMaxPointList.add(convertPoint(it.dpInMax.toFloat(), index))
-            mDiaMinPointList.add(convertPoint(it.dpInMin.toFloat(), index))
+
+            ySysMaxAxisList.add(it.spInMax.toFloat())
+            ySysMinAxisList.add(it.spInMin.toFloat())
+            yDiaMaxAxisList.add(it.dpInMax.toFloat())
+            yDiaMinAxisList.add(it.dpInMin.toFloat())
 
         }
 
         invalidate()
+    }
+
+    private fun updateViewPoint() {
+        updateOneViewPoint(mSysMaxPointList, ySysMaxAxisList)
+        updateOneViewPoint(mSysMinPointList, ySysMinAxisList)
+        updateOneViewPoint(mDiaMaxPointList, yDiaMaxAxisList)
+        updateOneViewPoint(mDiaMinPointList, yDiaMinAxisList)
+    }
+
+    private fun updateOneViewPoint(points: ArrayList<Point>, yList: List<Float>) {
+        val dY = maxYaxis - minYaxis
+        if (points.isEmpty()) {
+            yList.forEachIndexed { index, v ->
+                points.add(convertPoint(v, index, dY))
+            }
+        }
     }
 
     data class Point(var x: Float, var y: Float)

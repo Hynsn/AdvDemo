@@ -204,12 +204,18 @@ public class BPChartView extends View {
     private float weekScale = 0.6986f;
     private float monthScale = 0.6986f;
 
+    // 控件高度
+    private int mHeight = 0;
+
     public BPChartView(Context context) {
         this(context, null);
+        initPaints(context);
     }
 
     public BPChartView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
+        initPaints(context);
+
     }
 
     public BPChartView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -280,6 +286,8 @@ public class BPChartView extends View {
         mDiaLinePaint.setStrokeWidth(Screen.dp2px(getContext(), 7f));
 
         mIndicateLoc = new RectF();
+
+        mHeight = Screen.dp2px(context,400f);
     }
 
     //设置图表数据
@@ -478,7 +486,7 @@ public class BPChartView extends View {
             computeIndicateLocation(mIndicateLoc, i);
             float left = mIndicateLoc.left + mInterval / 2 + 1; // 加上间隔
             // 获取view的高度 减去所有控件的高度 得到 图表的高度 16代表预留出来的边距
-            int h = 300;
+            int h = mHeight;
             int height = h - mShadowMarginHeight;
             if (yAxisValueList.get(i) >= getMinYAxisValue() && yAxisValueList.get(i) <= getMaxYAxisValue()) { //目标值在最值区间
                 deltaValue = getMaxYAxisValue() - getMinYAxisValue();

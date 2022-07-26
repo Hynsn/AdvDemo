@@ -21,45 +21,53 @@ class BPChartFragment : BaseFragment<FragChartBpchartBinding, ChartVM>(), View.O
     ) = FragChartBpchartBinding.inflate(inflater, container, false)
 
     override fun bindView() {
-//[Data{spInMmHgMax=12, spInMmHgMin=12, dpInMmHgMax=85, dpInMmHgMin=85, spInKpaMax=16, spInKpaMin=16, dpInKpaMax=113, dpInKpaMin=113},
-// Data{spInMmHgMax=4, spInMmHgMin=1, dpInMmHgMax=9, dpInMmHgMin=2, spInKpaMax=5, spInKpaMin=1, dpInKpaMax=12, dpInKpaMin=3}]
 
         val d1 = BloodPressureChartData(
-            dpInMmHgMin = 85, dpInMmHgMax = 85,
-            dpInKpaMin = 113, dpInKpaMax = 113,
+            dpInMmHgMin = 85, dpInMmHgMax = 120,
+            spInMmHgMin = 12, spInMmHgMax = 24,
             maxTimestamp = 1641744645, minTimestamp = 1641744645,
+            dpInKpaMin = 113, dpInKpaMax = 113,
             spInKpaMin = 16, spInKpaMax = 16,
-            spInMmHgMin = 12, spInMmHgMax = 12,
             timeStr = "2022-01-10"
         )
         val d2 = BloodPressureChartData(
-            dpInMmHgMin = 2, dpInMmHgMax = 9,
-            dpInKpaMin = 3, dpInKpaMax = 12,
+            dpInMmHgMin = 1, dpInMmHgMax = 9,
+            spInMmHgMin = 1, spInMmHgMax = 20,
             maxTimestamp = 1657261877, minTimestamp = 1657261836,
+            dpInKpaMin = 3, dpInKpaMax = 12,
             spInKpaMin = 1, spInKpaMax = 5,
-            spInMmHgMin = 1, spInMmHgMax = 4,
             timeStr = "2022-01-11"
         )
         bind.chartBp.apply {
-            initChartData(BPQueryTimeType.DAY, BPUnitType.MMHG, arrayListOf(d1, d2), true)
+            initChartData(BPQueryTimeType.DAY, BPUnitType.KPA, arrayListOf(d1,d2), true)
             setOnScaleListener { position, yAxisValue, data ->
 
             }
         }
+        val d3 = BPYaxisChart.ChartData(
+            dpInMin = 85, dpInMax = 120,
+            spInMin = 12, spInMax = 24,
+            maxTimestamp = 1641744645, minTimestamp = 1641744645,
+            timeStr = "2022-01-10"
+        )
+        val d4 = BPYaxisChart.ChartData(
+            dpInMin = 1, dpInMax = 9,
+            spInMin = 1, spInMax = 20,
+            maxTimestamp = 1657261877, minTimestamp = 1657261836,
+            timeStr = "2022-01-11"
+        )
         bind.bpChart.apply {
             setYaxisMaxMin(300f,0f)
+            setTargetMaxMin(140f,90f)
+            setData(BPYaxisChart.DateType.DAY,arrayListOf(d3,d4))
             XaxisHeight = bind.chartBp.shadowMarginHeight
         }
+
         bind.bpChart1.apply {
             setYaxisMaxMin(300f,0f)
+            setTargetMaxMin(140f,90f)
+            setData(BPYaxisChart.DateType.DAY,arrayListOf(d3,d4))
             XaxisHeight = 0
-        }
-        bind.rulerWeight.apply {
-            setScope(1000,13000,500, RulerView.RulerType.DISTANCE)
-            setCurrentValue(1000)
-            setScrollSelected { s,v ->
-
-            }
         }
     }
 

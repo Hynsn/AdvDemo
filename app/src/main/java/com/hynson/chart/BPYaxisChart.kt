@@ -72,7 +72,7 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
     private fun setPaintStyle(type: PaintType) {
         paint.reset()
         when (type) {
-            PaintType.CENT_LINE -> {
+            PaintType.CENTER_LINE -> {
                 paint.apply {
                     style = Paint.Style.STROKE
                     strokeWidth = centerXSize
@@ -135,7 +135,7 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
             drawTargetText(canvas,tagetMaxYaxis,maxColor)
         }
         val startX = textPaddingLeft + maxLengedWidth + textPaddingRight
-        drawMiddleLine(canvas, startX)
+        drawCenterLine(canvas, startX)
     }
 
     fun setYaxisMaxMin(max: Float, min: Float) {
@@ -185,8 +185,8 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
         return (fmi.bottom - fmi.top) / 2 - fmi.bottom
     }
 
-    private fun drawMiddleLine(canvas: Canvas, startX: Float) {
-        setPaintStyle(PaintType.CENT_LINE)
+    private fun drawCenterLine(canvas: Canvas, startX: Float) {
+        setPaintStyle(PaintType.CENTER_LINE)
         val left: Float = (width + startX) / 2
         val top = 0f
         val bottom: Float = getYAxis(minYaxis)
@@ -213,7 +213,7 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
     }
 
     enum class PaintType {
-        CENT_LINE,
+        CENTER_LINE,
         YAXIS_LINE,
         YAXIS_LEGEND, // Y轴图例
         TARGET_LINE

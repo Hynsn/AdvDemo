@@ -29,6 +29,7 @@ import utils.Screen;
 public class BPChartView extends View {
 
     private static final String TAG = BPChartView.class.getSimpleName();
+
     private int mXAxisBeginRange = 0;
 
     private int mXAxisEndRange;
@@ -750,7 +751,8 @@ public class BPChartView extends View {
                     } else {
                         maxOverScrollX = getWidth();
                     }
-
+                    maxOverScrollX = getWidth() / 2;
+                    Log.i(TAG,"overScrollBy: "+deltaX+","+getScrollX()+","+getScrollY()+","+getMaximumScroll()+","+maxOverScrollX);
                     if (overScrollBy(deltaX, 0, getScrollX(), getScrollY(), (int) getMaximumScroll(), 0, maxOverScrollX, 0, true)) {
                         mVelocityTracker.clear();
                     }

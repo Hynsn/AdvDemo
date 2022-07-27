@@ -5,38 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/fl_chart"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <com.hynson.chart.BPYaxisChart
-            android:id="@+id/bp_chart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/chart_bp_gradient"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            app:centerXSize="0.5dp"
-            app:centerXColor="@color/color_002c5b"
-            app:YLineSize="1dp"
-            app:YColor="@color/color_3300"
-            app:textColorY="@color/color_a600"
-            app:textSizeY="11sp"
-            app:textPaddingLeft="4dp"
-            app:textPaddingRight="4dp"
-            app:targetPaddingEnd="4dp"
-            app:targetPaddingBottom="3.5dp"
-            android:visibility="visible"/>
-        <com.hynson.chart.BPChartView
-            android:id="@+id/chart_bp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
-    </FrameLayout>
     <FrameLayout
         android:id="@+id/fl_chart1"
         android:layout_width="match_parent"
@@ -78,8 +47,40 @@
             app:textPaddingRight="4dp"
             app:targetPaddingEnd="4dp"
             app:targetPaddingBottom="3.5dp"
-            app:axisXBottom="20dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"/>
+    </FrameLayout>
+    <FrameLayout
+        android:id="@+id/fl_chart"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <com.hynson.chart.BPYaxisChart
+            android:id="@+id/bp_chart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/chart_bp_gradient"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            app:centerXSize="0.5dp"
+            app:centerXColor="@color/color_002c5b"
+            app:YLineSize="1dp"
+            app:YColor="@color/color_3300"
+            app:textColorY="@color/color_a600"
+            app:textSizeY="11sp"
+            app:textPaddingLeft="4dp"
+            app:textPaddingRight="4dp"
+            app:targetPaddingEnd="4dp"
+            app:targetPaddingBottom="3.5dp"
+            app:axisXBottom="20dp"
+            android:visibility="visible"/>
+        <com.hynson.chart.BPChartView
+            android:id="@+id/chart_bp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </FrameLayout>
 </LinearLayout>

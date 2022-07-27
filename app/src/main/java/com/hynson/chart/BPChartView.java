@@ -100,7 +100,8 @@ public class BPChartView extends View {
     /**
      * 底部文字和指示标的高度
      */
-    private int mShadowMarginHeight;
+    private int axisXBottom;
+    private int axisYLeft;
 
     private int mLastMotionX;
 
@@ -144,10 +145,10 @@ public class BPChartView extends View {
     /**
      * Y轴坐标数据集
      */
-    private List<Double> ySysMaxAxisValueList = new ArrayList<>();
-    private List<Double> ySysMinAxisValueList = new ArrayList<>();
-    private List<Double> yDiaMaxAxisValueList = new ArrayList<>();
-    private List<Double> yDiaMinAxisValueList = new ArrayList<>();
+    private List<Float> ySysMaxAxisValueList = new ArrayList<>();
+    private List<Float> ySysMinAxisValueList = new ArrayList<>();
+    private List<Float> yDiaMaxAxisValueList = new ArrayList<>();
+    private List<Float> yDiaMinAxisValueList = new ArrayList<>();
 
     /**
      * 坐标集合
@@ -192,8 +193,7 @@ public class BPChartView extends View {
      */
     private float xAxisYPos;
     private BPQueryTimeType mQueryType = BPQueryTimeType.DAY; //查询的日、周、月类型
-    private BPUnitType mDataType = BPUnitType.MMHG; //查询的具体数据类型
-    private List<BloodPressureChartData> mChartData = new ArrayList<>();
+    private List<BPChartData> mChartData = new ArrayList<>();
 
     //柱状图属性
     private float mInterval; //柱子数量等分屏幕后的每份宽度
@@ -204,6 +204,9 @@ public class BPChartView extends View {
     private float weekScale = 0.6986f;
     private float monthScale = 0.6986f;
 
+    // 柱状图宽度
+    private int mSysLineWidth = 0;
+    private int mDiaLineWidth = 0;
 
     public BPChartView(Context context) {
         this(context, null);
@@ -236,9 +239,6 @@ public class BPChartView extends View {
         mIndicateWidth = Screen.dp2px(context, 1);
         mIndicateColor = ContextCompat.getColor(context, R.color.color_d900);
         mIndicateBottomPadding = Screen.dp2px(getContext(), 20);
-
-        //设置底部文字和指示标的高度
-        mShadowMarginHeight = Screen.dp2px(getContext(), 30);
 
         mOverScroller = new OverScroller(getContext());
         setOverScrollMode(OVER_SCROLL_ALWAYS);
@@ -274,40 +274,37 @@ public class BPChartView extends View {
         mSysLinePaint.setAntiAlias(true);
         mSysLinePaint.setColor(ContextCompat.getColor(getContext(), R.color.color_4daaf7));
         mSysLinePaint.setAlpha(alPhaValue);
-        mSysLinePaint.setStrokeWidth(Screen.dp2px(getContext(), 7f));
+        mSysLineWidth = Screen.dp2px(getContext(), 7f);
+        mSysLinePaint.setStrokeWidth(mSysLineWidth);
 
         mDiaLinePaint = new Paint();
         mDiaLinePaint.setStyle(Paint.Style.FILL);
         mDiaLinePaint.setAntiAlias(true);
         mDiaLinePaint.setColor(ContextCompat.getColor(getContext(), R.color.color_ffa94d));
         mDiaLinePaint.setAlpha(alPhaValue);
-        mDiaLinePaint.setStrokeWidth(Screen.dp2px(getContext(), 7f));
+        mDiaLineWidth = Screen.dp2px(getContext(), 7f);
+        mDiaLinePaint.setStrokeWidth(mDiaLineWidth);
 
         mIndicateLoc = new RectF();
 
     }
 
     //设置图表数据
-    public void initChartData(BPQueryTimeType queryType, BPUnitType dataType,
-                              List<BloodPressureChartData> chartData, boolean needToEnd) {
+    public void initChartData(BPQueryTimeType queryType, List<BPChartData> chartData, boolean needToEnd) {
         mQueryType = queryType;
-        mDataType = dataType;
         if (chartData == null) {
             return;
-        }
-
-        if (dataType == BPUnitType.MMHG) {
-            maxYAxisValue = 300.0;
-            minYAxisValue = 0.0;
-        } else {
-            maxYAxisValue = 40.0;
-            minYAxisValue = 0.0;
         }
 
         mChartData.clear();
         mChartData.addAll(chartData);
         initXAxisScale(queryType);
-        loadData(queryType, dataType, mChartData, needToEnd);
+        loadData(queryType, mChartData, needToEnd);
+    }
+
+    public void setMaxMinYAxis(int max, int min) {
+        maxYAxisValue = max;
+        minYAxisValue = min;
     }
 
     public void clearData() {
@@ -317,13 +314,12 @@ public class BPChartView extends View {
     }
 
     //刷新图表数据
-    public void refreshChartData(BPQueryTimeType queryType, BPUnitType dataType) {
+    public void refreshChartData(BPQueryTimeType queryType) {
         mQueryType = queryType;
-        mDataType = dataType;
 
         initXAxisScale(queryType);
 
-        loadData(queryType, dataType, mChartData, true);
+        loadData(queryType, mChartData, true);
     }
 
     //初始化X轴的刻度
@@ -381,8 +377,7 @@ public class BPChartView extends View {
                 getContext(), paddingEdge) - barWidth * divisor) / divisor;
     }
 
-    private void loadData(BPQueryTimeType queryType, BPUnitType dataType,
-                          List<BloodPressureChartData> chartData, boolean needToEnd) {
+    private void loadData(BPQueryTimeType queryType, List<BPChartData> chartData, boolean needToEnd) {
 
         yDiaMaxAxisValueList.clear();
         yDiaMinAxisValueList.clear();
@@ -410,28 +405,15 @@ public class BPChartView extends View {
 
             }
             tmpXAxisValues.add(i, xAxisValue);
-
-            if (dataType == BPUnitType.MMHG) {
-                ySysMaxAxisValueList.add(i, (double) mChartData.get(i).getSpInMmHgMax());
-                ySysMinAxisValueList.add(i, (double) mChartData.get(i).getSpInMmHgMin());
-                yDiaMaxAxisValueList.add(i, (double) mChartData.get(i).getDpInMmHgMax());
-                yDiaMinAxisValueList.add(i, (double) mChartData.get(i).getDpInMmHgMin());
-            } else if (dataType == BPUnitType.KPA) {
-                ySysMaxAxisValueList.add(i, (double) mChartData.get(i).getSpInKpaMax() / 10f);
-                ySysMinAxisValueList.add(i, (double) mChartData.get(i).getSpInKpaMin() / 10f);
-                yDiaMaxAxisValueList.add(i, (double) mChartData.get(i).getDpInKpaMax() / 10f);
-                yDiaMinAxisValueList.add(i, (double) mChartData.get(i).getDpInKpaMin() / 10f);
-            }
+            ySysMaxAxisValueList.add((float) mChartData.get(i).getSpInMax());
+            ySysMinAxisValueList.add((float) mChartData.get(i).getSpInMin());
+            yDiaMaxAxisValueList.add((float) mChartData.get(i).getDpInMax());
+            yDiaMinAxisValueList.add((float) mChartData.get(i).getDpInMin());
         }
 
         this.xAxisValueList = tmpXAxisValues;
 
         minYAxisValue = 0d; //计算最小值
-        if (dataType == BPUnitType.MMHG) {
-            maxYAxisValue = 300d; //计算最大值
-        } else if (dataType == BPUnitType.KPA) {
-            maxYAxisValue = 40d; //计算最大值
-        }
 
         mXAxisEndRange = xAxisValueList.size() - 1;
         mYAxisEndRange = ySysMaxAxisValueList.size() - 1;
@@ -445,8 +427,8 @@ public class BPChartView extends View {
         invalidate();
     }
 
-    private void updateViewPoint(){
-        if(mSysMaxPointList.isEmpty()){
+    private void updateViewPoint() {
+        if (mSysMaxPointList.isEmpty()) {
             mSysMaxPointList = createPointList(ySysMaxAxisValueList);
             mSysMinPointList = createPointList(ySysMinAxisValueList);
             mDiaMaxPointList = createPointList(yDiaMaxAxisValueList);
@@ -478,40 +460,37 @@ public class BPChartView extends View {
      * 目标值到最小值占据图表的1/3
      * 最大值到最小值占据图表的2/3
      */
-    private List<Point> createPointList(List<Double> yAxisValueList) {
+    private List<Point> createPointList(List<Float> yAxisValueList) {
 
         List<Point> points = new ArrayList<>();
         double deltaValue;
         double scale;
         float top = 0;
         for (int i = 0; i < yAxisValueList.size(); i++) {
+
             computeIndicateLocation(mIndicateLoc, i);
-            float left = mIndicateLoc.left + mInterval / 2 + 1; // 加上间隔
+            float left = mIndicateLoc.left + mInterval / 2 + getAxisXOffet(); // 加上间隔
             // 获取view的高度 减去所有控件的高度 得到 图表的高度 16代表预留出来的边距
             int h = getHeight();
-            int height = h - mShadowMarginHeight;
+            int height = h - axisXBottom - Math.max(mSysLineWidth, mDiaLineWidth);
             if (yAxisValueList.get(i) >= getMinYAxisValue() && yAxisValueList.get(i) <= getMaxYAxisValue()) { //目标值在最值区间
                 deltaValue = getMaxYAxisValue() - getMinYAxisValue();
                 scale = (yAxisValueList.get(i) - getMinYAxisValue()) / deltaValue; // 通过每个数据除以最大的数据 得到所占比
 
                 top = (float) (height - (height * scale)); // 图表高度减数据高度 得到每个数据的坐标点
 
-                top = top + getLineChartPadding(4);
+                //                top = top + getLineChartPadding(4);
             }
 
-            Point point = new Point();
-            point.x = left;
-            point.y = top;
+            Point point = new Point(left, top);
             points.add(point);
         }
 
         return points;
     }
 
-
-    //设置图表预留边距
-    private int getLineChartPadding(int dp) {
-        return Screen.dp2px(getContext(), dp);
+    private float getAxisXOffet() {
+        return axisYLeft + Math.max(mSysLineWidth, mDiaLineWidth) - mIndicateWidth;
     }
 
     @Override
@@ -534,7 +513,7 @@ public class BPChartView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         updateViewPoint();
-//        refreshChartData(mQueryType,mDataType);
+
         if (xAxisValueList == null || mSysMaxPointList.isEmpty()) {
             return;
         }
@@ -565,41 +544,42 @@ public class BPChartView extends View {
         float sysMinY = mSysMinPointList.get(position).y;
         float diaMaxY = mDiaMaxPointList.get(position).y;
         float diaMinY = mDiaMinPointList.get(position).y;
+
         // 圆点
-        canvas.drawCircle(mSysMaxPointList.get(position).x, sysMaxY,
-                Screen.dp2px(getContext(), 4f), mSysPaint);
-        canvas.drawCircle(mSysMinPointList.get(position).x, sysMinY,
-                Screen.dp2px(getContext(), 4f), mSysPaint);
+        float sysR = mSysLineWidth / 2f;
+        canvas.drawCircle(mSysMaxPointList.get(position).x, sysMaxY, sysR, mSysPaint);
+        canvas.drawCircle(mSysMinPointList.get(position).x, sysMinY, sysR, mSysPaint);
         // 柱状线
         canvas.drawLine(mSysMaxPointList.get(position).x, sysMaxY,
                 mSysMinPointList.get(position).x, sysMinY, mSysLinePaint);
 
         // 棱型
-        drawDiaData(canvas, position, mDiaMaxPointList);
-        drawDiaData(canvas, position, mDiaMinPointList);
+        float diaR = mDiaLineWidth / 2f;
+        drawDiaData(canvas, position, mDiaMaxPointList, diaR);
+        drawDiaData(canvas, position, mDiaMinPointList, diaR);
         Log.i(TAG, "drawChartData" + position + "," + mDiaMaxPointList.toString() + "," + mDiaMinPointList.toString());
         canvas.drawLine(mDiaMaxPointList.get(position).x, diaMaxY,
                 mDiaMinPointList.get(position).x, diaMinY, mDiaLinePaint);
     }
 
-    private void drawDiaData(Canvas canvas, int position, List<Point> mPointList) {
+    private void drawDiaData(Canvas canvas, int position, List<Point> mPointList, float a) {
 
         //绘制路径
         Path path = new Path();
         //从哪个点开始绘制
-        path.moveTo(mPointList.get(position).x - Screen.dp2px(getContext(), 3.5f),
+        path.moveTo(mPointList.get(position).x - a,
                 mPointList.get(position).y);
         //然后绘制到哪个点
         path.lineTo(mPointList.get(position).x,
-                mPointList.get(position).y - Screen.dp2px(getContext(), 3.5f));
+                mPointList.get(position).y - a);
         //然后再绘制到哪个点
-        path.lineTo(mPointList.get(position).x + Screen.dp2px(getContext(), 3.5f),
+        path.lineTo(mPointList.get(position).x + a,
                 mPointList.get(position).y);
         //然后再绘制到哪个点
         path.lineTo(mPointList.get(position).x,
-                mPointList.get(position).y + Screen.dp2px(getContext(), 3.5f));
+                mPointList.get(position).y + a);
         //然后再绘制到哪个点
-        path.lineTo(mPointList.get(position).x - Screen.dp2px(getContext(), 3.5f),
+        path.lineTo(mPointList.get(position).x - a,
                 mPointList.get(position).y);
 
         canvas.drawPath(path, mDiaPaint);
@@ -610,8 +590,8 @@ public class BPChartView extends View {
      */
     private void drawIndicate(Canvas canvas, int position) {
         computeIndicateLocation(mIndicateLoc, position);
-        float left = mIndicateLoc.left + mInterval / 2;
-        float right = mIndicateLoc.right - mInterval / 2;
+        float left = mIndicateLoc.left + mInterval / 2 + getAxisXOffet();
+        float right = mIndicateLoc.right - mInterval / 2 + getAxisXOffet();
         float bottom = mIndicateLoc.bottom;
         float top = bottom - mIndicateHeight;
         if (this.mSelectPosition == position) {
@@ -619,11 +599,7 @@ public class BPChartView extends View {
         } else {
             mIndicatePaint.setColor(mIndicateColor);
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            canvas.drawRoundRect(left, top, right, bottom, 5, 5, mIndicatePaint);
-        } else {
-            canvas.drawRect(left, top, right, bottom, mIndicatePaint);
-        }
+        canvas.drawRoundRect(left, top, right, bottom, 5, 5, mIndicatePaint);
     }
 
 
@@ -642,7 +618,7 @@ public class BPChartView extends View {
         }
         mXAxisTextPaint.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/BEBAS.ttf"));
 
-        float x = mIndicateLoc.left + barWidth / 2 + getXAxisPadding();
+        float x = mIndicateLoc.left + barWidth / 2 + getXAxisPadding() + getAxisXOffet();
 
         float y = mIndicateLoc.bottom + mIndicateBottomPadding - mXAxisTextBottomPadding;
 
@@ -766,7 +742,7 @@ public class BPChartView extends View {
                         maxOverScrollX = getWidth();
                     }
                     maxOverScrollX = getWidth() / 2;
-                    Log.i(TAG,"overScrollBy: "+deltaX+","+getScrollX()+","+getScrollY()+","+getMaximumScroll()+","+maxOverScrollX);
+                    Log.i(TAG, "overScrollBy: " + deltaX + "," + getScrollX() + "," + getScrollY() + "," + getMaximumScroll() + "," + maxOverScrollX);
                     if (overScrollBy(deltaX, 0, getScrollX(), getScrollY(), (int) getMaximumScroll(), 0, maxOverScrollX, 0, true)) {
                         mVelocityTracker.clear();
                     }
@@ -1007,11 +983,6 @@ public class BPChartView extends View {
         }
     }
 
-//    @Override
-//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-//    }
-
     private boolean isAlignTop() {
         return (mGravity & Gravity.TOP) == Gravity.TOP;
     }
@@ -1060,7 +1031,7 @@ public class BPChartView extends View {
     }
 
     public interface OnScaleListener {
-        void onScaleChanged(int position, double yAxisValue, BloodPressureChartData data);
+        void onScaleChanged(int position, double yAxisValue, BPChartData data);
     }
 
     public interface OnSelectListener {
@@ -1075,10 +1046,6 @@ public class BPChartView extends View {
 
         public float x;
         public float y;
-
-        Point() {
-
-        }
 
         Point(float x, float y) {
             this.x = x;
@@ -1105,8 +1072,9 @@ public class BPChartView extends View {
         return minYAxisValue;
     }
 
-    public int getShadowMarginHeight() {
-        return mShadowMarginHeight;
+    public void setReferAxisXY(int axisXBottom, int axisYLeft) {
+        this.axisXBottom = axisXBottom;
+        this.axisYLeft = axisYLeft;
     }
 
     public double getGoalValue() {
@@ -1121,15 +1089,7 @@ public class BPChartView extends View {
         return xAxisValueList;
     }
 
-    public BPUnitType getDataType() {
-        return mDataType;
-    }
-
-    public void setDataType(BPUnitType mDataType) {
-        this.mDataType = mDataType;
-    }
-
-    public List<BloodPressureChartData> getChartData() {
+    public List<BPChartData> getChartData() {
         return mChartData;
     }
 }

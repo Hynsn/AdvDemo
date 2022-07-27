@@ -62,7 +62,6 @@ open class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, a
 
     private val lineRange = ArrayList<Float>()
 
-
     init {
 
         val t = context.obtainStyledAttributes(attrs, R.styleable.BPYaxisChart)

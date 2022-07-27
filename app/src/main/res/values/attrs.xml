@@ -61,5 +61,10 @@
         <attr name="targetPaddingBottom" format="dimension"/>
         <attr name="textPaddingLeft" format="dimension"/>
         <attr name="textPaddingRight" format="dimension"/>
+        <attr name="axisXBottom" format="dimension"/>
+    </declare-styleable>
+    <declare-styleable name="BPXaxisChart">
+        <attr name="textColorX" format="color"/>
+        <attr name="textSizeX" format="dimension"/>
     </declare-styleable>
 </resources>

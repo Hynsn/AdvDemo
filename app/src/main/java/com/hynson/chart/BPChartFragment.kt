@@ -44,13 +44,13 @@ class BPChartFragment : BaseFragment<FragChartBpchartBinding, ChartVM>(), View.O
 
             }
         }
-        val d3 = BPYaxisChart.ChartData(
+        val d3 = BPXaxisChart.ChartData(
             dpInMin = 85, dpInMax = 120,
             spInMin = 12, spInMax = 24,
             maxTimestamp = 1641744645, minTimestamp = 1641744645,
             timeStr = "2022-01-10"
         )
-        val d4 = BPYaxisChart.ChartData(
+        val d4 = BPXaxisChart.ChartData(
             dpInMin = 1, dpInMax = 10,
             spInMin = 30, spInMax = 40,
             maxTimestamp = 1657261877, minTimestamp = 1657261836,
@@ -59,15 +59,16 @@ class BPChartFragment : BaseFragment<FragChartBpchartBinding, ChartVM>(), View.O
         bind.bpChart.apply {
             setYaxisMaxMin(300f,0f)
             setTargetMaxMin(140f,90f)
-            setData(BPYaxisChart.DateType.DAY,arrayListOf(d3,d4))
-            XaxisHeight = bind.chartBp.shadowMarginHeight
+            axisXBottom = bind.chartBp.shadowMarginHeight
         }
-
         bind.bpChart1.apply {
             setYaxisMaxMin(300f,0f)
             setTargetMaxMin(140f,90f)
-            setData(BPYaxisChart.DateType.DAY,arrayListOf(d3,d4))
-            XaxisHeight = 0
+        }
+        bind.bpChart2.apply {
+            setYaxisMaxMin(300f,0f)
+//            setYaxisRefer(bind.bpChart1.getXAxisPadding(),bind.bpChart1.getMinYaxisHeight())
+            setData(BPXaxisChart.DateType.DAY,arrayListOf(d3,d4))
         }
     }
 

@@ -20,7 +20,7 @@ import utils.Screen.dp2px
  * <author>  <time>     <version> <desc>
  * Hynsonhou  2022/7/25   1.0       首次创建
  */
-class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs) {
+open class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private var paint: Paint = Paint()
 
@@ -50,7 +50,7 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
 
     var YLineCount = 5
 
-    var XaxisHeight = 20
+    var axisXBottom = 20
 
     // Y轴虚线最值
     private var maxYaxis = 300f
@@ -62,31 +62,6 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
 
     private val lineRange = ArrayList<Float>()
 
-    /* 散点图 */
-
-    private val mIndicateRecF: RectF = RectF()
-    private val mIndicateBottomPadding = 0
-    private val mIndicateWidth = 0f
-
-    //柱子数量等分屏幕后的每份宽度
-    private var mInterval = 0f
-    private val barWidth = 30f
-
-
-    /* X轴坐标 */
-    private var xAxisLegentList: MutableList<String> = ArrayList<String>()
-
-    private var mSysMaxPointList = ArrayList<Point>()
-    private var mSysMinPointList = ArrayList<Point>()
-    private val mDiaMaxPointList = ArrayList<Point>()
-    private val mDiaMinPointList = ArrayList<Point>()
-
-    private var ySysMaxAxisList = ArrayList<Float>()
-    private var ySysMinAxisList = ArrayList<Float>()
-    private val yDiaMaxAxisList = ArrayList<Float>()
-    private val yDiaMinAxisList = ArrayList<Float>()
-
-    private var mDateType = DateType.DAY
 
     init {
 
@@ -102,8 +77,7 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
         textPaddingRight = t.getDimension(R.styleable.BPYaxisChart_textPaddingRight, 10f)
         targetPaddingEnd = t.getDimension(R.styleable.BPYaxisChart_targetPaddingEnd, 10F)
         targetPaddingBottom = t.getDimension(R.styleable.BPYaxisChart_targetPaddingBottom, 10F)
-
-        mInterval = getInterval(getDivisorCount(DateType.DAY))
+        axisXBottom = t.getDimensionPixelOffset(R.styleable.BPYaxisChart_axisXBottom, dp2px(context,20f))
     }
 
     private fun setPaintStyle(type: PaintType) {
@@ -187,110 +161,16 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        updateViewPoint()
         drawYaxis(canvas)
 
-        val count = canvas.save()
-
-        // 绘制横坐标，绘制柱状图
-        val xAxisEnd = xAxisLegentList.size - 1
-        for (position in 0..xAxisEnd) {
-            if (isInVisibleArea(mSysMaxPointList[position].x)) {
-                drawIndicate(canvas, position)
-                if (mSysMaxPointList[position].y != 0f) { // 跳过值为0的点
-                    drawChartData(canvas, position)
-                }
-                drawXAxisText(canvas, position, xAxisLegentList[position])
-            }
-        }
-
-        canvas.restoreToCount(count)
     }
 
-    private fun drawChartData(canvas: Canvas, position: Int) {
-        Log.i(TAG, "${System.identityHashCode(this)}drawChartData: ${mSysMaxPointList[position]}")
-
-        val sysMaxY = mSysMaxPointList[position].y
-        val sysMinY = mSysMinPointList[position].y
-        val diaMaxY = mDiaMaxPointList[position].y
-        val diaMinY = mDiaMinPointList[position].y
-
-        val sysMaxX = mSysMaxPointList[position].x
-        val sysMinX = mSysMinPointList[position].x
-        val diaMaxX = mDiaMaxPointList[position].x
-        val diaMinX = mDiaMinPointList[position].x
-        // 圆点
-        setPaintStyle(PaintType.SYS_PAINT)
-        canvas.drawCircle(sysMaxX, sysMaxY, dp2px(context, 4f).toFloat(), paint)
-        canvas.drawCircle(sysMinX, sysMinY, dp2px(context, 4f).toFloat(), paint)
-        // 柱状线
-        setPaintStyle(PaintType.SYS_LINE)
-        canvas.drawLine(sysMaxX, sysMaxY, sysMinX, sysMinY, paint)
-        // 棱型
-        setPaintStyle(PaintType.DIA_PAINT)
-        drawDiaData(canvas, position, mDiaMaxPointList)
-        drawDiaData(canvas, position, mDiaMinPointList)
-
-        setPaintStyle(PaintType.DIA_LINE)
-        canvas.drawLine(diaMaxX, diaMaxY, diaMinX, diaMinY, paint)
-    }
-
-    private fun drawDiaData(canvas: Canvas, position: Int, mPointList: List<Point>) {
-        setPaintStyle(PaintType.DIA_PAINT)
-        val path = Path()
-        path.moveTo(mPointList[position].x - dp2px(context, 3.5f), mPointList[position].y)
-        path.lineTo(mPointList[position].x, mPointList[position].y - dp2px(context, 3.5f))
-        path.lineTo(mPointList[position].x + dp2px(context, 3.5f), mPointList[position].y)
-        path.lineTo(mPointList[position].x, mPointList[position].y + dp2px(context, 3.5f))
-        path.lineTo(mPointList[position].x - dp2px(context, 3.5f), mPointList[position].y)
-        canvas.drawPath(path, paint)
-    }
-
-    /**
-     * 绘制指示标
-     */
-    private fun drawIndicate(canvas: Canvas, position: Int) {
-        setPaintStyle(PaintType.XAXIS_RULER)
-        getIndicateLocation(mIndicateRecF, position)
-        val left: Float = mIndicateRecF.left + mInterval / 2
-        val right: Float = mIndicateRecF.right - mInterval / 2
-        val bottom: Float = mIndicateRecF.bottom
-        val top: Float = bottom - dp2px(context, 6f)
-        if (this.mSelectPosition == position) {
-            paint.color = ContextCompat.getColor(context, R.color.color_d900)
-        }
-        canvas.drawRoundRect(left, top, right, bottom, 5f, 5f, paint)
-    }
-
-
-    /**
-     * 绘制X轴文字
-     */
-    private var mSelectPosition: Int = -1
-
-    private fun drawXAxisText(canvas: Canvas, position: Int, text: String) {
-        getIndicateLocation(mIndicateRecF, position)
-        setPaintStyle(PaintType.YAXIS_LEGEND)
-        if (this.mSelectPosition == position) {
-//            paint.textSize = mXAxisTextSelectedSize
-            paint.color = ContextCompat.getColor(context, R.color.color_d900)
-        }
-        paint.typeface = Typeface.createFromAsset(context.assets, "fonts/BEBAS.ttf")
-        val x: Float = mIndicateRecF.left + barWidth / 2 + getXAxisPadding()
-        var y: Float = mIndicateRecF.bottom + mIndicateBottomPadding
-//        if (true) {
-//            y = mIndicateRecF.top
-//            val rect = Rect()
-//            rect[mIndicateRecF.left.toInt(), mIndicateRecF.top.toInt(), mIndicateRecF.right.toInt()] = mIndicateRecF.bottom.toInt()
-//            paint.getTextBounds(text, 0, text.length, rect)
-//            //增加一些偏移
-//            y += mIndicateRecF.top / 2
-//        }
-        canvas.drawText(text, x, y, paint)
-    }
-
-    private fun getXAxisPadding(): Float {
+    // 提供给外部使用
+    fun getXAxisPadding(): Float {
         return textPaddingLeft + maxLengedWidth + textPaddingRight
+    }
+    fun getMinYaxisHeight(): Float{
+        return -getYAxis(minYaxis)
     }
 
     private fun drawYaxis(canvas: Canvas) {
@@ -394,7 +274,7 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
     //获取目标值Y轴坐标
     private fun getYAxis(y: Float): Float {
         // 获取view的高度 减去所有控件的高度 得到 图表的高度 16代表预留出来的边距
-        val height: Int = height - XaxisHeight - paddingTop - paddingBottom
+        val height: Int = height - axisXBottom - paddingTop - paddingBottom
         var top = 0f
         val scale: Float
         val deltaValue: Float
@@ -419,164 +299,5 @@ class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, attrs)
         XAXIS_RULER // 刻度尺
     }
 
-    enum class DateType {
-        DAY,
-        WEEK,
-        MONTH
-    }
 
-    data class ChartData(
-        val spInMax: Int,
-        val spInMin: Int,
-        val dpInMax: Int,
-        val dpInMin: Int,
-        val maxTimestamp: Long,
-        val minTimestamp: Long,
-        val timeStr: String
-    )
-
-    /**
-     * 计算处理数据坐标
-     *
-     */
-    private fun convertPoint(x: Float, i: Int, dy: Float): Point {
-        var scale: Float
-        var top = 0f
-        val height: Int = height
-        getIndicateLocation(mIndicateRecF, i)
-        val left = mIndicateRecF.left + mInterval / 2
-        if (x in minYaxis..maxYaxis) {
-            scale = (x - minYaxis) / dy
-            top = (height - height * scale)
-        }
-
-        return Point(left, top)
-    }
-
-    private fun getDivisorCount(type: DateType): Int {
-        return when (type) {
-            DateType.DAY -> 7
-            DateType.WEEK -> 5
-            DateType.MONTH -> 14
-        }
-    }
-
-    /**
-     * 获取指示器位置
-     */
-    private fun getIndicateLocation(outRect: RectF, position: Int) {
-
-        val height = height
-        val indicate: Float = getIndicateWidth()
-        val left = indicate * position
-        val right = left + indicate
-        var top = paddingTop.toFloat()
-        var bottom = (height - paddingBottom).toFloat()
-        bottom -= mIndicateBottomPadding
-        outRect.set(left, top, right, bottom)
-    }
-
-    private fun getInterval(divisor: Int): Float {
-        val width = context.resources.displayMetrics.widthPixels
-        return width.toFloat() / divisor
-    }
-
-    private fun getIndicateWidth(): Float {
-        return mIndicateWidth + mInterval
-    }
-
-    // 用户可见视图宽度
-    private var mVisibleWidth = 0
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-
-        mVisibleWidth = w
-    }
-
-    private fun isInVisibleArea(x: Float): Boolean {
-        val dx = x - scrollX
-        return -(mIndicateWidth + mVisibleWidth) <= dx && dx <= mVisibleWidth + mIndicateWidth
-    }
-
-    fun setData(type: DateType, data: List<ChartData>) {
-        mDateType = type
-        if (xAxisLegentList.isNotEmpty()) {
-            xAxisLegentList.clear()
-        }
-        if (mSysMaxPointList.isNotEmpty()) {
-            mSysMaxPointList.clear()
-        }
-        if (mSysMinPointList.isNotEmpty()) {
-            mSysMinPointList.clear()
-        }
-        if (mDiaMaxPointList.isNotEmpty()) {
-            mDiaMaxPointList.clear()
-        }
-        if (mDiaMinPointList.isNotEmpty()) {
-            mDiaMinPointList.clear()
-        }
-        if (ySysMaxAxisList.isNotEmpty()) {
-            ySysMaxAxisList.clear()
-        }
-        if (ySysMinAxisList.isNotEmpty()) {
-            ySysMinAxisList.clear()
-        }
-        if (yDiaMaxAxisList.isNotEmpty()) {
-            yDiaMaxAxisList.clear()
-        }
-        if (yDiaMinAxisList.isNotEmpty()) {
-            yDiaMinAxisList.clear()
-        }
-        var xAxisText = ""
-        data.forEachIndexed { index, it ->
-            xAxisText = when (type) {
-                DateType.DAY -> {
-                    dateFormatForSecondTimestamp(
-                        it.maxTimestamp,
-                        VesyncDateFormatUtils.DatePattern_M_d
-                    )
-                }
-                DateType.WEEK -> {
-                    getSundayToSaturdayOfWeek(it.maxTimestamp * 1000)
-                }
-                DateType.MONTH -> {
-                    dateFormatForSecondTimestamp(
-                        it.maxTimestamp,
-                        VesyncDateFormatUtils.DatePattern_M
-                    )
-                }
-            }
-            xAxisLegentList.add(index, xAxisText)
-
-            ySysMaxAxisList.add(it.spInMax.toFloat())
-            ySysMinAxisList.add(it.spInMin.toFloat())
-            yDiaMaxAxisList.add(it.dpInMax.toFloat())
-            yDiaMinAxisList.add(it.dpInMin.toFloat())
-
-        }
-
-        invalidate()
-    }
-
-    private fun updateViewPoint() {
-        updateOneViewPoint(mSysMaxPointList, ySysMaxAxisList)
-        updateOneViewPoint(mSysMinPointList, ySysMinAxisList)
-        updateOneViewPoint(mDiaMaxPointList, yDiaMaxAxisList)
-        updateOneViewPoint(mDiaMinPointList, yDiaMinAxisList)
-    }
-
-    private fun updateOneViewPoint(points: ArrayList<Point>, yList: List<Float>) {
-        val dY = maxYaxis - minYaxis
-        if (points.isEmpty()) {
-            yList.forEachIndexed { index, v ->
-                points.add(convertPoint(v, index, dY))
-            }
-        }
-    }
-
-    data class Point(var x: Float, var y: Float)
-
-    companion object {
-        val TAG = BPYaxisChart::class.java.simpleName
-    }
 }

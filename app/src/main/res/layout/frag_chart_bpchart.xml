@@ -13,15 +13,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-<!--        <com.hynson.chart.BPChartMarkView-->
-<!--            android:id="@+id/bp_chart"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:background="@drawable/chart_bp_gradient"-->
-<!--            app:textColor="#a6000000"-->
-<!--            app:textSize="14sp"-->
-<!--            android:visibility="visible"/>-->
         <com.hynson.chart.BPYaxisChart
             android:id="@+id/bp_chart"
             android:layout_width="match_parent"
@@ -70,6 +61,25 @@
             app:targetPaddingEnd="4dp"
             app:targetPaddingBottom="3.5dp"
             android:visibility="visible"/>
-
+        <com.hynson.chart.BPXaxisChart
+            android:id="@+id/bp_chart2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/chart_bp_gradient"
+            app:centerXSize="0.5dp"
+            app:centerXColor="@color/color_002c5b"
+            app:YLineSize="1dp"
+            app:YColor="@color/color_3300"
+            app:textColorY="@color/color_a600"
+            app:textSizeY="11sp"
+            app:textColorX="@color/color_a600"
+            app:textSizeX="11sp"
+            app:textPaddingLeft="4dp"
+            app:textPaddingRight="4dp"
+            app:targetPaddingEnd="4dp"
+            app:targetPaddingBottom="3.5dp"
+            app:axisXBottom="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"/>
     </FrameLayout>
 </LinearLayout>

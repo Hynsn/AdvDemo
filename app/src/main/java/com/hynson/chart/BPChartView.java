@@ -561,11 +561,6 @@ public class BPChartView extends View {
     }
 
     private void drawChartData(Canvas canvas, int position) {
-        int dy = getHeight()+getBottom();
-//        float sysMaxY = mSysMaxPointList.get(position).y + dy;
-//        float sysMinY = mSysMinPointList.get(position).y + dy;
-//        float diaMaxY = mDiaMaxPointList.get(position).y + dy;
-//        float diaMinY = mDiaMinPointList.get(position).y + dy;
         float sysMaxY = mSysMaxPointList.get(position).y;
         float sysMinY = mSysMinPointList.get(position).y;
         float diaMaxY = mDiaMaxPointList.get(position).y;

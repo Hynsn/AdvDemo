@@ -29,12 +29,12 @@ class ChartView(context: Context, attrs: AttributeSet) : FrameLayout(context, at
             timeStr = "1"
         )
         val data = arrayListOf(d1,d2)
-        for (i in 1..200){
+        for (i in 1..10){
             val item = BPChartData(
                 dpInMin = 85, dpInMax = 120,
                 spInMin = 12, spInMax = 24,
                 maxTimestamp = 1641744645, minTimestamp = 1641744645,
-                timeStr = "test-$i"
+                timeStr = "$i"
             )
             data.add(item)
         }
@@ -46,6 +46,7 @@ class ChartView(context: Context, attrs: AttributeSet) : FrameLayout(context, at
                 isSmoothScrollbarEnabled = true
                 orientation = LinearLayoutManager.HORIZONTAL
             }
+
         chartAdapter = ChartAdapter(data)
         rvData.apply {
             layoutManager = manager
@@ -53,5 +54,9 @@ class ChartView(context: Context, attrs: AttributeSet) : FrameLayout(context, at
         }
         val snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(rvData)
+
+        chartAdapter.emptyWidth = rvData.layoutParams.width / 2
+
+        chartAdapter.notifyDataSetChanged()
     }
 }

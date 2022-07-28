@@ -29,7 +29,7 @@ class ChartView(context: Context, attrs: AttributeSet) : FrameLayout(context, at
             timeStr = "1"
         )
         val data = arrayListOf(d1,d2)
-        for (i in 1..10){
+        for (i in 1..200){
             val item = BPChartData(
                 dpInMin = 85, dpInMax = 120,
                 spInMin = 12, spInMax = 24,

@@ -68,6 +68,7 @@
         <attr name="textSizeX" format="dimension"/>
     </declare-styleable>
     <declare-styleable name="BPBarView">
+        <attr name="bar_text" format="string"/>
         <attr name="bar_text_color" format="color"/>
         <attr name="bar_text_size" format="dimension"/>
     </declare-styleable>

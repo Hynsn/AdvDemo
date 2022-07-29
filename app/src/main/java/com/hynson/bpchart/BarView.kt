@@ -24,16 +24,22 @@ class BarView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private val ract = Rect()
     private var barWidth = 0
 
-    private var spInMax: Int = 0
-    private var spInMin: Int = 0
-    private var dpInMax: Int = 0
-    private var dpInMin: Int = 0
+    private var spInMax: Int = 10
+    private var spInMin: Int = 20
+    private var dpInMax: Int = 30
+    private var dpInMin: Int = 40
+    var text:CharSequence = "12"
+        set(value) {
+            invalidate()
+            field = value
+        }
 
     init {
-        val t = context.obtainStyledAttributes(attrs, R.styleable.BPXaxisChart)
+        val t = context.obtainStyledAttributes(attrs, R.styleable.BPBarView)
 
-        textColor = t.getColor(R.styleable.BPXaxisChart_textColorX, textColor)
-        textSize = t.getDimension(R.styleable.BPXaxisChart_textSizeX, 10f)
+        textColor = t.getColor(R.styleable.BPBarView_bar_text_color, textColor)
+        textSize = t.getDimension(R.styleable.BPBarView_bar_text_size, 10f)
+        text = t.getString(R.styleable.BPBarView_bar_text).toString()
 
         barWidth = Screen.dp2px(getContext(), 7f)
     }
@@ -111,11 +117,6 @@ class BarView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     var isSelect:Boolean = false
         set(value) {
         invalidate()
-            field = value
-        }
-    var text:CharSequence? = null
-        set(value) {
-            invalidate()
             field = value
         }
 

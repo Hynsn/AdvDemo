@@ -32,4 +32,8 @@
         android:id="@+id/BPChartFragment"
         android:name="com.hynson.chart.BPChartFragment"
         android:label="BPChartFragment" />
+    <fragment
+        android:id="@+id/myViewFragment"
+        android:name="com.hynson.customview.MyViewFragment"
+        android:label="MyViewFragment" />
 </navigation>

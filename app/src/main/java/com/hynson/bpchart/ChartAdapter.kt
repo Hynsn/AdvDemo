@@ -1,12 +1,10 @@
 package com.hynson.bpchart
 
-import android.graphics.Color
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hynson.R
 import com.hynson.chart.BPChartData
@@ -14,6 +12,7 @@ import com.hynson.chart.BPChartData
 class ChartAdapter(val data: List<BPChartData>) : RecyclerView.Adapter<ChartAdapter.ChartVH>() {
 
     var emptyWidth = 0
+    var otherWidth = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChartAdapter.ChartVH {
         return ChartVH(
@@ -24,7 +23,7 @@ class ChartAdapter(val data: List<BPChartData>) : RecyclerView.Adapter<ChartAdap
     override fun onBindViewHolder(holder: ChartAdapter.ChartVH, position: Int) {
         val info = data[position]
         with(holder) {
-            if(isEmpty(position)){
+            if (isEmpty(position)) {
                 llItem.apply {
                     val lp = layoutParams
                     lp.width = emptyWidth
@@ -32,19 +31,23 @@ class ChartAdapter(val data: List<BPChartData>) : RecyclerView.Adapter<ChartAdap
                     gravity = Gravity.END
                 }
                 bar.visibility = View.GONE
-            }
-            else{
+            } else {
                 llItem.apply {
                     val lp = layoutParams
-                    lp.width = ViewGroup.LayoutParams.WRAP_CONTENT
+                    if (otherWidth == 0) {
+                        lp.width = ViewGroup.LayoutParams.WRAP_CONTENT
+                    } else {
+                        lp.width = otherWidth
+                    }
                     layoutParams = lp
                     gravity = Gravity.CENTER
                 }
                 bar.apply {
+                    isSelect = info.isSelect
                     visibility = View.VISIBLE
-                    setMaxMin(300f,0f)
+                    setMaxMin(300f, 0f)
                     text = info.timeStr
-                    setData(70,20,100,80)
+                    setData(70, 20, 100, 80)
                 }
             }
         }
@@ -60,15 +63,4 @@ class ChartAdapter(val data: List<BPChartData>) : RecyclerView.Adapter<ChartAdap
         val llItem: LinearLayout = itemView.findViewById(R.id.ll_chart)
         val bar = itemView.findViewById<BarView>(R.id.bv_bar)
     }
-
-//    inner class EmptyVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
-//        fun render() {
-//            if (itemView.layoutParams is RecyclerView.LayoutParams) {
-//                val params = itemView.layoutParams
-//                params.width = itemView.width / 2
-//                itemView.layoutParams = params
-//            }
-//        }
-//    }
-
 }

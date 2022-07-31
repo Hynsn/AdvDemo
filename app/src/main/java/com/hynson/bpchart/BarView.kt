@@ -24,11 +24,14 @@ class BarView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private val ract = Rect()
     private var barWidth = 0
 
+    private val barMinHeight = Screen.dp2px(context, 200f)
+    private var centerSpace = Screen.dp2px(context, 10f)
+
     private var spInMax: Int = 10
     private var spInMin: Int = 20
     private var dpInMax: Int = 30
     private var dpInMin: Int = 40
-    var text:CharSequence = "12"
+    var text: CharSequence = "12"
         set(value) {
             invalidate()
             field = value
@@ -47,21 +50,21 @@ class BarView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val r = barWidth / 2f
-        val h = maxDyHeight - minDyHeight
-        val cx = width / 2f
+        val h = measuredHeight
+        val cx = measuredWidth / 2f
 
         text?.let {
             setPaintStyle(PaintType.YAXIS_LEGEND)
             val t = it.toString()
-            paint.getTextBounds(t, 0, t.length, ract);
-            val y = height + top
-            canvas.drawText(t,cx,y.toFloat(),paint)
+//            paint.getTextBounds(t, 0, t.length, ract)
+            val y = h - paddingBottom - centerSpace
+            canvas.drawText(t, cx, y.toFloat(), paint)
         }
 
         // 圆点
         setPaintStyle(PaintType.SYS_PAINT)
-        val spMaxY = convertViewY(spInMax,h)
-        val spMinY = convertViewY(spInMin,h)
+        val spMaxY = convertViewY(spInMax, h)
+        val spMinY = convertViewY(spInMin, h)
 
         canvas.drawCircle(cx, spMaxY, r, paint)
         canvas.drawCircle(cx, spMinY, r, paint)
@@ -69,8 +72,8 @@ class BarView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         setPaintStyle(PaintType.SYS_LINE)
         canvas.drawLine(cx, spMaxY, cx, spMinY, paint)
 
-        val dpMinY = convertViewY(dpInMin,h)
-        val dpMaxY = convertViewY(dpInMax,h)
+        val dpMinY = convertViewY(dpInMin, h)
+        val dpMaxY = convertViewY(dpInMax, h)
         // 棱型
         setPaintStyle(PaintType.DIA_PAINT)
         drawDiaData(canvas, cx, dpMaxY, r)
@@ -80,13 +83,58 @@ class BarView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         canvas.drawLine(cx, dpMaxY, cx, dpMinY, paint)
     }
 
-    private fun convertViewY(y: Int, h: Float): Float {
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        setPaintStyle(PaintType.YAXIS_LEGEND)
+        val t = text.toString()
+        paint.getTextBounds(t, 0, t.length, ract);
+        val width = measureWidth(widthMeasureSpec, ract.width())
+        val sumHeight = ract.height() + barMinHeight + centerSpace
+        val height = measureHeight(heightMeasureSpec, sumHeight)
+        setMeasuredDimension(width, height)
+    }
+
+    private fun measureWidth(measureSpec: Int, width: Int): Int {
+        // 获取子View的宽度测量模式
+        val mode = MeasureSpec.getMode(measureSpec)
+        // 获取子View的宽度Size
+        val size = MeasureSpec.getSize(measureSpec)
+        return when (mode) {
+            MeasureSpec.EXACTLY -> { // match_parent或具体值时
+                size
+            }
+            MeasureSpec.AT_MOST -> { // wrap_content时
+                width
+            }
+            else -> {
+                0
+            }
+        }
+    }
+
+    private fun measureHeight(measureSpec: Int, height: Int): Int {
+        val mode = MeasureSpec.getMode(measureSpec)
+        val size = MeasureSpec.getSize(measureSpec)
+        return when (mode) {
+            MeasureSpec.EXACTLY -> { // match_parent或具体值时
+                size
+            }
+            MeasureSpec.AT_MOST -> { // wrap_content时
+                height
+            }
+            else -> {
+                0
+            }
+        }
+    }
+
+    private fun convertViewY(y: Int, height: Int): Float {
         var ret = 0f
+        val dH = maxDyHeight - minDyHeight
         if (y >= minDyHeight && y <= maxDyHeight) {
-            val scale = (y - minDyHeight) / h
+            val scale = (y - minDyHeight) / dH
             ret = (height - height * scale)
         }
-        ret -= paddingBottom
+        ret -= (paddingBottom + centerSpace + barWidth / 2)
         return ret
     }
 
@@ -114,9 +162,9 @@ class BarView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         invalidate()
     }
 
-    var isSelect:Boolean = false
+    var isSelect: Boolean = false
         set(value) {
-        invalidate()
+            invalidate()
             field = value
         }
 
@@ -141,7 +189,10 @@ class BarView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                     style = Paint.Style.FILL
                     textAlign = Paint.Align.CENTER
                     isAntiAlias = true
-                    typeface = if(isSelect) Typeface.createFromAsset(context.assets, "fonts/BEBAS.ttf") else Typeface.DEFAULT
+                    typeface = if (isSelect) Typeface.createFromAsset(
+                        context.assets,
+                        "fonts/BEBAS.ttf"
+                    ) else Typeface.DEFAULT
                 }
             }
             PaintType.SYS_PAINT -> {
@@ -186,6 +237,7 @@ class BarView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         }
 
     }
+
     enum class PaintType {
         YAXIS_LEGEND,
         SYS_PAINT,// 伸缩压点

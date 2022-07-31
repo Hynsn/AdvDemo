@@ -54,15 +54,13 @@ class BPChartFragment : BaseFragment<FragChartBpchartBinding, ChartVM>(), View.O
             setYaxisMaxMin(300f,0f)
             setTargetMaxMin(140f,90f)
         }
-//        val
+
         bind.bpChart2.apply {
             setYaxisMaxMin(300f,0f)
-            setYaxisRefer(bind.bpChart1.getXAxisPadding(),bind.bpChart1.getMinYaxisHeight())
             setData(BPXaxisChart.DateType.DAY,arrayListOf(d3,d4))
         }
         bind.chartBp.apply {
             setMaxMinYAxis(300,0)
-            setReferAxisXY(bind.bpChart.axisXBottom,bind.bpChart1.getXAxisPadding().toInt())
             initChartData(BPQueryTimeType.DAY, arrayListOf(d1,d2), true)
             setOnScaleListener { position, yAxisValue, data ->
 

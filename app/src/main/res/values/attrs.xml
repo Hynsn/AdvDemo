@@ -59,8 +59,6 @@
         <attr name="textSizeY" format="dimension"/>
         <attr name="targetPaddingEnd" format="dimension"/>
         <attr name="targetPaddingBottom" format="dimension"/>
-        <attr name="textPaddingLeft" format="dimension"/>
-        <attr name="textPaddingRight" format="dimension"/>
         <attr name="axisXBottom" format="dimension"/>
     </declare-styleable>
     <declare-styleable name="BPXaxisChart">

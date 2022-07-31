@@ -41,8 +41,7 @@ open class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, a
     // Y轴图例文本
     private var textSizeY = 10f
     private var textColorY = ContextCompat.getColor(context, R.color.color_a600)
-    private var textPaddingLeft = 10f
-    private var textPaddingRight = 10f
+    private var textWidth = Screen.dp2px(context,30f)
 
     // 目标文本Padding
     private var targetPaddingEnd = 10f
@@ -72,8 +71,6 @@ open class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, a
         YLineSize = t.getDimension(R.styleable.BPYaxisChart_centerXSize, 10f)
         textColorY = t.getColor(R.styleable.BPYaxisChart_textColorY, textColorY)
         textSizeY = t.getDimension(R.styleable.BPYaxisChart_textSizeY, 10f)
-        textPaddingLeft = t.getDimension(R.styleable.BPYaxisChart_textPaddingLeft, 10f)
-        textPaddingRight = t.getDimension(R.styleable.BPYaxisChart_textPaddingRight, 10f)
         targetPaddingEnd = t.getDimension(R.styleable.BPYaxisChart_targetPaddingEnd, 10F)
         targetPaddingBottom = t.getDimension(R.styleable.BPYaxisChart_targetPaddingBottom, 10F)
         axisXBottom = t.getDimensionPixelOffset(R.styleable.BPYaxisChart_axisXBottom, dp2px(context,20f))
@@ -111,7 +108,6 @@ open class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, a
                     textSize = textSizeY
                     color = textColorY
                     style = Paint.Style.FILL
-                    textAlign = Paint.Align.RIGHT
                     isAntiAlias = true
                 }
             }
@@ -164,15 +160,8 @@ open class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, a
 
     }
 
-    // 提供给外部使用
-    fun getXAxisPadding(): Float {
-        return textPaddingLeft + maxLengedWidth + textPaddingRight
-    }
-    fun getMinYaxisHeight(): Float{
-        return -getYAxis(minYaxis)
-    }
-
     private fun drawYaxis(canvas: Canvas) {
+        val startX = textWidth.toFloat()
         if (YLineCount > 2) { // 至少两条线
 
             val dY = (maxYaxis - minYaxis) / (YLineCount - 1)
@@ -186,7 +175,6 @@ open class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, a
             lineRange.forEach {
                 drawLegendText(canvas, it)
             }
-            val startX = textPaddingLeft + maxLengedWidth + textPaddingRight
             lineRange.forEach {
                 drawYaxisLine(canvas, it, startX, false, YColor)
             }
@@ -195,7 +183,6 @@ open class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, a
             drawTargetText(canvas, targetMinYaxis, minColor)
             drawTargetText(canvas, targetMaxYaxis, maxColor)
         }
-        val startX = textPaddingLeft + maxLengedWidth + textPaddingRight
         drawCenterLine(canvas, startX)
     }
 
@@ -231,23 +218,22 @@ open class BPYaxisChart(context: Context, attrs: AttributeSet) : View(context, a
         canvas.drawLine(startX, y, width.toFloat(), y, paint)
     }
 
-    private var maxLengedWidth = 0f
+    val rect:Rect = Rect()
     private fun drawLegendText(canvas: Canvas, yAxisValue: Float) {
         val legend = yAxisValue.toInt().toString()
         val y = getYAxis(yAxisValue)
         setPaintStyle(PaintType.YAXIS_LEGEND)
-        val dy = getTextHeight(paint)
-        val dx = paint.measureText(legend)
-        if (dx >= maxLengedWidth) {
-            maxLengedWidth = dx
-        }
-        canvas.drawText(legend, dx + textPaddingLeft, y + dy, paint)
+        paint.textAlign = Paint.Align.CENTER
+
+        paint.getTextBounds(legend,0,legend.length,rect)
+        canvas.drawText(legend, textWidth.toFloat() / 2, y + rect.height()/2, paint)
     }
 
     private fun drawTargetText(canvas: Canvas, yAxisValue: Float, color: Int) {
         val legend = yAxisValue.toInt().toString()
         val y = getYAxis(yAxisValue)
         setPaintStyle(PaintType.YAXIS_LEGEND)
+        paint.textAlign = Paint.Align.RIGHT
         paint.color = color
         val dy = y - targetPaddingBottom
         val dx = width - targetPaddingEnd

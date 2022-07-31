@@ -36,4 +36,8 @@
         android:id="@+id/myViewFragment"
         android:name="com.hynson.customview.MyViewFragment"
         android:label="MyViewFragment" />
+    <fragment
+        android:id="@+id/chartFragment"
+        android:name="com.hynson.chart.ChartFragment"
+        android:label="ChartFragment" />
 </navigation>

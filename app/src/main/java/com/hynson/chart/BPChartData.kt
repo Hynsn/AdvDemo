@@ -7,5 +7,6 @@ data class BPChartData(
     val dpInMin:Int,
     val maxTimestamp:Long,
     val minTimestamp:Long,
-    val timeStr:String
+    val timeStr:String,
+    var isSelect:Boolean = false
 )

@@ -1,47 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:background="@drawable/chart_bp_gradient"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <com.hynson.chart.BPYaxisChart
         android:id="@+id/bp_chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/chart_bp_gradient"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        app:centerXSize="0.5dp"
-        app:centerXColor="@color/color_002c5b"
-        app:YLineSize="1dp"
+        android:visibility="visible"
         app:YColor="@color/color_3300"
-        app:textColorY="@color/color_a600"
-        app:textSizeY="11sp"
-        app:textPaddingLeft="4dp"
-        app:textPaddingRight="4dp"
-        app:targetPaddingEnd="4dp"
-        app:targetPaddingBottom="3.5dp"
+        app:YLineSize="1dp"
         app:axisXBottom="20dp"
-        android:visibility="visible"/>
+        app:centerXColor="@color/color_002c5b"
+        app:centerXSize="0.5dp"
+        app:targetPaddingBottom="3.5dp"
+        app:targetPaddingEnd="4dp"
+        app:textColorY="@color/color_a600"
+        app:textSizeY="11sp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_data"
-        android:layout_width="346dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
+        android:layout_marginStart="30dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:itemCount="10"
         tools:listitem="@layout/chart_item"
         tools:orientation="horizontal" />
-
+<!--    <View-->
+<!--        android:layout_width="1dp"-->
+<!--        app:layout_constraintLeft_toLeftOf="@id/rv_data"-->
+<!--        app:layout_constraintRight_toRightOf="@id/rv_data"-->
+<!--        android:background="@color/color_73"-->
+<!--        android:layout_height="match_parent"/>-->
 
     <TextView
+        android:id="@+id/tv_tip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#002c5b"
         android:layout_gravity="center_horizontal"
+        android:background="#002c5b"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/rv_data"
+        app:layout_constraintRight_toRightOf="@id/rv_data"
         android:lines="3"
-        android:visibility="gone"
+        android:text="SYS：90/190mmHg\n DIA：100/200mmHg\n Jun 11, 12-1PM"
         android:textColor="#ffffff"
-        android:text="SYS：90/190mmHg\n DIA：100/200mmHg\n Jun 11, 12-1PM" />
+        android:visibility="visible" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

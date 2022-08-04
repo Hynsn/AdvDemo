@@ -96,6 +96,15 @@
 
         <service android:name=".aidl.RemoteService"
             android:process=":remote"/>
+
+        <receiver
+            android:name=".shortcut.NormalCreateBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.shortcut.core.normal_create" />
+            </intent-filter>
+        </receiver>
     </application>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

@@ -10,6 +10,8 @@ ext {
             Name      : "1.0"
     ]
     ver = [
+            "core"            : '1.6.0',
+            "shortcuts"       : '',
             "core_ktx"        : '1.8.0',
             "appcompat"       : '1.4.2',
             "constraintlayout": '2.1.4',

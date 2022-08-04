@@ -1,8 +1,13 @@
 package com.hynson.main;
 
+import android.app.PendingIntent;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.content.pm.ShortcutInfo;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,6 +15,9 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.pm.ShortcutInfoCompat;
+import androidx.core.content.pm.ShortcutManagerCompat;
+import androidx.core.graphics.drawable.IconCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
 
@@ -102,9 +110,13 @@ public class MainActivity extends FragmentActivity {
             case R.id.btn_setting:
                 intent.setComponent(new ComponentName(this, SettingActivity.class));
                 break;
+            case R.id.btn_shortcut:
+                ShortCut.INSTANCE.add(this);
+                break;
         }
-        startActivity(intent);
+        //startActivity(intent);
     }
+
 //    public void showGuideView() {
 //    View view = getWindow().getDecorView().findViewById(R.id.activity_main);
 //    if (view == null) return;

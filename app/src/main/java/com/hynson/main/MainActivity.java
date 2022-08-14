@@ -33,6 +33,7 @@ import com.hynson.mbedtls.MbedtlsActivity;
 import com.hynson.navigation.NavigationActivity;
 import com.hynson.opensl.OpenslActivity;
 import com.hynson.set.SettingActivity;
+import com.hynson.shortcut.ShortcutActivity;
 import com.hynson.topbar.TopBarActivity;
 import com.hynson.webview.WebviewActivity;
 
@@ -111,10 +112,11 @@ public class MainActivity extends FragmentActivity {
                 intent.setComponent(new ComponentName(this, SettingActivity.class));
                 break;
             case R.id.btn_shortcut:
-                ShortCut.INSTANCE.add(this);
+                intent.setComponent(new ComponentName(this, ShortcutActivity.class));
+
                 break;
         }
-        //startActivity(intent);
+        startActivity(intent);
     }
 
 //    public void showGuideView() {

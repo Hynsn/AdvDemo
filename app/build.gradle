@@ -8,7 +8,7 @@ apply plugin: 'com.uber.okbuck'
 android {
     compileSdkVersion rootProject.ext.droid["compileSdk"]
     defaultConfig {
-        applicationId "com.hynson.myapplication"
+        applicationId "com.hynson.adv"
         minSdkVersion rootProject.ext.droid["minSdk"]
         targetSdkVersion rootProject.ext.droid["targetSdk"]
         versionCode rootProject.ext.droid["Code"]

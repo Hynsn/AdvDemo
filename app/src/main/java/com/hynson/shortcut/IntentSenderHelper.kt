@@ -8,7 +8,12 @@ import android.content.IntentSender
 import android.os.Bundle
 
 /**
- * Created by ZP on 2019/3/3.
+ * Author: Hynsonhou
+ * Date: 2022/8/9 15:19
+ * Description: 快捷方式
+ * History:
+ * <author>  <time>     <version> <desc>
+ * Hynsonhou  2022/8/9   1.0       首次创建
  */
 object IntentSenderHelper {
     fun getDefaultIntentSender(context: Context, action: String): IntentSender {

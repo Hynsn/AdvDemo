@@ -2,8 +2,9 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
-
 apply plugin: 'com.uber.okbuck'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion rootProject.ext.droid["compileSdk"]
@@ -25,10 +26,19 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
+        signingConfigs {
+            config {
+                keyAlias "hynson.cc"
+                keyPassword "hynson123456"
+                storeFile rootProject.file("hynson_adv.jks")
+                storePassword "hynson123456"
+            }
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.config
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -103,6 +113,12 @@ dependencies {
 //    implementation "com.android.tools.build:gradle:7.0.0"
 
 //    implementation project(':ndklib')
+
+    // firebase
+    implementation platform('com.google.firebase:firebase-bom:30.3.2')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-crashlytics'
+
 }
 
 tasks.whenTaskAdded { task ->

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "132009151647",
+    "project_id": "adv-cf27f",
+    "storage_bucket": "adv-cf27f.appspot.com"
+  },
+  "client": [
+    {
+      // test
+      "client_info": {
+        "mobilesdk_app_id": "1:132009151647:android:57e732882e5e9f90f1a6aa",
+        "android_client_info": {
+          "package_name": "com.hynson.adv"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "132009151647-t9jqo50olc02ri6borq9ih3g0fd0acur.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0YoaVQ_W98EwCFrCYmuXvq3O_ptqhI2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "132009151647-t9jqo50olc02ri6borq9ih3g0fd0acur.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

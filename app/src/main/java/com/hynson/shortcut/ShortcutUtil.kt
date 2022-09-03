@@ -46,8 +46,11 @@ object ShortcutUtil {
             ShortcutBroadcastReceiver.ACTION, ShortcutBroadcastReceiver::class.java, bundle
         )
         val isReqPinShortcut = ShortcutManagerCompat.isRequestPinShortcutSupported(context)
-        when {
-            /*isReqPinShortcut && (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) -> {
+        return if(isReqPinShortcut) {
+            ShortcutManagerCompat.requestPinShortcut(context, shortcut, sender)
+        } else false
+/*        when {
+            *//*isReqPinShortcut && (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) -> {
                 val addIntent = Intent(Const.ACTION_INSTALL_SHORTCUT).apply {
                     putExtra("duplicate", false)
                     putExtra(Intent.EXTRA_SHORTCUT_NAME, title)
@@ -56,7 +59,7 @@ object ShortcutUtil {
                 }
                 context.sendBroadcast(addIntent)
                 return true
-            }*/
+            }*//*
             isReqPinShortcut -> {
 //                val granted =
 //                    (ContextCompat.checkSelfPermission(
@@ -71,7 +74,7 @@ object ShortcutUtil {
             else -> {
                 return false
             }
-        }
+        }*/
     }
 
     fun updateShortCut(

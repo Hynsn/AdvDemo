@@ -3,6 +3,7 @@ package com.hynson.main;
 import android.app.Application;
 import android.content.Context;
 
+import com.hynson.crash.CrashHandler;
 import com.hynson.webview.HttpServer;
 
 public class TestApp extends Application {
@@ -24,6 +25,6 @@ public class TestApp extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        //CrashHandler.getInstance().init(base);
+//        CrashHandler.getInstance().init(base);
     }
 }

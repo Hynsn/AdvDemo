@@ -4,3 +4,4 @@ include ':base'
 
 include 'ndklib'
 project(':ndklib').projectDir =file('./subndk/ndklib')
+include ':lib-view'

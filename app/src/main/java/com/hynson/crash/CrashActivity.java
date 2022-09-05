@@ -1,5 +1,6 @@
 package com.hynson.crash;
 
+import android.util.Log;
 import android.view.View;
 
 import com.base.base.BaseActivity;
@@ -14,6 +15,8 @@ public class CrashActivity extends BaseActivity<ActivityCrashBinding> {
 
     @Override
     protected void bindView() {
+
+        Log.i("CrashActivity",""+Thread.getDefaultUncaughtExceptionHandler().toString());
 //        TestDataModel.getInstance().activities.add(this);
     }
 

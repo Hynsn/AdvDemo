@@ -12,6 +12,7 @@ import com.hynson.customview.flowlayout.TagInfo
 import com.hynson.customview.flowlayout.TagType
 import com.hynson.databinding.FragChartPiechartBinding
 import com.hynson.ktbase.BaseFragment
+import com.hynson.view.chart.Chart
 
 class PieChartFragment : BaseFragment<FragChartPiechartBinding,ChartVM>(),View.OnClickListener{
     override val layoutId: Int = R.layout.frag_customview_flowlayout

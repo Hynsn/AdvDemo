@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.hynson.R;
 import com.hynson.aidl.AidlActivity;
+import com.hynson.chart.ChartActivity;
 import com.hynson.coroutine.CoroutineActivity;
 import com.hynson.crash.CrashActivity;
 import com.hynson.customview.CustomViewActivity;
@@ -75,6 +76,9 @@ public class MainActivity extends FragmentActivity {
         Intent intent = new Intent();
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         switch (v.getId()) {
+            case R.id.btn_chart:
+                intent.setComponent(new ComponentName(this, ChartActivity.class));
+                break;
             case R.id.btn_customview:
                 intent.setComponent(new ComponentName(this, CustomViewActivity.class));
                 break;

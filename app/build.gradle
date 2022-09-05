@@ -69,7 +69,9 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'])
-    implementation project(path: ':base')
+    implementation project(':base')
+    implementation project(':lib-view')
+
     def room_version = rootProject.ext.ver["room"]
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"

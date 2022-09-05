@@ -25,6 +25,6 @@ public class TestApp extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-//        CrashHandler.getInstance().init(base);
+        CrashHandler.getInstance().init(base);
     }
 }

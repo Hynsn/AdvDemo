@@ -1,10 +1,10 @@
-package com.hynson.chart
+package com.hynson.view.chart
 
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import com.hynson.R
+import com.hynson.view.R
 
 /**
  * Author: Hynsonhou

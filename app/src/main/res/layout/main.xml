@@ -17,9 +17,17 @@
                 android:id="@+id/btn_customview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="@{Activity.test}"
+                android:onClick="@{Activity::test}"
                 android:textAllCaps="false"
                 android:text="Customview"
+                android:textSize="18sp" />
+            <Button
+                android:id="@+id/btn_chart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity::test}"
+                android:textAllCaps="false"
+                android:text="Chart"
                 android:textSize="18sp" />
             <Button
                 android:id="@+id/btn_webview"

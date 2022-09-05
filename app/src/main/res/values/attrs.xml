@@ -30,18 +30,6 @@
         <attr name="fixViewEditingBackground" format="reference" />
         <attr name="fixViewTextColor" format="color" />
     </declare-styleable>
-    <declare-styleable name="PieChart">
-        <attr name="pc_circle_width" format="dimension"/>
-        <attr name="pc_radius" format="dimension"/>
-        <attr name="pc_text" format="string"/>
-        <attr name="pc_text_color" format="color"/>
-        <attr name="pc_text_size" format="dimension"/>
-        <attr name="pc_unit" format="string"/>
-        <attr name="pc_unit_color" format="color"/>
-        <attr name="pc_unit_size" format="dimension"/>
-        <attr name="pc_space" format="dimension"/>
-        <attr name="pc_default_data_color" format="color"/>
-    </declare-styleable>
 
     <declare-styleable name="BPChartMarkView">
         <attr name="textColor" format="color"/>

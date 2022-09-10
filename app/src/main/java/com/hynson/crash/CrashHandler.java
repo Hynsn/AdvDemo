@@ -14,12 +14,14 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private static String TAG = CrashHandler.class.getSimpleName();
 
     private Context mContext;
+    private Thread.UncaughtExceptionHandler orginal;
     private static CrashHandler mInstance;
 
-    public void init(Context context){
+    public void init(Context context,Thread.UncaughtExceptionHandler orginal){
         this.mContext = context;
+        this.orginal = orginal;
         Thread.setDefaultUncaughtExceptionHandler(this);
-        Handler handler = new Handler(getMainLooper());
+/*        Handler handler = new Handler(getMainLooper());
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -32,7 +34,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                     }
                 }
             }
-        });
+        });*/
     }
 
     public static CrashHandler getInstance() {
@@ -51,5 +53,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     public void uncaughtException(@NonNull Thread thread, @NonNull Throwable throwable) {
         Log.i(TAG, "uncaughtException: "+thread+","+throwable.getMessage());
         throwable.printStackTrace();
+
+        orginal.uncaughtException(thread, throwable);
     }
 }

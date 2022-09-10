@@ -10,6 +10,7 @@ public class TestApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        CrashHandler.getInstance().init(this,Thread.getDefaultUncaughtExceptionHandler());
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -25,6 +26,6 @@ public class TestApp extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        CrashHandler.getInstance().init(base);
+//        CrashHandler.getInstance().init(base);
     }
 }

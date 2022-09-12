@@ -78,15 +78,15 @@ dependencies {
     testImplementation "androidx.room:room-testing:$room_version"
     implementation "androidx.legacy:legacy-support-v4:${rootProject.ext.ver["legacy"]}"
 
-    implementation "androidx.appcompat:appcompat:${rootProject.ext.ver["appcompat"]}"
-    implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.ver["constraintlayout"]}"
-    testImplementation "junit:junit:$ver.junit"
-    androidTestImplementation "androidx.test:runner:${rootProject.ext.ver["runner"]}"
+    implementation ver.appcompat
+    implementation ver.constraintlayout
+    testImplementation ver.junit
+    androidTestImplementation ver.runner
     androidTestImplementation "androidx.test.espresso:espresso-core:${rootProject.ext.ver["espresso"]}"
-    implementation "com.google.android.material:material:${rootProject.ext.ver["material"]}"
+    implementation ver.material
     implementation "androidx.fragment:fragment-ktx:${rootProject.ext.ver["fragment"]}"
 
-    def lifecycle_ver = rootProject.ext.ver["lifecycle"]
+    def lifecycle_ver = ver.lifecycle
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_ver"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_ver"
@@ -107,10 +107,10 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kt_coroutines"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:${rootProject.ext.ver["quickadapter"]}"
+    implementation ver.quickadapter
 
-    implementation "com.google.code.gson:gson:${rootProject.ext.ver["gson"]}"
-    implementation "com.google.auto.service:auto-service:${rootProject.ext.ver["spi"]}"
+    implementation ver.gson
+    implementation ver.spi
 
 //    implementation "com.android.tools.build:gradle:7.0.0"
 

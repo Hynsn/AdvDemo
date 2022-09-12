@@ -34,12 +34,12 @@ android {
 
 dependencies {
 
-    implementation "androidx.appcompat:appcompat:${rootProject.ext.ver["appcompat"]}"
-    implementation "com.google.android.material:material:${rootProject.ext.ver["material"]}"
-    testImplementation "junit:junit:${rootProject.ext.ver["junit"]}"
+    implementation ver.appcompat
+    implementation ver.material
+    testImplementation ver.junit
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    implementation "androidx.core:core-ktx:${rootProject.ext.ver["core_ktx"]}"
+    implementation ver.core_ktx
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'androidx.core:core-google-shortcuts:1.0.1'
 

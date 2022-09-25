@@ -39,6 +39,12 @@ public class CrashActivity extends BaseActivity<ActivityCrashBinding> {
                     }
                 }).start();
                 break;
+            case R.id.btn_newcrash:
+                String s2 = null;
+                if(s2.length() > 0) {
+                    throw new RuntimeException("主线程异常");
+                }
+                break;
         }
     }
 }

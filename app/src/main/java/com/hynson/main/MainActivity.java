@@ -30,6 +30,7 @@ import com.hynson.customview.CustomViewActivity;
 import com.hynson.databinding.DBLoginActivity;
 import com.hynson.databinding.MainBinding;
 import com.hynson.floatkkey.FloatKeyActivity;
+import com.hynson.gson.GsonActivity;
 import com.hynson.mbedtls.MbedtlsActivity;
 import com.hynson.navigation.NavigationActivity;
 import com.hynson.opensl.OpenslActivity;
@@ -118,6 +119,9 @@ public class MainActivity extends FragmentActivity {
             case R.id.btn_shortcut:
                 intent.setComponent(new ComponentName(this, ShortcutActivity.class));
 
+                break;
+            case R.id.btn_gson:
+                intent.setComponent(new ComponentName(this, GsonActivity.class));
                 break;
         }
         startActivity(intent);

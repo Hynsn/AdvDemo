@@ -111,6 +111,8 @@ dependencies {
 
     implementation ver.gson
     implementation ver.spi
+    implementation ver.rxjava
+    implementation ver.rxandroid
 
 //    implementation "com.android.tools.build:gradle:7.0.0"
 

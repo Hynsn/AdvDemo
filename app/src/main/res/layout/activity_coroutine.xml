@@ -11,13 +11,23 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btn_coroutine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="协程"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_rxjava"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_rxjava"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RxJava"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_coroutine" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -31,3 +31,5 @@ Android中IPC通信Binder
 - 浮动键盘
 #### TopBar
 - 折叠布局实现吸顶效果
+#### ALERTWINDOW
+- 悬浮框

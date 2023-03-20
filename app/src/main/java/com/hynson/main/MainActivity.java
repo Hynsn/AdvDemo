@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.hynson.R;
 import com.hynson.aidl.AidlActivity;
+import com.hynson.alertwindow.AlertWindowActivity;
 import com.hynson.chart.ChartActivity;
 import com.hynson.coroutine.CoroutineActivity;
 import com.hynson.crash.CrashActivity;
@@ -118,10 +119,12 @@ public class MainActivity extends FragmentActivity {
                 break;
             case R.id.btn_shortcut:
                 intent.setComponent(new ComponentName(this, ShortcutActivity.class));
-
                 break;
             case R.id.btn_gson:
                 intent.setComponent(new ComponentName(this, GsonActivity.class));
+                break;
+            case R.id.btn_alert_window:
+                intent.setComponent(new ComponentName(this, AlertWindowActivity.class));
                 break;
         }
         startActivity(intent);

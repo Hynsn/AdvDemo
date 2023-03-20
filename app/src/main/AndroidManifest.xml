@@ -98,6 +98,7 @@
             android:process=":remote" />
 
         <activity android:name=".shortcut.ShortcutActivity" />
+        <activity android:name=".alertwindow.AlertWindowActivity" />
 
         <receiver
             android:name=".shortcut.ShortcutBroadcastReceiver"

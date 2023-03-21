@@ -2,6 +2,8 @@ package com.hynson.main
 
 import android.app.Application
 import android.content.Context
+import com.hynson.R
+import com.hynson.alertwindow.window.AlertWindow
 import com.hynson.crash.CrashAHandler
 import com.hynson.crash.CrashBHandler
 import com.hynson.crash.CrashHandler
@@ -19,6 +21,10 @@ class TestApp : Application() {
                 e.printStackTrace()
             }
         }.start()
+
+        AlertWindow.with(this)
+            .setLayoutId(R.layout.alert_timer)
+            .build()
     }
 
     override fun attachBaseContext(base: Context?) {

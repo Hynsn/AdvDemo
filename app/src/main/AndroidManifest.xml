@@ -110,7 +110,15 @@
                 <action android:name="android.intent.action.ADD_SHORTCUT_ACTION"/>-->
             </intent-filter>
         </receiver>
+
+        <!--    悬浮框    -->
+        <service android:name=".alertwindow.AlertWindowService" />
+        <service android:name=".alertwindow.dialog.DialogService" />
     </application>
+
+    <!-- 悬浮框   -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

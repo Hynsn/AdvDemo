@@ -12,21 +12,58 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btn_foreground_nopermission"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="应用内"
+            android:text="无需申请权限 应用内"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btn_foreground"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="应用内"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_foreground_nopermission" />
+
+        <Button
+            android:id="@+id/btn_global"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="全局"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button" />
+            app:layout_constraintTop_toBottomOf="@id/btn_foreground" />
+
+        <Button
+            android:id="@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="关闭"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_global" />
+
+        <Button
+            android:id="@+id/btn_open_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="打开全局弹框"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_close" />
+
+        <Button
+            android:id="@+id/btn_alert_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="打开AlertDialog"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_open_dialog" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

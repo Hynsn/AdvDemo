@@ -20,6 +20,7 @@ class AlertWindowActivity : BaseActivity<AlertwindowActivityBinding>(), View.OnC
 
     override fun bindView() {
         startService(Intent(this, AlertWindowService::class.java))
+        binding.btnForegroundNopermission.setOnClickListener(this)
         binding.btnClose.setOnClickListener(this)
         binding.btnForeground.setOnClickListener(this)
         binding.btnGlobal.setOnClickListener(this)

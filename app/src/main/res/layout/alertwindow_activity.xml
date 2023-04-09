@@ -15,7 +15,7 @@
             android:id="@+id/btn_foreground_nopermission"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="无需申请权限 应用内"
+            android:text="应用内 无需申请权限 "
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -24,7 +24,7 @@
             android:id="@+id/btn_foreground"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="应用内"
+            android:text="应用内 需权限"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_foreground_nopermission" />
@@ -33,7 +33,7 @@
             android:id="@+id/btn_global"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="全局"
+            android:text="全局 需权限"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_foreground" />

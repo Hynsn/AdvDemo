@@ -14,6 +14,7 @@ class AlertViewManager(builder: AlertWindow.Builder) : IAlertView, AlertLifecycl
     private var mContainer: WeakReference<FrameLayout>? = null
 
     private val alertView = AlertView(builder.app, builder.layoutId, builder.layoutParam)
+    private var isShow = false
 
     init {
         builder.lifecycle.register(this)
@@ -29,9 +30,10 @@ class AlertViewManager(builder: AlertWindow.Builder) : IAlertView, AlertLifecycl
     }
 
     override fun activityAttach(activity: Activity) {
-        // 添加
-        getActivityRoot(activity)?.let {
-            attach(it)
+        if (isShow) {
+            getActivityRoot(activity)?.let {
+                attach(it)
+            }
         }
     }
 
@@ -52,7 +54,6 @@ class AlertViewManager(builder: AlertWindow.Builder) : IAlertView, AlertLifecycl
         mContainer?.clear()
 
         mContainer = WeakReference(c)
-
         addViewToWindow()
     }
 
@@ -79,10 +80,12 @@ class AlertViewManager(builder: AlertWindow.Builder) : IAlertView, AlertLifecycl
     }
 
     override fun show() {
+        isShow = true
         addViewToWindow()
     }
 
     override fun hide() {
+        isShow = false
         getContainer()?.let { detach(it) }
     }
 

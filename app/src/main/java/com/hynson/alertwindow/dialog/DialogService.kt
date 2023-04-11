@@ -5,15 +5,17 @@ import android.app.Service
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.hynson.R
 
@@ -33,9 +35,9 @@ class DialogService : Service() {
 
     override fun onStart(intent: Intent?, startId: Int) {
         super.onStart(intent, startId)
-        // showDialog()
-        // showBottomDialog()
-        showBottomSheetDialog()
+//         showDialog()
+        showBottomDialog()
+//        showBottomSheetDialog()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -70,10 +72,20 @@ class DialogService : Service() {
             setType(type)
             setGravity(Gravity.BOTTOM) //设置弹出位置
             setWindowAnimations(R.style.main_menu_animStyle) //设置弹出动画
-            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT) //设置对话框大小
+            setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ) //设置对话框大小
         }
 
         dialog.show()
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed({
+            val edit = dialog.findViewById<EditText>(R.id.edt_name)
+            edit.requestFocus()
+            (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).showSoftInput(edit, 0)
+        }, 200)
+
         dialog.findViewById<View>(R.id.tv_take_photo).setOnClickListener { dialog.dismiss() }
         dialog.findViewById<View>(R.id.tv_take_pic).setOnClickListener { dialog.dismiss() }
         dialog.findViewById<View>(R.id.tv_cancel).setOnClickListener { dialog.dismiss() }
@@ -85,11 +97,13 @@ class DialogService : Service() {
     private fun showBottomSheetDialog() {
         val sheetDialog = BottomSheetDialog(this)
         val view = View.inflate(this, R.layout.dialog_bottom, null)
-        val type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-        else WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
+        val type =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+            else WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
         sheetDialog.setContentView(view)
         sheetDialog.window?.setType(type)
-        sheetDialog.findViewById<FrameLayout>(R.id.design_bottom_sheet)?.setBackgroundColor(Color.TRANSPARENT)
+        sheetDialog.findViewById<FrameLayout>(R.id.design_bottom_sheet)
+            ?.setBackgroundColor(Color.TRANSPARENT)
         sheetDialog.show()
     }
 }

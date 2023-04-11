@@ -21,6 +21,8 @@ class AlertWindowActivity : BaseActivity<AlertwindowActivityBinding>(), View.OnC
     override fun bindView() {
         startService(Intent(this, AlertWindowService::class.java))
         binding.btnForegroundNopermission.setOnClickListener(this)
+        binding.btnCloseNp.setOnClickListener(this)
+
         binding.btnClose.setOnClickListener(this)
         binding.btnForeground.setOnClickListener(this)
         binding.btnGlobal.setOnClickListener(this)
@@ -32,9 +34,10 @@ class AlertWindowActivity : BaseActivity<AlertwindowActivityBinding>(), View.OnC
     override fun onClick(p0: View) {
         when (p0.id) {
             R.id.btn_foreground_nopermission -> {
-                AlertWindow.with(application)
-                    .setLayoutId(R.layout.alert_timer)
-                    .build()
+                AlertWindow.get()?.show()
+            }
+            R.id.btn_close_np -> {
+                AlertWindow.get()?.hide()
             }
 
             R.id.btn_foreground -> {

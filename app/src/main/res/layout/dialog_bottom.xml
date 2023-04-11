@@ -27,6 +27,12 @@
         android:text="相册选择"
         android:textColor="@android:color/background_dark"
         android:textSize="16sp" />
+    <EditText
+        android:id="@+id/edt_name"
+        android:hint="输入"
+        android:focusable="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <View
         android:layout_width="match_parent"

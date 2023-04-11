@@ -4,12 +4,19 @@ import android.animation.ValueAnimator
 import android.graphics.PixelFormat
 import android.os.Build
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.WindowManager
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.hynson.R
 
 
@@ -23,6 +30,24 @@ class AlertWindowService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
+        val myEventObserver = object : LifecycleObserver {
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+            fun onAppBackground() {
+
+            }
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_START)
+            fun onAppForeground() {
+
+            }
+        }
+
+        ProcessLifecycleOwner.get().lifecycle.addObserver(object : LifecycleEventObserver {
+            override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+                Log.i("TAG", "onStateChanged: $event")
+            }
+        })
         initObserve()
     }
 
@@ -65,7 +90,7 @@ class AlertWindowService : LifecycleService() {
             type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
             } else {
-                WindowManager.LayoutParams.TYPE_PHONE
+                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY
             }
             format = PixelFormat.RGBA_8888
             flags =

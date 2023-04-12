@@ -99,6 +99,7 @@
 
         <activity android:name=".shortcut.ShortcutActivity" />
         <activity android:name=".alertwindow.AlertWindowActivity" />
+        <activity android:name=".coordinatorlayout.CoordinatorActivity"/>
 
         <receiver
             android:name=".shortcut.ShortcutBroadcastReceiver"

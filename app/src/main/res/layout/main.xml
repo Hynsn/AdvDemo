@@ -2,144 +2,172 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="Activity"
             type="com.hynson.main.MainActivity" />
     </data>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <Button
                 android:id="@+id/btn_customview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{Activity::test}"
-                android:textAllCaps="false"
                 android:text="Customview"
+                android:textAllCaps="false"
                 android:textSize="18sp" />
+
             <Button
                 android:id="@+id/btn_chart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{Activity::test}"
-                android:textAllCaps="false"
                 android:text="Chart"
+                android:textAllCaps="false"
                 android:textSize="18sp" />
+
             <Button
                 android:id="@+id/btn_webview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{Activity.test}"
-                android:textAllCaps="false"
                 android:text="WebView"
-                android:textSize="18sp"/>
+                android:textAllCaps="false"
+                android:textSize="18sp" />
+
             <Button
                 android:id="@+id/btn_databinding"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{Activity.test}"
-                android:textAllCaps="false"
                 android:text="DataBinding"
+                android:textAllCaps="false"
                 android:textSize="18sp" />
+
             <Button
                 android:id="@+id/btn_navigation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{Activity.test}"
-                android:textAllCaps="false"
                 android:text="Navigation"
+                android:textAllCaps="false"
                 android:textSize="18sp" />
+
             <Button
                 android:id="@+id/btn_crashed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{Activity.test}"
-                android:textAllCaps="false"
                 android:text="testCrash"
+                android:textAllCaps="false"
                 android:textSize="18sp" />
+
             <Button
                 android:id="@+id/btn_mbedtls"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{Activity.test}"
-                android:textAllCaps="false"
                 android:text="testMbedtls"
+                android:textAllCaps="false"
                 android:textSize="18sp" />
+
             <Button
                 android:id="@+id/btn_opensl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{Activity.test}"
-                android:textAllCaps="false"
                 android:text="testOpenSL"
+                android:textAllCaps="false"
                 android:textSize="18sp" />
+
             <Button
                 android:id="@+id/btn_ipcaidl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{Activity.test}"
-                android:textAllCaps="false"
                 android:text="testAIDL"
+                android:textAllCaps="false"
                 android:textSize="18sp" />
+
             <Button
                 android:id="@+id/btn_ktcoroutine"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{Activity.test}"
-                android:textAllCaps="false"
                 android:text="ktcoroutine"
+                android:textAllCaps="false"
                 android:textSize="18sp" />
+
             <Button
                 android:id="@+id/btn_gson"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{Activity.test}"
-                android:textAllCaps="false"
                 android:text="Gson"
+                android:textAllCaps="false"
                 android:textSize="18sp" />
+
             <Button
                 android:id="@+id/btn_float_key"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{Activity.test}"
-                android:textAllCaps="false"
                 android:text="FloatKey"
+                android:textAllCaps="false"
                 android:textSize="18sp" />
+
             <Button
                 android:id="@+id/btn_topbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{Activity.test}"
-                android:textAllCaps="false"
                 android:text="TopBar"
+                android:textAllCaps="false"
                 android:textSize="18sp" />
+
             <Button
                 android:id="@+id/btn_setting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{Activity.test}"
-                android:textAllCaps="false"
                 android:text="Setting"
+                android:textAllCaps="false"
                 android:textSize="18sp" />
+
             <Button
                 android:id="@+id/btn_shortcut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{Activity.test}"
-                android:textAllCaps="false"
                 android:text="Shortcut"
+                android:textAllCaps="false"
                 android:textSize="18sp" />
+
             <Button
                 android:id="@+id/btn_alert_window"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{Activity.test}"
-                android:textAllCaps="false"
                 android:text="AlertWindow"
+                android:textAllCaps="false"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/btn_coordinator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{Activity.test}"
+                android:text="Coordinator"
+                android:textAllCaps="false"
                 android:textSize="18sp" />
         </LinearLayout>
     </ScrollView>

@@ -25,6 +25,7 @@ import com.hynson.R;
 import com.hynson.aidl.AidlActivity;
 import com.hynson.alertwindow.AlertWindowActivity;
 import com.hynson.chart.ChartActivity;
+import com.hynson.coordinatorlayout.CoordinatorActivity;
 import com.hynson.coroutine.CoroutineActivity;
 import com.hynson.crash.CrashActivity;
 import com.hynson.customview.CustomViewActivity;
@@ -125,6 +126,9 @@ public class MainActivity extends FragmentActivity {
                 break;
             case R.id.btn_alert_window:
                 intent.setComponent(new ComponentName(this, AlertWindowActivity.class));
+                break;
+            case R.id.btn_coordinator:
+                intent.setComponent(new ComponentName(this, CoordinatorActivity.class));
                 break;
         }
         startActivity(intent);

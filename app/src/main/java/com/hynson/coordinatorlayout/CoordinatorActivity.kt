@@ -15,32 +15,7 @@ class CoordinatorActivity : BaseActivity<ActivityCoordinatorlayoutBinding>(), Vi
 
     override fun onClick(p0: View) {
         when (p0.id) {
-            R.id.btn_foreground_nopermission -> {
 
-            }
-            R.id.btn_close_np -> {
-
-            }
-
-            R.id.btn_foreground -> {
-
-            }
-
-            R.id.btn_global -> {
-
-            }
-
-            R.id.btn_close -> {
-
-            }
-
-            R.id.btn_open_dialog -> {
-
-            }
-
-            R.id.btn_alert_dialog -> {
-
-            }
         }
     }
 }

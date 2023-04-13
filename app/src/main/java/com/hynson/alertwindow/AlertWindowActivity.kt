@@ -28,7 +28,6 @@ class AlertWindowActivity : BaseActivity<AlertwindowActivityBinding>(), View.OnC
         binding.btnGlobal.setOnClickListener(this)
 
         binding.btnOpenDialog.setOnClickListener(this)
-        binding.btnAlertDialog.setOnClickListener(this)
     }
 
     override fun onClick(p0: View) {
@@ -61,22 +60,9 @@ class AlertWindowActivity : BaseActivity<AlertwindowActivityBinding>(), View.OnC
             R.id.btn_open_dialog -> {
                 showGlobalDialog()
             }
-
-            R.id.btn_alert_dialog -> {
-                showDialog()
-            }
         }
     }
 
-    private fun showDialog() {
-        val dialog = AlertDialog.Builder(this).setTitle("这是标题")
-            .setMessage("这是对话框中的内容")
-            .create()
-        val type =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY else WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
-        dialog.window?.setType(type)
-        dialog.show()
-    }
 
     private fun showGlobalDialog() {
         //兼容api23版本

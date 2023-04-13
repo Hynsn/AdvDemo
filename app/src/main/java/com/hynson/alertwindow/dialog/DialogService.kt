@@ -36,8 +36,7 @@ class DialogService : Service() {
     override fun onStart(intent: Intent?, startId: Int) {
         super.onStart(intent, startId)
 //         showDialog()
-        showBottomDialog()
-//        showBottomSheetDialog()
+        showBottomSheetDialog()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -58,40 +57,6 @@ class DialogService : Service() {
     }
 
     /**
-     * 自定义Dialog实现
-     */
-    private fun showBottomDialog() {
-        val dialog = Dialog(this, R.style.DialogTheme).apply {
-            val view = View.inflate(context, R.layout.dialog_bottom, null)
-            setContentView(view)
-        }
-
-        val type =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY else WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
-        dialog.window?.apply {
-            setType(type)
-            setGravity(Gravity.BOTTOM) //设置弹出位置
-            setWindowAnimations(R.style.main_menu_animStyle) //设置弹出动画
-            setLayout(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            ) //设置对话框大小
-        }
-
-        dialog.show()
-        val handler = Handler(Looper.getMainLooper())
-        handler.postDelayed({
-            val edit = dialog.findViewById<EditText>(R.id.edt_name)
-            edit.requestFocus()
-            (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).showSoftInput(edit, 0)
-        }, 200)
-
-        dialog.findViewById<View>(R.id.tv_take_photo).setOnClickListener { dialog.dismiss() }
-        dialog.findViewById<View>(R.id.tv_take_pic).setOnClickListener { dialog.dismiss() }
-        dialog.findViewById<View>(R.id.tv_cancel).setOnClickListener { dialog.dismiss() }
-    }
-
-    /**
      * BottomSheetDialog实现
      */
     private fun showBottomSheetDialog() {
@@ -106,4 +71,5 @@ class DialogService : Service() {
             ?.setBackgroundColor(Color.TRANSPARENT)
         sheetDialog.show()
     }
+
 }

@@ -2,7 +2,7 @@ ext {
     ext.kotlin_version = '1.5.30'
 
     droid = [
-            compileSdk: 31,
+            compileSdk: 33,
             buildTools: "30.0.3",
             targetSdk : 30,
             minSdk    : 21,
@@ -27,7 +27,7 @@ ext {
             "kt-coroutines"   : '1.1.1',
             "nanohttpd"       : '2.2.0',
             "gson"            : 'com.google.code.gson:gson:2.9.0',
-            "quickadapter"    : 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4',
+            "quickadapter"    : 'io.github.cymchad:BaseRecyclerViewAdapterHelper:4.0.0-beta04',
             "glide"           : 'com.github.bumptech.glide:glide:4.13.2',
             "spi"             : 'com.google.auto.service:auto-service:1.0.1',
             "rxjava"          : 'io.reactivex.rxjava2:rxjava:2.2.21',

@@ -60,6 +60,12 @@ android {
         checkReleaseBuilds false
         abortOnError false
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+        freeCompilerArgs += [
+                "-Xjvm-default=all",
+        ]
+    }
 }
 repositories {
     flatDir {

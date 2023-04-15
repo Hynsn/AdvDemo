@@ -1,5 +1,6 @@
 package com.hynson.coordinatorlayout
 
+import android.graphics.Color
 import android.view.View
 import com.base.base.BaseActivity
 import com.hynson.R
@@ -10,7 +11,8 @@ class CoordinatorActivity : BaseActivity<ActivityCoordinatorlayoutBinding>(), Vi
     override fun getLayout() = R.layout.activity_coordinatorlayout
 
     override fun bindView() {
-
+        binding.clRoot.setBackgroundColor(Color.TRANSPARENT)
+        binding.clRoot.invalidate()
     }
 
     override fun onClick(p0: View) {

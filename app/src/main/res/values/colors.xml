@@ -24,4 +24,6 @@
 
     <color name="color_002c5b">#002c5b</color>
     <color name="color_3300">#33000000</color>
+    <color name="color_00">#00000000</color>
+
 </resources>

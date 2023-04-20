@@ -3,13 +3,13 @@ package com.hynson.main
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseMultiItemAdapter
 import com.hynson.databinding.ItemContentBinding
 import com.hynson.databinding.ItemContentCellsBinding
 import com.hynson.main.Content.Companion.ITEM_TYPE
 import com.hynson.main.Content.Companion.SECTION_TYPE
+import com.hynson.recyclerview.FlowLayoutManager
 
 
 class ContentAdapter(data: List<Content>) :
@@ -56,7 +56,7 @@ class ContentAdapter(data: List<Content>) :
                         cellsAdapter.items = it
                     }
                     holder.viewBinding.rvCells.apply {
-                        layoutManager = GridLayoutManager(context, 4)
+                        layoutManager = FlowLayoutManager()
                         adapter = cellsAdapter
                     }
                     cellsAdapter.apply {

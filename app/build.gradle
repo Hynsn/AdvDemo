@@ -119,6 +119,7 @@ dependencies {
     implementation ver.spi
     implementation ver.rxjava
     implementation ver.rxandroid
+    implementation 'com.airbnb.android:lottie:3.7.2'
 
 //    implementation "com.android.tools.build:gradle:7.0.0"
 

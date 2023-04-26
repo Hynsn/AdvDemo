@@ -1,5 +1,6 @@
 package com.hynson.customview
 
+import android.animation.Animator
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -12,26 +13,33 @@ import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieComposition
+import com.airbnb.lottie.LottieCompositionFactory
 import com.hynson.R
 import com.hynson.customview.weight.NumSpan
 import com.hynson.databinding.FragCustomviewNumtextBinding
 import com.hynson.ktbase.BaseFragment
 
-class NumTextFragment : BaseFragment<FragCustomviewNumtextBinding,CustomViewVM>(),View.OnClickListener{
+class NumTextFragment : BaseFragment<FragCustomviewNumtextBinding, CustomViewVM>(), View.OnClickListener {
+    private val annimListener = AnimatorCounter(1000L)
+
     override val layoutId: Int = R.layout.frag_customview_numtext
 
     override fun getVm(provider: ViewModelProvider) = provider.get(CustomViewVM::class.java)
     override fun getBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = FragCustomviewNumtextBinding.inflate(inflater,container,false)
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ) = FragCustomviewNumtextBinding.inflate(inflater, container, false)
 
     override fun bindView() {
         bind.btnAppend.setOnClickListener(this)
         bind.btnDel.setOnClickListener(this)
         bind.btnShow.setOnClickListener(this)
         bind.btnHide.setOnClickListener(this)
+        bind.btnPlay1.setOnClickListener(this)
+        bind.btnPause.setOnClickListener(this)
         updateAlarmMinuteView(mBuilder.toString())
     }
 
@@ -71,10 +79,10 @@ class NumTextFragment : BaseFragment<FragCustomviewNumtextBinding,CustomViewVM>(
         val fY = if (downup) -0.5f else 0.0f
         val tY = if (downup) 0.0f else 0.5f
         val animation = TranslateAnimation(
-            Animation.RELATIVE_TO_SELF, 0.0f,
-            Animation.RELATIVE_TO_SELF, 0.0f,
-            Animation.RELATIVE_TO_SELF, fY,
-            Animation.RELATIVE_TO_SELF, tY
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, fY,
+                Animation.RELATIVE_TO_SELF, tY
         )
         animation.duration = 400
         view.startAnimation(animation)
@@ -86,15 +94,15 @@ class NumTextFragment : BaseFragment<FragCustomviewNumtextBinding,CustomViewVM>(
 
     private fun updateAlarmMinuteView(text: String) {
         val format =
-            String.format("%0${numbLen}d", if (TextUtils.isEmpty(text)) 0 else text.toInt())
+                String.format("%0${numbLen}d", if (TextUtils.isEmpty(text)) 0 else text.toInt())
         val builder = SpannableStringBuilder()
         builder.append(format).append("\b")
         val lastIndex = leftZeroIndex(format)
         Log.i(CustomViewActivity.TAG, "updateAlarmMinuteView: $format,$lastIndex")
         for (i in format.indices) {
             val hotSpan = NumSpan(
-                context,
-                if (lastIndex < i) R.color.numColor else R.color.zeroColor
+                    context,
+                    if (lastIndex < i) R.color.numColor else R.color.zeroColor
             )
             hotSpan.setRightMarginDpValue(10)
             Log.i(CustomViewActivity.TAG, "updateAlarmMinuteView: " + i + "," + (i + 1))
@@ -135,6 +143,62 @@ class NumTextFragment : BaseFragment<FragCustomviewNumtextBinding,CustomViewVM>(
             }
             R.id.btn_show -> translateVisibility(bind.ntText, true, true)
             R.id.btn_hide -> translateVisibility(bind.ntText, false, false)
+            R.id.btn_play_1 -> {
+//                bind.animationView.repeatCount = 5
+                bind.animationView.loop(true)
+                bind.animationView.playAnimation()
+                annimListener.isFinished = { isFinished, couter ->
+                    Log.i(TAG, "isFinished:$isFinished,$couter ")
+                    if (isFinished) {
+                        bind.animationView.pauseAnimation()
+                    }
+                }
+                bind.animationView.removeAnimatorListener(annimListener)
+                bind.animationView.addAnimatorListener(annimListener)
+            }
+            R.id.btn_pause -> {
+                bind.animationView.cancelAnimation()
+            }
         }
+    }
+
+    /**
+     * @param 总时长
+     *
+     */
+    class AnimatorCounter(val durtion: Long) : Animator.AnimatorListener {
+        var isFinished: ((finished: Boolean, counter: Int) -> (Unit))? = null
+            set(value) {
+                start = System.currentTimeMillis()
+                field = value
+            }
+        private var start = System.currentTimeMillis()
+        private var counter = 0
+        override fun onAnimationStart(p0: Animator) {
+            start = System.currentTimeMillis()
+            Log.i(TAG, "onAnimationStart")
+        }
+
+        override fun onAnimationEnd(p0: Animator) {
+            Log.i(TAG, "onAnimationEnd")
+        }
+
+        override fun onAnimationCancel(p0: Animator) {
+            Log.i(TAG, "onAnimationCancel")
+            start = System.currentTimeMillis()
+            counter = 0
+        }
+
+        override fun onAnimationRepeat(p0: Animator) {
+            Log.i(TAG, "onAnimationRepeat")
+            counter++
+            val now = System.currentTimeMillis()
+            val ret = (now - start) >= durtion
+            isFinished?.invoke(ret, counter)
+        }
+    }
+
+    companion object {
+        private const val TAG = "animationView"
     }
 }

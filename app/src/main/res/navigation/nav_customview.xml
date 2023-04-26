@@ -40,4 +40,8 @@
         android:id="@+id/chartFragment"
         android:name="com.hynson.chart.ChartFragment"
         android:label="ChartFragment" />
+    <fragment
+        android:id="@+id/expandFragment"
+        android:name="com.hynson.customview.ExpandTextViewFragment"
+        android:label="ExpandFragment" />
 </navigation>

@@ -18,9 +18,9 @@ class CustomViewFragment : BaseFragment<FragCustomviewBinding, CustomViewVM>() {
     override fun getVm(provider: ViewModelProvider) = provider.get(CustomViewVM::class.java)
 
     override fun getBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = FragCustomviewBinding.inflate(inflater, container, false)
 
     override fun bindView() {
@@ -32,14 +32,15 @@ class CustomViewFragment : BaseFragment<FragCustomviewBinding, CustomViewVM>() {
         itemList.add(TestItem("PieChart", R.id.pieChartFragment, null, null))
         itemList.add(TestItem("BPChart", R.id.BPChartFragment, null, null))
         itemList.add(TestItem("MyView", R.id.myViewFragment, null, null))
-        itemList.add(TestItem("BarView",R.id.chartFragment,null,null))
+        itemList.add(TestItem("BarView", R.id.chartFragment, null, null))
+        itemList.add(TestItem("ExpandFragment", R.id.expandFragment, null, null))
 
         val itemAdapter = TestItemAdapter(requireContext(), itemList)
         bind.rvCustomView.apply {
             layoutManager = LinearLayoutManager(
-                context,
-                LinearLayoutManager.VERTICAL,
-                false
+                    context,
+                    LinearLayoutManager.VERTICAL,
+                    false
             )
             adapter = itemAdapter
         }

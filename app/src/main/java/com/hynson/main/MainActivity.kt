@@ -57,9 +57,9 @@ class MainActivity : FragmentActivity() {
         binding?.rvContents?.apply {
 
             layoutManager = LinearLayoutManager(
-                context,
-                LinearLayoutManager.VERTICAL,
-                false
+                    context,
+                    LinearLayoutManager.VERTICAL,
+                    false
             )
             adapter = contentAdapter
         }
@@ -145,7 +145,9 @@ class MainActivity : FragmentActivity() {
 
         })
 
-        contents.add(Content(Content.ITEM_TYPE, name = "CustomView"))
+        contents.add(Content(Content.ITEM_TYPE, name = "CustomView", itemAction = {
+            startActivity(CustomViewActivity::class.java)
+        }))
         contents.add(Content(Content.SECTION_TYPE, cells = customCells))
     }
 
@@ -164,10 +166,10 @@ class MainActivity : FragmentActivity() {
 
     private fun showAlertDialog() {
         val dialog = AlertDialog.Builder(this).setTitle("这是标题")
-            .setMessage("这是对话框中的内容")
-            .create()
+                .setMessage("这是对话框中的内容")
+                .create()
         val type =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY else WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY else WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
         dialog.window?.setType(type)
         dialog.show()
     }
@@ -179,12 +181,12 @@ class MainActivity : FragmentActivity() {
         val sheetDialog = BottomSheetDialog(this)
         val view = View.inflate(this, R.layout.dialog_bottom, null)
         val type =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-            else WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+                else WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
         sheetDialog.setContentView(view)
         sheetDialog.window?.setType(type)
         sheetDialog.findViewById<FrameLayout>(R.id.design_bottom_sheet)
-            ?.setBackgroundColor(Color.TRANSPARENT)
+                ?.setBackgroundColor(Color.TRANSPARENT)
         sheetDialog.show()
     }
 
@@ -217,14 +219,14 @@ class MainActivity : FragmentActivity() {
         }
 
         val type =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY else WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY else WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
         dialog.window?.apply {
             setType(type)
             setGravity(Gravity.BOTTOM) //设置弹出位置
             setWindowAnimations(R.style.main_menu_animStyle) //设置弹出动画
             setLayout(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
             ) //设置对话框大小
         }
 

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="UsingOnClickInXml">
+
+    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.hynson.customview.weight.ExpandTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:text="@string/test"
+            android:textColor="#666666"
+            android:textSize="16sp"
+            app:arrowAlign="top"
+            app:arrowPosition="right"
+            app:maxCollapsedLines="4" />
+
+        <com.hynson.customview.weight.ExpandTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:text="@string/test"
+            android:textColor="#666666"
+            android:textSize="16sp"
+            app:arrowAlign="center"
+            app:arrowPosition="right"
+            app:maxCollapsedLines="4" />
+
+        <com.hynson.customview.weight.ExpandTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:text="@string/test"
+            android:textColor="#666666"
+            android:textSize="16sp"
+            app:arrowAlign="bottom"
+            app:arrowPosition="right"
+            app:maxCollapsedLines="4" />
+
+        <com.hynson.customview.weight.ExpandTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:text="@string/test"
+            android:textColor="#666666"
+            android:textSize="16sp"
+            app:arrowAlign="left"
+            app:arrowPadding="8dp"
+            app:arrowPosition="below"
+            app:maxCollapsedLines="4" />
+
+        <com.hynson.customview.weight.ExpandTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:text="@string/test"
+            android:textColor="#666666"
+            android:textSize="16sp"
+            app:arrowAlign="center"
+            app:arrowPadding="8dp"
+            app:arrowPosition="below"
+            app:maxCollapsedLines="4" />
+
+        <com.hynson.customview.weight.ExpandTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:text="@string/test"
+            android:textColor="#666666"
+            android:textSize="16sp"
+            app:arrowAlign="right"
+            app:arrowPadding="8dp"
+            app:arrowPosition="below"
+            app:maxCollapsedLines="4" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

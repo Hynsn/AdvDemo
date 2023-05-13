@@ -14,5 +14,6 @@ data class Content(
 
 data class Cell(
     val name: String,
-    val action: ((Int) -> (Unit))
+    val resId: Int = 0,
+    val action: ((position: Int, cell: Cell) -> (Unit))? = null
 )

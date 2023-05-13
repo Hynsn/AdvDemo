@@ -57,9 +57,9 @@ class MainActivity : FragmentActivity() {
         binding?.rvContents?.apply {
 
             layoutManager = LinearLayoutManager(
-                    context,
-                    LinearLayoutManager.VERTICAL,
-                    false
+                context,
+                LinearLayoutManager.VERTICAL,
+                false
             )
             adapter = contentAdapter
         }
@@ -127,36 +127,32 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun initCustomView(contents: MutableList<Content>) {
-        val customCells = arrayListOf<Cell>(Cell("TimeLine") {
+        val action = { position: Int, cell: Cell ->
+            CustomViewActivity.start(this, cell.resId)
+        }
+        val customCells =
+            arrayListOf<Cell>(
+                Cell("TimeLine", R.id.timelineFragment, action),
+                Cell("NumText", R.id.numTextFragment, action),
+                Cell("RulerView", R.id.rulerViewFragment, action),
+                Cell("FlowLayout", R.id.flowLayoutFragment, action),
+                Cell("PieChart", R.id.pieChartFragment, action),
+                Cell("BPChart", R.id.BPChartFragment, action),
+                Cell("MyView", R.id.myViewFragment, action),
+                Cell("BarView", R.id.chartFragment, action),
+                Cell("ExpandFragment", R.id.expandFragment, action)
+            )
 
-        }, Cell("NumText") {
-
-        }, Cell("RulerView") {
-
-        }, Cell("FlowLayout") {
-
-        }, Cell("PieChart") {
-
-        }, Cell("BPChart") {
-
-        }, Cell("MyView") {
-
-        }, Cell("BarView") {
-
-        })
-
-        contents.add(Content(Content.ITEM_TYPE, name = "CustomView", itemAction = {
-            startActivity(CustomViewActivity::class.java)
-        }))
+        contents.add(Content(Content.ITEM_TYPE, name = "CustomView"))
         contents.add(Content(Content.SECTION_TYPE, cells = customCells))
     }
 
     private fun initDialog(contents: MutableList<Content>) {
-        val customCells = arrayListOf<Cell>(Cell("AlertDialog") {
+        val customCells = arrayListOf<Cell>(Cell("AlertDialog") { pos, cell ->
             showAlertDialog()
-        }, Cell("BottomSheetDialog") {
+        }, Cell("BottomSheetDialog") { pos, cell ->
             showBottomSheetDialog()
-        }, Cell("Dialog") {
+        }, Cell("Dialog") { pos, cell ->
             showBottomDialog()
         })
 
@@ -166,11 +162,8 @@ class MainActivity : FragmentActivity() {
 
     private fun showAlertDialog() {
         val dialog = AlertDialog.Builder(this).setTitle("这是标题")
-                .setMessage("这是对话框中的内容")
-                .create()
-        val type =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY else WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
-        dialog.window?.setType(type)
+            .setMessage("这是对话框中的内容")
+            .create()
         dialog.show()
     }
 
@@ -180,22 +173,18 @@ class MainActivity : FragmentActivity() {
     private fun showBottomSheetDialog() {
         val sheetDialog = BottomSheetDialog(this)
         val view = View.inflate(this, R.layout.dialog_bottom, null)
-        val type =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-                else WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
         sheetDialog.setContentView(view)
-        sheetDialog.window?.setType(type)
         sheetDialog.findViewById<FrameLayout>(R.id.design_bottom_sheet)
-                ?.setBackgroundColor(Color.TRANSPARENT)
+            ?.setBackgroundColor(Color.TRANSPARENT)
         sheetDialog.show()
     }
 
     private fun initClassicUIInteractive(contents: MutableList<Content>) {
-        val customCells = arrayListOf<Cell>(Cell("TopBar") {
+        val customCells = arrayListOf<Cell>(Cell("TopBar") { _, _ ->
             startActivity(TopBarActivity::class.java)
-        }, Cell("Coordinator") {
+        }, Cell("Coordinator") { _, _ ->
             startActivity(CoordinatorActivity::class.java)
-        }, Cell("FloatKey") {
+        }, Cell("FloatKey") { _, _ ->
             startActivity(FloatKeyActivity::class.java)
         })
         contents.add(Content(Content.ITEM_TYPE, name = "Classic UI interactive"))
@@ -217,16 +206,12 @@ class MainActivity : FragmentActivity() {
             val view = View.inflate(context, R.layout.dialog_bottom, null)
             setContentView(view)
         }
-
-        val type =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY else WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
         dialog.window?.apply {
-            setType(type)
             setGravity(Gravity.BOTTOM) //设置弹出位置
             setWindowAnimations(R.style.main_menu_animStyle) //设置弹出动画
             setLayout(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
             ) //设置对话框大小
         }
 

@@ -98,14 +98,14 @@ class NumTextFragment : BaseFragment<FragCustomviewNumtextBinding, CustomViewVM>
         val builder = SpannableStringBuilder()
         builder.append(format).append("\b")
         val lastIndex = leftZeroIndex(format)
-        Log.i(CustomViewActivity.TAG, "updateAlarmMinuteView: $format,$lastIndex")
+        Log.i(TAG, "updateAlarmMinuteView: $format,$lastIndex")
         for (i in format.indices) {
             val hotSpan = NumSpan(
                     context,
                     if (lastIndex < i) R.color.numColor else R.color.zeroColor
             )
             hotSpan.setRightMarginDpValue(10)
-            Log.i(CustomViewActivity.TAG, "updateAlarmMinuteView: " + i + "," + (i + 1))
+            Log.i(TAG, "updateAlarmMinuteView: " + i + "," + (i + 1))
             builder.setSpan(hotSpan, i, i + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         bind.tvNumb.text = builder

@@ -2,6 +2,7 @@ package com.hynson.main
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseMultiItemAdapter
@@ -33,8 +34,10 @@ class ContentAdapter(data: List<Content>) :
             }
 
             override fun onBind(holder: ItemVH, position: Int, item: Content?) {
+                val visible = if (item?.itemAction == null) View.GONE else View.VISIBLE
                 item?.run {
                     holder.viewBinding.tvName.text = name
+                    holder.viewBinding.ivValue.visibility = visible
                 }
             }
         }).addItemType(
@@ -61,7 +64,9 @@ class ContentAdapter(data: List<Content>) :
                     }
                     cellsAdapter.apply {
                         setOnItemClickListener { _, _, position ->
-                            items[position].action.invoke(position)
+                            items[position].run {
+                                action?.invoke(position, this)
+                            }
                         }
                     }
                 }

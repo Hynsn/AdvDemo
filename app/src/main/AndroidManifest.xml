@@ -100,6 +100,7 @@
         <activity android:name=".shortcut.ShortcutActivity" />
         <activity android:name=".alertwindow.AlertWindowActivity" />
         <activity android:name=".coordinatorlayout.CoordinatorActivity"/>
+        <activity android:name=".detail.DetailActivity"/>
 
         <receiver
             android:name=".shortcut.ShortcutBroadcastReceiver"

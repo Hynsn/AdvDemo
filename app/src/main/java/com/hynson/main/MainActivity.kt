@@ -32,6 +32,7 @@ import com.hynson.crash.CrashActivity
 import com.hynson.customview.CustomViewActivity
 import com.hynson.databinding.ActivityMainBinding
 import com.hynson.databinding.DBLoginActivity
+import com.hynson.detail.DetailActivity
 import com.hynson.floatkkey.FloatKeyActivity
 import com.hynson.gson.GsonActivity
 import com.hynson.mbedtls.MbedtlsActivity
@@ -122,6 +123,9 @@ class MainActivity : FragmentActivity() {
         }))
         contentList.add(Content(Content.ITEM_TYPE, name = "AlertWindow", itemAction = {
             startActivity(AlertWindowActivity::class.java)
+        }))
+        contentList.add(Content(Content.ITEM_TYPE, name = "Detail", itemAction = {
+            startActivity(DetailActivity::class.java)
         }))
         return contentList
     }

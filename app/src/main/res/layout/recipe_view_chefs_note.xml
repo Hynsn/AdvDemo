@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.hynson.detail.chefsnote.ChefsNoteVM" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/ll_chefs_notes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_chefs_notes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="8dp"
+            android:text="笔记"
+            android:textColor="#d9000000"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/stv_chefs_notes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8.5dp"
+            android:ellipsize="end"
+            android:lineSpacingMultiplier="1.2"
+            android:padding="16dp"
+            android:text="这个价钱不一定啊。那就买个油耗低那就买个油耗低的车那就买个油耗低的车那就买个油耗低的车那就买个油耗低的车那就买个油耗低的车那就买个油耗低的车那就买个油耗低的车那就买个油耗低的车那就买个油耗低的车那就买个油耗低的车那就买个油耗低的车的车，这样就 便宜很多了哈哈！这个价钱不一定啊。那就买个油耗低的车，这样就便宜很多了哈哈！"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+</layout>

@@ -190,6 +190,8 @@ class MainActivity : FragmentActivity() {
             startActivity(CoordinatorActivity::class.java)
         }, Cell("FloatKey") { _, _ ->
             startActivity(FloatKeyActivity::class.java)
+        }, Cell("Ble") { _, _ ->
+            startActivity(com.hynson.ble.MainActivity::class.java)
         })
         contents.add(Content(Content.ITEM_TYPE, name = "Classic UI interactive"))
         contents.add(Content(Content.SECTION_TYPE, cells = customCells))

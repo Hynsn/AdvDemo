@@ -79,6 +79,7 @@
         <activity android:name=".floatkkey.FloatKeyActivity" />
         <activity android:name=".topbar.TopBarActivity" />
         <activity android:name=".set.SettingActivity" />
+        <activity android:name=".ble.MainActivity"/>
         <activity
             android:name=".main.MainActivity"
             android:configChanges="orientation|screenSize"
@@ -168,4 +169,9 @@
     <!-- 魅族   -->
     <uses-permission android:name="com.meizu.flyme.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="com.meizu.flyme.launcher.permission.WRITE_SETTINGS" />
+
+    <!--  蓝牙  -->
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
 </manifest>

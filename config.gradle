@@ -11,7 +11,7 @@ ext {
     ]
     ver = [
             "core"            : '1.6.0',
-            "shortcuts"       : '',
+            "shortcuts"       : 'androidx.core:core-google-shortcuts:1.0.1',
             "core_ktx"        : 'androidx.core:core-ktx:1.8.0',
             "appcompat"       : 'androidx.appcompat:appcompat:1.4.2',
             "constraintlayout": 'androidx.constraintlayout:constraintlayout:2.1.4',

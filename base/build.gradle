@@ -16,7 +16,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
-    buildFeatures{
+    buildFeatures {
         dataBinding = true
     }
 
@@ -41,9 +41,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation ver.core_ktx
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'androidx.core:core-google-shortcuts:1.0.1'
-
-
+    implementation ver.shortcuts
 }
 repositories {
     mavenCentral()

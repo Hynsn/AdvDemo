@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.base.base.BaseFragment;
+import com.fastdroid.base.BaseFragment;
 import com.hynson.R;
 import com.hynson.databinding.FragHomeBinding;
 import com.hynson.navigation.NavigationVM;

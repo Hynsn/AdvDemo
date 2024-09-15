@@ -1,4 +1,4 @@
-package com.base;
+package com.fastdroid;
 
 import org.junit.Test;
 

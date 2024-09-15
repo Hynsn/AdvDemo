@@ -1,4 +1,4 @@
-package com.base;
+package com.fastdroid;
 
 import android.content.Context;
 

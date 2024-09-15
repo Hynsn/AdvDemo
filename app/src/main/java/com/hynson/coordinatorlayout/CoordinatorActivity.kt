@@ -3,7 +3,7 @@ package com.hynson.coordinatorlayout
 import android.graphics.Color
 import android.util.Log
 import android.view.View
-import com.base.base.BaseActivity
+import com.fastdroid.base.BaseActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.hynson.R
 import com.hynson.databinding.ActivityCoordinatorlayoutBinding

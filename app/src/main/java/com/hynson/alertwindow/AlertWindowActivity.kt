@@ -4,10 +4,8 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import android.view.View
-import android.view.WindowManager
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import com.base.base.BaseActivity
+import com.fastdroid.base.BaseActivity
 import com.hynson.R
 import com.hynson.alertwindow.dialog.DialogService
 import com.hynson.alertwindow.window.AlertWindow

@@ -6,7 +6,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.Toast;
 
-import com.base.base.BaseActivity;
+import com.fastdroid.base.BaseActivity;
 import com.hynson.R;
 import com.hynson.databinding.ActivityMbedtlsBinding;
 

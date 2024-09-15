@@ -1,4 +1,4 @@
-package com.base.base;
+package com.fastdroid.base;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;

@@ -1,8 +1,7 @@
 package com.hynson.floatkkey;
 
-import com.base.base.BaseActivity;
+import com.fastdroid.base.BaseActivity;
 import com.hynson.R;
-import com.hynson.databinding.ActivityCoroutineBinding;
 import com.hynson.databinding.ActivityFloatkeyBinding;
 
 public class FloatKeyActivity extends BaseActivity<ActivityFloatkeyBinding> {

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
-import com.base.base.BaseActivity;
+import com.fastdroid.base.BaseActivity;
 import com.hynson.R;
 import com.hynson.databinding.entity.NoteInfo;
 

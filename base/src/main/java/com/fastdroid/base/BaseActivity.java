@@ -1,4 +1,4 @@
-package com.base.base;
+package com.fastdroid.base;
 
 import android.os.Bundle;
 import android.util.Log;

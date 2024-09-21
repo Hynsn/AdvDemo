@@ -1,12 +1,16 @@
 package com.hynson.main
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.ComponentName
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.LocaleList
 import android.os.Looper
 import android.os.Message
 import android.util.Log
@@ -17,7 +21,10 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.SimpleAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,6 +42,8 @@ import com.hynson.databinding.DBLoginActivity
 import com.hynson.detail.DetailActivity
 import com.hynson.floatkkey.FloatKeyActivity
 import com.hynson.gson.GsonActivity
+import com.hynson.language.AppLanguage
+import com.hynson.language.LanguageAdapter
 import com.hynson.mbedtls.MbedtlsActivity
 import com.hynson.navigation.NavigationActivity
 import com.hynson.opensl.OpenslActivity
@@ -42,6 +51,7 @@ import com.hynson.set.SettingActivity
 import com.hynson.shortcut.ShortcutActivity
 import com.hynson.topbar.TopBarActivity
 import com.hynson.webview.WebviewActivity
+import java.util.Locale
 
 class MainActivity : FragmentActivity() {
     private val TAG = MainActivity::class.java.simpleName
@@ -158,11 +168,62 @@ class MainActivity : FragmentActivity() {
             showBottomSheetDialog()
         }, Cell("Dialog") { pos, cell ->
             showBottomDialog()
+        }, Cell(getString(R.string.dialog_list)) { pos, cell ->
+            showListDialog()
         })
 
         contents.add(Content(Content.ITEM_TYPE, name = "Dialog Gather"))
         contents.add(Content(Content.SECTION_TYPE, cells = customCells))
     }
+
+    private fun showListDialog() {
+        val languages =
+            listOf(AppLanguage(Locale.CHINESE, "中文"), AppLanguage(Locale.ENGLISH, "English"))
+        val adapter = LanguageAdapter(this, R.layout.item_app_language, languages)
+        val listDialog = AlertDialog.Builder(this).apply {
+            setTitle(R.string.change_language)
+            setAdapter(adapter) { _, pos ->
+                Toast.makeText(
+                    this@MainActivity,
+                    "切换${languages[pos].locale.language}",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+                changeLanguage(this@MainActivity, languages[pos].locale)
+            }
+        }
+        listDialog.show()
+    }
+
+    /*修改应用内语言设置*/
+    fun changeLanguage(context: Activity, newLocale: Locale = Locale.ROOT) {
+        setAppLanguage(context, newLocale)
+        ActivityCompat.recreate(context)
+    }
+
+    /*设置语言*/
+    private fun setAppLanguage(context: Context, locale: Locale) {
+        val resources = context.resources
+        val metrics = resources.displayMetrics
+        val configuration = resources.configuration
+        //Android 7.0以上的方法
+        if (Build.VERSION.SDK_INT >= 24) {
+            configuration.setLocale(locale)
+            configuration.setLocales(LocaleList(locale))
+            context.createConfigurationContext(configuration)
+            //实测，updateConfiguration这个方法虽然很多博主说是版本不适用
+            //但是我的生产环境androidX+Android Q环境下，必须加上这一句，才可以通过重启App来切换语言
+            resources.updateConfiguration(configuration, metrics)
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            //Android 4.1 以上方法
+            configuration.setLocale(locale)
+            resources.updateConfiguration(configuration, metrics)
+        } else {
+            configuration.locale = locale
+            resources.updateConfiguration(configuration, metrics)
+        }
+    }
+
 
     private fun showAlertDialog() {
         val dialog = AlertDialog.Builder(this).setTitle("这是标题")

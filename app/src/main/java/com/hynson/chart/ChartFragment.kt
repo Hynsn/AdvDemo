@@ -7,9 +7,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.hynson.R
-import com.hynson.databinding.FragChartBpchartBinding
 import com.hynson.databinding.FragChartItemBinding
-import com.hynson.ktbase.BaseFragment
+import com.fastdroid.ktbase.BaseFragment
 
 class ChartFragment : BaseFragment<FragChartItemBinding, ChartVM>(), View.OnClickListener {
     override val layoutId: Int = R.layout.frag_chart_item

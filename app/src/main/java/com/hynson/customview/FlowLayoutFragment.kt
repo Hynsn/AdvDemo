@@ -10,9 +10,9 @@ import com.hynson.R
 import com.hynson.customview.flowlayout.TagInfo
 import com.hynson.customview.flowlayout.TagType
 import com.hynson.databinding.FragCustomviewFlowlayoutBinding
-import com.hynson.ktbase.BaseFragment
+import com.fastdroid.ktbase.BaseFragment
 
-class FlowLayoutFragment : BaseFragment<FragCustomviewFlowlayoutBinding,CustomViewVM>(),View.OnClickListener{
+class FlowLayoutFragment : BaseFragment<FragCustomviewFlowlayoutBinding, CustomViewVM>(),View.OnClickListener{
     override val layoutId: Int = R.layout.frag_customview_flowlayout
     override fun getVm(provider: ViewModelProvider) = provider.get(CustomViewVM::class.java)
     override fun getBinding(

@@ -2,7 +2,7 @@ package com.hynson.customview
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
-import com.hynson.ktbase.BaseVM
+import com.fastdroid.ktbase.BaseVM
 import kotlinx.coroutines.launch
 
 class CustomViewVM : BaseVM() {

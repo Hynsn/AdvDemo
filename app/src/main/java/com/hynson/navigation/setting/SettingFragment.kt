@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 
 import com.hynson.R
 import com.hynson.databinding.FragDetailBinding
-import com.hynson.ktbase.BaseFragment
+import com.fastdroid.ktbase.BaseFragment
 import com.hynson.navigation.NavigationVM
 
 class SettingFragment : BaseFragment<FragDetailBinding, SetVM>() {

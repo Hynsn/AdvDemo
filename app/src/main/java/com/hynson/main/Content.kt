@@ -1,5 +1,8 @@
 package com.hynson.main
 
+import android.view.View
+import com.hynson.utils.ColorUtil
+
 data class Content(
     val type: Int,
     val name: String? = null,
@@ -15,5 +18,6 @@ data class Content(
 data class Cell(
     val name: String,
     val resId: Int = 0,
-    val action: ((position: Int, cell: Cell) -> (Unit))? = null
+    val colorPair: Pair<Int, Int> = ColorUtil.getColorPair(),
+    val action: ((v: View, position: Int, cell: Cell) -> (Unit))? = null,
 )

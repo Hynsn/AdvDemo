@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="language">语言</string>
     <string name="change">切换</string>
     <string name="change_language">切换语言</string>
     <string name="dialog_list">列表弹框</string>
+    <string name="chart">图表</string>
 </resources>

@@ -15,16 +15,22 @@ import android.os.Looper
 import android.os.Message
 import android.util.Log
 import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.PopupMenu
 import android.widget.SimpleAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.view.MenuCompat
+import androidx.core.view.MenuItemCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -53,12 +59,25 @@ import com.hynson.topbar.TopBarActivity
 import com.hynson.webview.WebviewActivity
 import java.util.Locale
 
-class MainActivity : FragmentActivity() {
+class MainActivity : AppCompatActivity() {
     private val TAG = MainActivity::class.java.simpleName
     var binding: ActivityMainBinding? = null
 
     private val contentAdapter by lazy {
         ContentAdapter(getContentList())
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.settings) {
+            showListDialog()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,7 +112,7 @@ class MainActivity : FragmentActivity() {
         val contentList = ArrayList<Content>()
         initCustomView(contentList)
         initDialog(contentList)
-        contentList.add(Content(Content.ITEM_TYPE, name = "Chart", itemAction = {
+        contentList.add(Content(Content.ITEM_TYPE, name = getString(R.string.chart), itemAction = {
             startActivity(ChartActivity::class.java)
         }))
         contentList.add(Content(Content.ITEM_TYPE, name = "WebView", itemAction = {
@@ -141,20 +160,20 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun initCustomView(contents: MutableList<Content>) {
-        val action = { position: Int, cell: Cell ->
+        val action = { v: View, position: Int, cell: Cell ->
             CustomViewActivity.start(this, cell.resId)
         }
         val customCells =
             arrayListOf<Cell>(
-                Cell("TimeLine", R.id.timelineFragment, action),
-                Cell("NumText", R.id.numTextFragment, action),
-                Cell("RulerView", R.id.rulerViewFragment, action),
-                Cell("FlowLayout", R.id.flowLayoutFragment, action),
-                Cell("PieChart", R.id.pieChartFragment, action),
-                Cell("BPChart", R.id.BPChartFragment, action),
-                Cell("MyView", R.id.myViewFragment, action),
-                Cell("BarView", R.id.chartFragment, action),
-                Cell("ExpandFragment", R.id.expandFragment, action)
+                Cell("TimeLine", R.id.timelineFragment, action = action),
+                Cell("NumText", R.id.numTextFragment, action = action),
+                Cell("RulerView", R.id.rulerViewFragment, action = action),
+                Cell("FlowLayout", R.id.flowLayoutFragment, action = action),
+                Cell("PieChart", R.id.pieChartFragment, action = action),
+                Cell("BPChart", R.id.BPChartFragment, action = action),
+                Cell("MyView", R.id.myViewFragment, action = action),
+                Cell("BarView", R.id.chartFragment, action = action),
+                Cell("ExpandFragment", R.id.expandFragment, action = action)
             )
 
         contents.add(Content(Content.ITEM_TYPE, name = "CustomView"))
@@ -162,18 +181,35 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun initDialog(contents: MutableList<Content>) {
-        val customCells = arrayListOf<Cell>(Cell("AlertDialog") { pos, cell ->
+        val customCells = arrayListOf<Cell>(Cell("AlertDialog") { _, pos, cell ->
             showAlertDialog()
-        }, Cell("BottomSheetDialog") { pos, cell ->
+        }, Cell("BottomSheetDialog") { _, pos, cell ->
             showBottomSheetDialog()
-        }, Cell("Dialog") { pos, cell ->
+        }, Cell("Dialog") { _, pos, cell ->
             showBottomDialog()
-        }, Cell(getString(R.string.dialog_list)) { pos, cell ->
-            showListDialog()
+        }, Cell("PopupMenu") { v, pos, cell ->
+            showPopupMenu(v)
         })
 
         contents.add(Content(Content.ITEM_TYPE, name = "Dialog Gather"))
         contents.add(Content(Content.SECTION_TYPE, cells = customCells))
+    }
+
+    private fun showPopupMenu(anchor: View) {
+        val popupMenu = PopupMenu(this, anchor).apply {
+            menuInflater.inflate(R.menu.menu_settings, menu)
+            setOnMenuItemClickListener { item ->
+                return@setOnMenuItemClickListener when (item.itemId) {
+                    R.id.action_language -> {
+                        showListDialog()
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+        }
+        popupMenu.show()
     }
 
     private fun showListDialog() {
@@ -245,13 +281,13 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun initClassicUIInteractive(contents: MutableList<Content>) {
-        val customCells = arrayListOf<Cell>(Cell("TopBar") { _, _ ->
+        val customCells = arrayListOf<Cell>(Cell("TopBar") { _, _, _ ->
             startActivity(TopBarActivity::class.java)
-        }, Cell("Coordinator") { _, _ ->
+        }, Cell("Coordinator") { _, _, _ ->
             startActivity(CoordinatorActivity::class.java)
-        }, Cell("FloatKey") { _, _ ->
+        }, Cell("FloatKey") { _, _, _ ->
             startActivity(FloatKeyActivity::class.java)
-        }, Cell("Ble") { _, _ ->
+        }, Cell("Ble") { _, _, _ ->
             startActivity(com.hynson.ble.MainActivity::class.java)
         })
         contents.add(Content(Content.ITEM_TYPE, name = "Classic UI interactive"))

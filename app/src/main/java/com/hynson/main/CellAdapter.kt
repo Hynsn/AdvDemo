@@ -23,10 +23,9 @@ class CellAdapter : BaseQuickAdapter<Cell, CellAdapter.VH>() {
 
     override fun onBindViewHolder(holder: VH, position: Int, item: Cell?) {
         holder.cell.tvName.text = item?.name
-        val colors = ColorUtil.getColorPair()
-        holder.cell.llCell.setBackgroundColor(colors.first)
-        holder.cell.tvName.setTextColor(colors.second)
+        item?.colorPair?.run {
+            holder.cell.llCell.setBackgroundColor(first)
+            holder.cell.tvName.setTextColor(second)
+        }
     }
-
-
 }

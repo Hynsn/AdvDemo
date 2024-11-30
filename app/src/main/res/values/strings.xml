@@ -13,4 +13,5 @@
     <string name="change">Change</string>
     <string name="dialog_list">ListDialog</string>
     <string name="chart">Chart</string>
+    <string name="activity_result">ActivityResult</string>
 </resources>

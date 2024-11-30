@@ -36,6 +36,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.hynson.R
+import com.hynson.activityresult.GetResultActivity
 import com.hynson.aidl.AidlActivity
 import com.hynson.alertwindow.AlertWindowActivity
 import com.hynson.chart.ChartActivity
@@ -125,6 +126,9 @@ class MainActivity : AppCompatActivity() {
             startActivity(NavigationActivity::class.java)
         }))
         initClassicUIInteractive(contentList)
+        contentList.add(Content(Content.ITEM_TYPE, name = getString(R.string.activity_result), itemAction = {
+            startActivity(GetResultActivity::class.java)
+        }))
         contentList.add(Content(Content.ITEM_TYPE, name = "testCrash", itemAction = {
             startActivity(CrashActivity::class.java)
         }))

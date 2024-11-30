@@ -5,4 +5,5 @@
     <string name="change_language">切换语言</string>
     <string name="dialog_list">列表弹框</string>
     <string name="chart">图表</string>
+    <string name="activity_result">获取Activity结果</string>
 </resources>

@@ -44,7 +44,7 @@
             android:id="@+id/login_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{Activity.userLogin}"
+            android:onClick="@{Activity::userLogin}"
             android:text="登录"/>
     </LinearLayout>
 </layout>

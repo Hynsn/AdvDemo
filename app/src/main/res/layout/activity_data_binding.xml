@@ -23,7 +23,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_margin="30dp"
-            android:onClick="@{Activity.addNote}"
+            android:onClick="@{Activity::addNote}"
             app:backgroundTint="#FFEB3B"
             app:srcCompat="@drawable/add_circle_outline_64px"
             android:contentDescription="TODO" />

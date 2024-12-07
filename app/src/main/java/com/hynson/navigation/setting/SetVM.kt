@@ -2,7 +2,7 @@ package com.hynson.navigation.setting
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
-import com.hynson.ktbase.BaseVM
+import com.fastdroid.ktbase.BaseVM
 import kotlinx.coroutines.launch
 
 class SetVM : BaseVM() {

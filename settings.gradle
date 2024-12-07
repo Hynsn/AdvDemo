@@ -1,7 +1,9 @@
 include ':app'
 include ':test'
-include ':base'
 
 include 'ndklib'
 project(':ndklib').projectDir =file('./subndk/ndklib')
 include ':lib-view'
+include ':base'
+project(':base').projectDir =file('../FastDroid/base')
+

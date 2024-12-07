@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.widget.Toast
-import com.base.base.BaseActivity
+import com.fastdroid.base.BaseActivity
 import com.hynson.R
 import com.hynson.databinding.ActivityShortcutBinding
 import com.hynson.main.MainActivity

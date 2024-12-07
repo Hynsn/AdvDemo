@@ -2,7 +2,7 @@ package com.hynson.navigation;
 
 import android.util.Log;
 
-import com.base.base.BaseActivity;
+import com.fastdroid.base.BaseActivity;
 import com.hynson.R;
 import com.hynson.databinding.ActivityNaviLoadBinding;
 

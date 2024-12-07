@@ -3,7 +3,7 @@ package com.hynson.crash;
 import android.util.Log;
 import android.view.View;
 
-import com.base.base.BaseActivity;
+import com.fastdroid.base.BaseActivity;
 import com.hynson.R;
 import com.hynson.databinding.ActivityCrashBinding;
 

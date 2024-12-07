@@ -3,7 +3,7 @@ package com.hynson.opensl;
 import android.content.res.AssetManager;
 import android.view.View;
 
-import com.base.base.BaseActivity;
+import com.fastdroid.base.BaseActivity;
 import com.hynson.R;
 import com.hynson.databinding.ActivityOpenslBinding;
 

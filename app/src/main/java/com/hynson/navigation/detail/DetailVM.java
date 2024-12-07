@@ -2,7 +2,7 @@ package com.hynson.navigation.detail;
 
 import androidx.lifecycle.LifecycleOwner;
 
-import com.base.base.FviewModel;
+import com.fastdroid.base.FviewModel;
 
 public class DetailVM extends FviewModel {
     // TODO: Implement the ViewModel

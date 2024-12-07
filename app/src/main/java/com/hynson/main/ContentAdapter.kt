@@ -63,9 +63,9 @@ class ContentAdapter(data: List<Content>) :
                         adapter = cellsAdapter
                     }
                     cellsAdapter.apply {
-                        setOnItemClickListener { _, _, position ->
+                        setOnItemClickListener { _, v, position ->
                             items[position].run {
-                                action?.invoke(position, this)
+                                action?.invoke(v,position, this)
                             }
                         }
                     }

@@ -4,7 +4,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.base.base.FviewModel;
+import com.fastdroid.base.FviewModel;
 
 public class HomeViewModel extends FviewModel {
 

@@ -2,7 +2,7 @@ package com.hynson.chart
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
-import com.hynson.ktbase.BaseVM
+import com.fastdroid.ktbase.BaseVM
 import kotlinx.coroutines.launch
 
 class ChartVM : BaseVM() {

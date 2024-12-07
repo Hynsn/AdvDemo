@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.hynson.R
 import com.hynson.customview.weight.RulerView
 import com.hynson.databinding.FragCustomviewScrollRuleBinding
-import com.hynson.ktbase.BaseFragment
+import com.fastdroid.ktbase.BaseFragment
 
-class RulerViewFragment : BaseFragment<FragCustomviewScrollRuleBinding,CustomViewVM>(), View.OnClickListener{
+class RulerViewFragment : BaseFragment<FragCustomviewScrollRuleBinding, CustomViewVM>(), View.OnClickListener{
     override val layoutId: Int = R.layout.frag_customview_scroll_rule
     override fun getBinding(
         inflater: LayoutInflater,

@@ -13,13 +13,10 @@ import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
-import com.airbnb.lottie.LottieAnimationView
-import com.airbnb.lottie.LottieComposition
-import com.airbnb.lottie.LottieCompositionFactory
 import com.hynson.R
 import com.hynson.customview.weight.NumSpan
 import com.hynson.databinding.FragCustomviewNumtextBinding
-import com.hynson.ktbase.BaseFragment
+import com.fastdroid.ktbase.BaseFragment
 
 class NumTextFragment : BaseFragment<FragCustomviewNumtextBinding, CustomViewVM>(), View.OnClickListener {
     private val annimListener = AnimatorCounter(1000L)

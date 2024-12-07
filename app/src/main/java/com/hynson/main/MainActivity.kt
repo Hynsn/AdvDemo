@@ -1,28 +1,42 @@
 package com.hynson.main
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.ComponentName
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.LocaleList
 import android.os.Looper
 import android.os.Message
 import android.util.Log
 import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.PopupMenu
+import android.widget.SimpleAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.view.MenuCompat
+import androidx.core.view.MenuItemCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.hynson.R
+import com.hynson.activityresult.GetResultActivity
 import com.hynson.aidl.AidlActivity
 import com.hynson.alertwindow.AlertWindowActivity
 import com.hynson.chart.ChartActivity
@@ -35,6 +49,8 @@ import com.hynson.databinding.DBLoginActivity
 import com.hynson.detail.DetailActivity
 import com.hynson.floatkkey.FloatKeyActivity
 import com.hynson.gson.GsonActivity
+import com.hynson.language.AppLanguage
+import com.hynson.language.LanguageAdapter
 import com.hynson.mbedtls.MbedtlsActivity
 import com.hynson.navigation.NavigationActivity
 import com.hynson.opensl.OpenslActivity
@@ -42,13 +58,27 @@ import com.hynson.set.SettingActivity
 import com.hynson.shortcut.ShortcutActivity
 import com.hynson.topbar.TopBarActivity
 import com.hynson.webview.WebviewActivity
+import java.util.Locale
 
-class MainActivity : FragmentActivity() {
+class MainActivity : AppCompatActivity() {
     private val TAG = MainActivity::class.java.simpleName
     var binding: ActivityMainBinding? = null
 
     private val contentAdapter by lazy {
         ContentAdapter(getContentList())
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.settings) {
+            showListDialog()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,7 +113,7 @@ class MainActivity : FragmentActivity() {
         val contentList = ArrayList<Content>()
         initCustomView(contentList)
         initDialog(contentList)
-        contentList.add(Content(Content.ITEM_TYPE, name = "Chart", itemAction = {
+        contentList.add(Content(Content.ITEM_TYPE, name = getString(R.string.chart), itemAction = {
             startActivity(ChartActivity::class.java)
         }))
         contentList.add(Content(Content.ITEM_TYPE, name = "WebView", itemAction = {
@@ -96,6 +126,9 @@ class MainActivity : FragmentActivity() {
             startActivity(NavigationActivity::class.java)
         }))
         initClassicUIInteractive(contentList)
+        contentList.add(Content(Content.ITEM_TYPE, name = getString(R.string.activity_result), itemAction = {
+            startActivity(GetResultActivity::class.java)
+        }))
         contentList.add(Content(Content.ITEM_TYPE, name = "testCrash", itemAction = {
             startActivity(CrashActivity::class.java)
         }))
@@ -131,20 +164,20 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun initCustomView(contents: MutableList<Content>) {
-        val action = { position: Int, cell: Cell ->
+        val action = { v: View, position: Int, cell: Cell ->
             CustomViewActivity.start(this, cell.resId)
         }
         val customCells =
             arrayListOf<Cell>(
-                Cell("TimeLine", R.id.timelineFragment, action),
-                Cell("NumText", R.id.numTextFragment, action),
-                Cell("RulerView", R.id.rulerViewFragment, action),
-                Cell("FlowLayout", R.id.flowLayoutFragment, action),
-                Cell("PieChart", R.id.pieChartFragment, action),
-                Cell("BPChart", R.id.BPChartFragment, action),
-                Cell("MyView", R.id.myViewFragment, action),
-                Cell("BarView", R.id.chartFragment, action),
-                Cell("ExpandFragment", R.id.expandFragment, action)
+                Cell("TimeLine", R.id.timelineFragment, action = action),
+                Cell("NumText", R.id.numTextFragment, action = action),
+                Cell("RulerView", R.id.rulerViewFragment, action = action),
+                Cell("FlowLayout", R.id.flowLayoutFragment, action = action),
+                Cell("PieChart", R.id.pieChartFragment, action = action),
+                Cell("BPChart", R.id.BPChartFragment, action = action),
+                Cell("MyView", R.id.myViewFragment, action = action),
+                Cell("BarView", R.id.chartFragment, action = action),
+                Cell("ExpandFragment", R.id.expandFragment, action = action)
             )
 
         contents.add(Content(Content.ITEM_TYPE, name = "CustomView"))
@@ -152,17 +185,85 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun initDialog(contents: MutableList<Content>) {
-        val customCells = arrayListOf<Cell>(Cell("AlertDialog") { pos, cell ->
+        val customCells = arrayListOf<Cell>(Cell("AlertDialog") { _, pos, cell ->
             showAlertDialog()
-        }, Cell("BottomSheetDialog") { pos, cell ->
+        }, Cell("BottomSheetDialog") { _, pos, cell ->
             showBottomSheetDialog()
-        }, Cell("Dialog") { pos, cell ->
+        }, Cell("Dialog") { _, pos, cell ->
             showBottomDialog()
+        }, Cell("PopupMenu") { v, pos, cell ->
+            showPopupMenu(v)
         })
 
         contents.add(Content(Content.ITEM_TYPE, name = "Dialog Gather"))
         contents.add(Content(Content.SECTION_TYPE, cells = customCells))
     }
+
+    private fun showPopupMenu(anchor: View) {
+        val popupMenu = PopupMenu(this, anchor).apply {
+            menuInflater.inflate(R.menu.menu_settings, menu)
+            setOnMenuItemClickListener { item ->
+                return@setOnMenuItemClickListener when (item.itemId) {
+                    R.id.action_language -> {
+                        showListDialog()
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+        }
+        popupMenu.show()
+    }
+
+    private fun showListDialog() {
+        val languages =
+            listOf(AppLanguage(Locale.CHINESE, "中文"), AppLanguage(Locale.ENGLISH, "English"))
+        val adapter = LanguageAdapter(this, R.layout.item_app_language, languages)
+        val listDialog = AlertDialog.Builder(this).apply {
+            setTitle(R.string.change_language)
+            setAdapter(adapter) { _, pos ->
+                Toast.makeText(
+                    this@MainActivity,
+                    "切换${languages[pos].locale.language}",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+                changeLanguage(this@MainActivity, languages[pos].locale)
+            }
+        }
+        listDialog.show()
+    }
+
+    /*修改应用内语言设置*/
+    fun changeLanguage(context: Activity, newLocale: Locale = Locale.ROOT) {
+        setAppLanguage(context, newLocale)
+        ActivityCompat.recreate(context)
+    }
+
+    /*设置语言*/
+    private fun setAppLanguage(context: Context, locale: Locale) {
+        val resources = context.resources
+        val metrics = resources.displayMetrics
+        val configuration = resources.configuration
+        //Android 7.0以上的方法
+        if (Build.VERSION.SDK_INT >= 24) {
+            configuration.setLocale(locale)
+            configuration.setLocales(LocaleList(locale))
+            context.createConfigurationContext(configuration)
+            //实测，updateConfiguration这个方法虽然很多博主说是版本不适用
+            //但是我的生产环境androidX+Android Q环境下，必须加上这一句，才可以通过重启App来切换语言
+            resources.updateConfiguration(configuration, metrics)
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            //Android 4.1 以上方法
+            configuration.setLocale(locale)
+            resources.updateConfiguration(configuration, metrics)
+        } else {
+            configuration.locale = locale
+            resources.updateConfiguration(configuration, metrics)
+        }
+    }
+
 
     private fun showAlertDialog() {
         val dialog = AlertDialog.Builder(this).setTitle("这是标题")
@@ -184,13 +285,13 @@ class MainActivity : FragmentActivity() {
     }
 
     private fun initClassicUIInteractive(contents: MutableList<Content>) {
-        val customCells = arrayListOf<Cell>(Cell("TopBar") { _, _ ->
+        val customCells = arrayListOf<Cell>(Cell("TopBar") { _, _, _ ->
             startActivity(TopBarActivity::class.java)
-        }, Cell("Coordinator") { _, _ ->
+        }, Cell("Coordinator") { _, _, _ ->
             startActivity(CoordinatorActivity::class.java)
-        }, Cell("FloatKey") { _, _ ->
+        }, Cell("FloatKey") { _, _, _ ->
             startActivity(FloatKeyActivity::class.java)
-        }, Cell("Ble") { _, _ ->
+        }, Cell("Ble") { _, _, _ ->
             startActivity(com.hynson.ble.MainActivity::class.java)
         })
         contents.add(Content(Content.ITEM_TYPE, name = "Classic UI interactive"))

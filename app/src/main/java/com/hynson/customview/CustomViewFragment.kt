@@ -10,7 +10,7 @@ import com.hynson.R
 import com.hynson.main.TestItem
 import com.hynson.main.TestItemAdapter
 import com.hynson.databinding.FragCustomviewBinding
-import com.hynson.ktbase.BaseFragment
+import com.fastdroid.ktbase.BaseFragment
 
 class CustomViewFragment : BaseFragment<FragCustomviewBinding, CustomViewVM>() {
     override val layoutId: Int = R.layout.frag_customview

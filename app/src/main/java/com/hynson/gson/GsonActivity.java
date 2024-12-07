@@ -2,7 +2,7 @@ package com.hynson.gson;
 
 import android.view.View;
 
-import com.base.base.BaseActivity;
+import com.fastdroid.base.BaseActivity;
 import com.hynson.R;
 import com.hynson.databinding.ActivityCoroutineBinding;
 import com.google.gson.Gson;

@@ -27,6 +27,7 @@
             </intent-filter>-->
         </activity>
         <activity android:name=".crash.CrashActivity" />
+        <activity android:name=".activityresult.GetResultActivity"/>
         <activity
             android:name=".webview.WebviewActivity"
             android:screenOrientation="portrait"
@@ -41,45 +42,16 @@
         <activity android:name=".databinding.DBLoginActivity" />
         <activity android:name=".databinding.DBNoteActivity" />
         <activity android:name=".chart.ChartActivity" />
-        <activity android:name=".customview.CustomViewActivity">
-
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
-        </activity>
-        <activity android:name=".mbedtls.MbedtlsActivity">
-
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
-        </activity>
-        <activity android:name=".navigation.NavigationActivity">
-
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
-        </activity>
+        <activity android:name=".customview.CustomViewActivity" />
+        <activity android:name=".mbedtls.MbedtlsActivity" />
+        <activity android:name=".navigation.NavigationActivity" />
         <activity android:name=".navigation.NaviLoadActivity" />
         <activity android:name=".coroutine.CoroutineActivity" />
         <activity android:name=".gson.GsonActivity" />
         <activity android:name=".floatkkey.FloatKeyActivity" />
         <activity android:name=".topbar.TopBarActivity" />
         <activity android:name=".set.SettingActivity" />
-        <activity android:name=".ble.MainActivity"/>
+        <activity android:name=".ble.MainActivity" />
         <activity
             android:name=".main.MainActivity"
             android:configChanges="orientation|screenSize"
@@ -100,8 +72,8 @@
 
         <activity android:name=".shortcut.ShortcutActivity" />
         <activity android:name=".alertwindow.AlertWindowActivity" />
-        <activity android:name=".coordinatorlayout.CoordinatorActivity"/>
-        <activity android:name=".detail.DetailActivity"/>
+        <activity android:name=".coordinatorlayout.CoordinatorActivity" />
+        <activity android:name=".detail.DetailActivity" />
 
         <receiver
             android:name=".shortcut.ShortcutBroadcastReceiver"
@@ -171,7 +143,11 @@
     <uses-permission android:name="com.meizu.flyme.launcher.permission.WRITE_SETTINGS" />
 
     <!--  蓝牙  -->
-    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.CAMERA"/>
 </manifest>

@@ -4,7 +4,7 @@ import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.base.base.BaseActivity
+import com.fastdroid.base.BaseActivity
 import com.hynson.test.databinding.ActivityMainBinding
 import com.google.gson.Gson
 import utils.Screen

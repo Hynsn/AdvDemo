@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import com.base.base.BaseActivity
+import com.fastdroid.base.BaseActivity
 import com.hynson.R
 import com.hynson.databinding.ActivityCustomviewBinding
 

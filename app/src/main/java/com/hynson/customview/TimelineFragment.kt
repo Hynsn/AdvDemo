@@ -8,7 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.hynson.R
 import com.hynson.databinding.FragCustomviewTimelineBinding
-import com.hynson.ktbase.BaseFragment
+import com.fastdroid.ktbase.BaseFragment
 
 class TimelineFragment : BaseFragment<FragCustomviewTimelineBinding, CustomViewVM>() {
     private var progress = 0

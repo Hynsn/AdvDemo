@@ -7,7 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.hynson.R
 import com.hynson.databinding.FragCustomviewExpandtextviewBinding
-import com.hynson.ktbase.BaseFragment
+import com.fastdroid.ktbase.BaseFragment
 
 class ExpandTextViewFragment : BaseFragment<FragCustomviewExpandtextviewBinding, CustomViewVM>() {
     override val layoutId: Int = R.layout.frag_customview_expandtextview

@@ -41,6 +41,8 @@
         </activity>
         <activity android:name=".databinding.DBLoginActivity" />
         <activity android:name=".databinding.DBNoteActivity" />
+        <activity android:name=".mvvm.TestMVVMActivity"/>
+        <activity android:name=".mvvm.TestBaseActivity"/>
         <activity android:name=".chart.ChartActivity" />
         <activity android:name=".customview.CustomViewActivity" />
         <activity android:name=".mbedtls.MbedtlsActivity" />

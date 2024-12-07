@@ -52,6 +52,8 @@ import com.hynson.gson.GsonActivity
 import com.hynson.language.AppLanguage
 import com.hynson.language.LanguageAdapter
 import com.hynson.mbedtls.MbedtlsActivity
+import com.hynson.mvvm.TestBaseActivity
+import com.hynson.mvvm.TestMVVMActivity
 import com.hynson.navigation.NavigationActivity
 import com.hynson.opensl.OpenslActivity
 import com.hynson.set.SettingActivity
@@ -119,6 +121,7 @@ class MainActivity : AppCompatActivity() {
         contentList.add(Content(Content.ITEM_TYPE, name = "WebView", itemAction = {
             startActivity(WebviewActivity::class.java)
         }))
+        initMvvmTest(contentList)
         contentList.add(Content(Content.ITEM_TYPE, name = "DataBinding", itemAction = {
             startActivity(DBLoginActivity::class.java)
         }))
@@ -181,6 +184,21 @@ class MainActivity : AppCompatActivity() {
             )
 
         contents.add(Content(Content.ITEM_TYPE, name = "CustomView"))
+        contents.add(Content(Content.SECTION_TYPE, cells = customCells))
+    }
+
+    private fun initMvvmTest(contents: MutableList<Content>){
+        val customCells = arrayListOf<Cell>(Cell("不带VM的Activity") { _, pos, cell ->
+            startActivity(TestBaseActivity::class.java)
+        }, Cell("带VM的Activity") { _, pos, cell ->
+            startActivity(TestMVVMActivity::class.java)
+        }, Cell("Dialog") { _, pos, cell ->
+            showBottomDialog()
+        }, Cell("PopupMenu") { v, pos, cell ->
+            showPopupMenu(v)
+        })
+
+        contents.add(Content(Content.ITEM_TYPE, name = "Activity"))
         contents.add(Content(Content.SECTION_TYPE, cells = customCells))
     }
 

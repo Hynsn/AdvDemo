@@ -17,12 +17,6 @@ class CustomViewFragment : BaseFragment<FragCustomviewBinding, CustomViewVM>() {
 
     override fun getVm(provider: ViewModelProvider) = provider.get(CustomViewVM::class.java)
 
-    override fun getBinding(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ) = FragCustomviewBinding.inflate(inflater, container, false)
-
     override fun bindView() {
         val itemList: MutableList<TestItem> = ArrayList()
         itemList.add(TestItem("TimeLine", R.id.timelineFragment, null, null))
@@ -46,7 +40,7 @@ class CustomViewFragment : BaseFragment<FragCustomviewBinding, CustomViewVM>() {
         }
     }
 
-    override fun initData(owner: LifecycleOwner?, savedInstanceState: Bundle?) {
+    override fun initData(owner: LifecycleOwner, savedInstanceState: Bundle?) {
 
     }
 }

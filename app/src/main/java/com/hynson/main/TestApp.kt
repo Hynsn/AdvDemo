@@ -30,13 +30,13 @@ class TestApp : Application() {
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
 
-        CrashHandler.getInstance().init(base)
-
-        val original = Thread.getDefaultUncaughtExceptionHandler()
-
-        val a = CrashAHandler(original)
-        val b = CrashBHandler(a)
-
-        Thread.setDefaultUncaughtExceptionHandler(b)
+//        CrashHandler.getInstance().init(base)
+//
+//        val original = Thread.getDefaultUncaughtExceptionHandler()
+//
+//        val a = CrashAHandler(original)
+//        val b = CrashBHandler(a)
+//
+//        Thread.setDefaultUncaughtExceptionHandler(b)
     }
 }

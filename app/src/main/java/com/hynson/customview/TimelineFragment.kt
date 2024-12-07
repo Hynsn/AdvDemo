@@ -15,11 +15,7 @@ class TimelineFragment : BaseFragment<FragCustomviewTimelineBinding, CustomViewV
     val stepSeconds: ArrayList<Int> = ArrayList()
 
     override val layoutId: Int = R.layout.frag_customview_timeline
-    override fun getBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = FragCustomviewTimelineBinding.inflate(inflater,container,false)
+
     override fun getVm(provider: ViewModelProvider) = provider.get(CustomViewVM::class.java)
 
     override fun bindView() {
@@ -43,7 +39,7 @@ class TimelineFragment : BaseFragment<FragCustomviewTimelineBinding, CustomViewV
         }
     }
 
-    override fun initData(owner: LifecycleOwner?, savedInstanceState: Bundle?) {
+    override fun initData(owner: LifecycleOwner, savedInstanceState: Bundle?) {
         stepSeconds.add(2)
         stepSeconds.add(2)
         stepSeconds.add(2)

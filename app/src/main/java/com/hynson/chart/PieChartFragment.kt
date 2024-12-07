@@ -17,11 +17,6 @@ import com.hynson.view.chart.Chart
 class PieChartFragment : BaseFragment<FragChartPiechartBinding, ChartVM>(),View.OnClickListener{
     override val layoutId: Int = R.layout.frag_customview_flowlayout
     override fun getVm(provider: ViewModelProvider) = provider.get(ChartVM::class.java)
-    override fun getBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = FragChartPiechartBinding.inflate(inflater,container,false)
 
     override fun bindView() {
 
@@ -52,7 +47,7 @@ class PieChartFragment : BaseFragment<FragChartPiechartBinding, ChartVM>(),View.
         return list
     }
 
-    override fun initData(owner: LifecycleOwner?, savedInstanceState: Bundle?) {
+    override fun initData(owner: LifecycleOwner, savedInstanceState: Bundle?) {
 
     }
 

@@ -13,11 +13,6 @@ import com.fastdroid.ktbase.BaseFragment
 class BPChartFragment : BaseFragment<FragChartBpchartBinding, ChartVM>(), View.OnClickListener {
     override val layoutId: Int = R.layout.frag_chart_bpchart
     override fun getVm(provider: ViewModelProvider) = provider.get(ChartVM::class.java)
-    override fun getBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = FragChartBpchartBinding.inflate(inflater, container, false)
 
     override fun bindView() {
 
@@ -68,7 +63,7 @@ class BPChartFragment : BaseFragment<FragChartBpchartBinding, ChartVM>(), View.O
         }
     }
 
-    override fun initData(owner: LifecycleOwner?, savedInstanceState: Bundle?) {
+    override fun initData(owner: LifecycleOwner, savedInstanceState: Bundle?) {
 
     }
 

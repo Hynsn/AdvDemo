@@ -13,11 +13,6 @@ import com.fastdroid.ktbase.BaseFragment
 
 class RulerViewFragment : BaseFragment<FragCustomviewScrollRuleBinding, CustomViewVM>(), View.OnClickListener{
     override val layoutId: Int = R.layout.frag_customview_scroll_rule
-    override fun getBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = FragCustomviewScrollRuleBinding.inflate(inflater,container,false)
 
     override fun getVm(provider: ViewModelProvider) = provider.get(CustomViewVM::class.java)
 
@@ -39,7 +34,7 @@ class RulerViewFragment : BaseFragment<FragCustomviewScrollRuleBinding, CustomVi
         }
     }
 
-    override fun initData(owner: LifecycleOwner?, savedInstanceState: Bundle?) {
+    override fun initData(owner: LifecycleOwner, savedInstanceState: Bundle?) {
 
     }
 

@@ -15,19 +15,6 @@ class MyViewFragment : BaseFragment<FragCustomviewMyviewBinding, CustomViewVM>()
     override val layoutId: Int = R.layout.frag_customview_myview
 
     override fun getVm(provider: ViewModelProvider) = provider.get(CustomViewVM::class.java)
-    override fun getBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = FragCustomviewMyviewBinding.inflate(inflater, container, false)
-
-    override fun bindView() {
-
-    }
-
-    override fun initData(owner: LifecycleOwner?, savedInstanceState: Bundle?) {
-
-    }
 
     override fun onClick(v: View) {
         when (v.id) {

@@ -19,12 +19,6 @@ class SettingFragment : BaseFragment<FragDetailBinding, SetVM>() {
         return provider.get(SetVM::class.java)
     }
 
-    override fun getBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = FragDetailBinding.inflate(inflater,container,false)
-
     private var naviVM: NavigationVM? = null
 //    val viewmodel: NavigationVM by viewModels()
 
@@ -35,7 +29,7 @@ class SettingFragment : BaseFragment<FragDetailBinding, SetVM>() {
         bind.btnBack.setOnClickListener { view -> navigateUp(view) }
     }
 
-    override fun initData(owner: LifecycleOwner?, savedInstanceState: Bundle?) {}
+    override fun initData(owner: LifecycleOwner, savedInstanceState: Bundle?) {}
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.i(TAG, "onCreateView: ")
         return super.onCreateView(inflater, container, savedInstanceState)

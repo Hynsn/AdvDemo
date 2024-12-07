@@ -24,11 +24,6 @@ class NumTextFragment : BaseFragment<FragCustomviewNumtextBinding, CustomViewVM>
     override val layoutId: Int = R.layout.frag_customview_numtext
 
     override fun getVm(provider: ViewModelProvider) = provider.get(CustomViewVM::class.java)
-    override fun getBinding(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ) = FragCustomviewNumtextBinding.inflate(inflater, container, false)
 
     override fun bindView() {
         bind.btnAppend.setOnClickListener(this)
@@ -40,7 +35,7 @@ class NumTextFragment : BaseFragment<FragCustomviewNumtextBinding, CustomViewVM>
         updateAlarmMinuteView(mBuilder.toString())
     }
 
-    override fun initData(owner: LifecycleOwner?, savedInstanceState: Bundle?) {
+    override fun initData(owner: LifecycleOwner, savedInstanceState: Bundle?) {
 
     }
 

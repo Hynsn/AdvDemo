@@ -1,25 +1,18 @@
 package com.hynson.customview
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
+import com.fastdroid.ktbase.BaseFragment
 import com.hynson.R
 import com.hynson.customview.flowlayout.TagInfo
 import com.hynson.customview.flowlayout.TagType
 import com.hynson.databinding.FragCustomviewFlowlayoutBinding
-import com.fastdroid.ktbase.BaseFragment
 
 class FlowLayoutFragment : BaseFragment<FragCustomviewFlowlayoutBinding, CustomViewVM>(),View.OnClickListener{
     override val layoutId: Int = R.layout.frag_customview_flowlayout
     override fun getVm(provider: ViewModelProvider) = provider.get(CustomViewVM::class.java)
-    override fun getBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = FragCustomviewFlowlayoutBinding.inflate(inflater,container,false)
 
     private val myTagInfos = java.util.ArrayList<TagInfo>()
 
@@ -68,9 +61,6 @@ class FlowLayoutFragment : BaseFragment<FragCustomviewFlowlayoutBinding, CustomV
             setDefault()
             setIsEdit(false)
         }
-
-    }
-    override fun initData(owner: LifecycleOwner?, savedInstanceState: Bundle?) {
 
     }
 

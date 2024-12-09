@@ -13,8 +13,8 @@ import com.hynson.main.Content.Companion.SECTION_TYPE
 import com.hynson.recyclerview.FlowLayoutManager
 
 
-class ContentAdapter(data: List<Content>) :
-    BaseMultiItemAdapter<Content>(data) {
+class ContentAdapter :
+    BaseMultiItemAdapter<Content>() {
 
     // 类型 1 的 viewholder
     class ItemVH(val viewBinding: ItemContentBinding) : RecyclerView.ViewHolder(viewBinding.root)

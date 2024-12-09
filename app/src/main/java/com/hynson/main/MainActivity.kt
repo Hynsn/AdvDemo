@@ -2,10 +2,7 @@ package com.hynson.main
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.ComponentName
 import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -19,56 +16,28 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.PopupMenu
-import android.widget.SimpleAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.view.MenuCompat
-import androidx.core.view.MenuItemCompat
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.fastdroid.ktbase.BaseMvvmActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.hynson.R
-import com.hynson.activityresult.GetResultActivity
-import com.hynson.aidl.AidlActivity
-import com.hynson.alertwindow.AlertWindowActivity
-import com.hynson.chart.ChartActivity
-import com.hynson.coordinatorlayout.CoordinatorActivity
-import com.hynson.coroutine.CoroutineActivity
-import com.hynson.crash.CrashActivity
-import com.hynson.customview.CustomViewActivity
 import com.hynson.databinding.ActivityMainBinding
-import com.hynson.databinding.DBLoginActivity
-import com.hynson.detail.DetailActivity
-import com.hynson.floatkkey.FloatKeyActivity
-import com.hynson.gson.GsonActivity
 import com.hynson.language.AppLanguage
 import com.hynson.language.LanguageAdapter
-import com.hynson.mbedtls.MbedtlsActivity
-import com.hynson.mvvm.TestBaseActivity
-import com.hynson.mvvm.TestMVVMActivity
-import com.hynson.navigation.NavigationActivity
-import com.hynson.opensl.OpenslActivity
-import com.hynson.set.SettingActivity
-import com.hynson.shortcut.ShortcutActivity
-import com.hynson.topbar.TopBarActivity
-import com.hynson.webview.WebviewActivity
 import java.util.Locale
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseMvvmActivity<ActivityMainBinding, MainVM>() {
     private val TAG = MainActivity::class.java.simpleName
-    var binding: ActivityMainBinding? = null
 
-    private val contentAdapter by lazy {
-        ContentAdapter(getContentList())
-    }
+    private val contentAdapter = ContentAdapter()
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -83,12 +52,11 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding?.activity = this
-        binding?.rvContents?.apply {
+    override fun getVm(provider: ViewModelProvider) = provider[MainVM::class.java]
 
+    override fun bindView() {
+        super.bindView()
+        bind.rvContents.apply {
             layoutManager = LinearLayoutManager(
                 context,
                 LinearLayoutManager.VERTICAL,
@@ -110,111 +78,14 @@ class MainActivity : AppCompatActivity() {
         Log.v("", "")
     }
 
-    private fun getContentList(): List<Content> {
-
-        val contentList = ArrayList<Content>()
-        initCustomView(contentList)
-        initDialog(contentList)
-        contentList.add(Content(Content.ITEM_TYPE, name = getString(R.string.chart), itemAction = {
-            startActivity(ChartActivity::class.java)
-        }))
-        contentList.add(Content(Content.ITEM_TYPE, name = "WebView", itemAction = {
-            startActivity(WebviewActivity::class.java)
-        }))
-        initMvvmTest(contentList)
-        contentList.add(Content(Content.ITEM_TYPE, name = "DataBinding", itemAction = {
-            startActivity(DBLoginActivity::class.java)
-        }))
-        contentList.add(Content(Content.ITEM_TYPE, name = "Navigation", itemAction = {
-            startActivity(NavigationActivity::class.java)
-        }))
-        initClassicUIInteractive(contentList)
-        contentList.add(Content(Content.ITEM_TYPE, name = getString(R.string.activity_result), itemAction = {
-            startActivity(GetResultActivity::class.java)
-        }))
-        contentList.add(Content(Content.ITEM_TYPE, name = "testCrash", itemAction = {
-            startActivity(CrashActivity::class.java)
-        }))
-        contentList.add(Content(Content.ITEM_TYPE, name = "Mbedtls", itemAction = {
-            startActivity(MbedtlsActivity::class.java)
-        }))
-        contentList.add(Content(Content.ITEM_TYPE, name = "OpenSL", itemAction = {
-            startActivity(OpenslActivity::class.java)
-        }))
-        contentList.add(Content(Content.ITEM_TYPE, name = "AIDL", itemAction = {
-            startActivity(AidlActivity::class.java)
-        }))
-        contentList.add(Content(Content.ITEM_TYPE, name = "Coroutine", itemAction = {
-            startActivity(CoroutineActivity::class.java)
-        }))
-
-        contentList.add(Content(Content.ITEM_TYPE, name = "Setting", itemAction = {
-            startActivity(SettingActivity::class.java)
-        }))
-        contentList.add(Content(Content.ITEM_TYPE, name = "Shortcut", itemAction = {
-            startActivity(ShortcutActivity::class.java)
-        }))
-        contentList.add(Content(Content.ITEM_TYPE, name = "Gson", itemAction = {
-            startActivity(GsonActivity::class.java)
-        }))
-        contentList.add(Content(Content.ITEM_TYPE, name = "AlertWindow", itemAction = {
-            startActivity(AlertWindowActivity::class.java)
-        }))
-        contentList.add(Content(Content.ITEM_TYPE, name = "Detail", itemAction = {
-            startActivity(DetailActivity::class.java)
-        }))
-        return contentList
-    }
-
-    private fun initCustomView(contents: MutableList<Content>) {
-        val action = { v: View, position: Int, cell: Cell ->
-            CustomViewActivity.start(this, cell.resId)
-        }
-        val customCells =
-            arrayListOf<Cell>(
-                Cell("TimeLine", R.id.timelineFragment, action = action),
-                Cell("NumText", R.id.numTextFragment, action = action),
-                Cell("RulerView", R.id.rulerViewFragment, action = action),
-                Cell("FlowLayout", R.id.flowLayoutFragment, action = action),
-                Cell("PieChart", R.id.pieChartFragment, action = action),
-                Cell("BPChart", R.id.BPChartFragment, action = action),
-                Cell("MyView", R.id.myViewFragment, action = action),
-                Cell("BarView", R.id.chartFragment, action = action),
-                Cell("ExpandFragment", R.id.expandFragment, action = action)
-            )
-
-        contents.add(Content(Content.ITEM_TYPE, name = "CustomView"))
-        contents.add(Content(Content.SECTION_TYPE, cells = customCells))
-    }
-
-    private fun initMvvmTest(contents: MutableList<Content>){
-        val customCells = arrayListOf<Cell>(Cell("不带VM的Activity") { _, pos, cell ->
-            startActivity(TestBaseActivity::class.java)
-        }, Cell("带VM的Activity") { _, pos, cell ->
-            startActivity(TestMVVMActivity::class.java)
-        }, Cell("Dialog") { _, pos, cell ->
-            showBottomDialog()
-        }, Cell("PopupMenu") { v, pos, cell ->
-            showPopupMenu(v)
-        })
-
-        contents.add(Content(Content.ITEM_TYPE, name = "Activity"))
-        contents.add(Content(Content.SECTION_TYPE, cells = customCells))
-    }
-
-    private fun initDialog(contents: MutableList<Content>) {
-        val customCells = arrayListOf<Cell>(Cell("AlertDialog") { _, pos, cell ->
-            showAlertDialog()
-        }, Cell("BottomSheetDialog") { _, pos, cell ->
-            showBottomSheetDialog()
-        }, Cell("Dialog") { _, pos, cell ->
-            showBottomDialog()
-        }, Cell("PopupMenu") { v, pos, cell ->
-            showPopupMenu(v)
-        })
-
-        contents.add(Content(Content.ITEM_TYPE, name = "Dialog Gather"))
-        contents.add(Content(Content.SECTION_TYPE, cells = customCells))
+    override fun initData(owner: LifecycleOwner, savedInstanceState: Bundle?) {
+        super.initData(owner, savedInstanceState)
+        vm.actionList = arrayListOf(
+            { v, p, cell -> showAlertDialog() },
+            { v, p, cell -> showBottomSheetDialog() },
+            { v, p, cell -> showBottomDialog() },
+            { v, p, cell -> showPopupMenu(v) })
+        contentAdapter.addAll(vm.getContentList(this))
     }
 
     private fun showPopupMenu(anchor: View) {
@@ -300,27 +171,6 @@ class MainActivity : AppCompatActivity() {
         sheetDialog.findViewById<FrameLayout>(R.id.design_bottom_sheet)
             ?.setBackgroundColor(Color.TRANSPARENT)
         sheetDialog.show()
-    }
-
-    private fun initClassicUIInteractive(contents: MutableList<Content>) {
-        val customCells = arrayListOf<Cell>(Cell("TopBar") { _, _, _ ->
-            startActivity(TopBarActivity::class.java)
-        }, Cell("Coordinator") { _, _, _ ->
-            startActivity(CoordinatorActivity::class.java)
-        }, Cell("FloatKey") { _, _, _ ->
-            startActivity(FloatKeyActivity::class.java)
-        }, Cell("Ble") { _, _, _ ->
-            startActivity(com.hynson.ble.MainActivity::class.java)
-        })
-        contents.add(Content(Content.ITEM_TYPE, name = "Classic UI interactive"))
-        contents.add(Content(Content.SECTION_TYPE, cells = customCells))
-    }
-
-    private fun startActivity(cls: Class<*>) {
-        val intent = Intent()
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        intent.component = ComponentName(this, cls)
-        startActivity(intent)
     }
 
     /**

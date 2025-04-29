@@ -32,6 +32,7 @@ import com.hynson.R
 import com.hynson.databinding.ActivityMainBinding
 import com.hynson.language.AppLanguage
 import com.hynson.language.LanguageAdapter
+import com.hynson.notification.DownloadNotification
 import java.util.Locale
 
 class MainActivity : BaseMvvmActivity<ActivityMainBinding, MainVM>() {
@@ -85,6 +86,9 @@ class MainActivity : BaseMvvmActivity<ActivityMainBinding, MainVM>() {
             { v, p, cell -> showBottomSheetDialog() },
             { v, p, cell -> showBottomDialog() },
             { v, p, cell -> showPopupMenu(v) })
+        vm.notificationActionList = arrayListOf(
+            { v, p, cell -> showDownloadNotification() }
+        )
         contentAdapter.addAll(vm.getContentList(this))
     }
 
@@ -201,5 +205,55 @@ class MainActivity : BaseMvvmActivity<ActivityMainBinding, MainVM>() {
         dialog.findViewById<View>(R.id.tv_take_photo).setOnClickListener { dialog.dismiss() }
         dialog.findViewById<View>(R.id.tv_take_pic).setOnClickListener { dialog.dismiss() }
         dialog.findViewById<View>(R.id.tv_cancel).setOnClickListener { dialog.dismiss() }
+    }
+
+    private val downloadNotification by lazy {
+        DownloadNotification(this.baseContext)
+    }
+
+    private fun showDownloadNotification() {
+        downloadNotification.init(
+            "下载",
+            "开始下载",
+            DownloadNotification.CHANNEL_ID,
+            DownloadNotification.CHANNEL_NAME
+        )
+        //下载以及安装线程模拟
+        Thread {
+            for (i in 0..99) {
+                downloadNotification.setProgress(100, i, false)
+                downloadNotification.notify(DownloadNotification.NOTIFY_ID)
+                //下载进度提示
+                downloadNotification.setContentText("下载$i%")
+                try {
+                    Thread.sleep(50) //演示休眠50毫秒
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+            }
+            //下载完成后更改标题以及提示信息
+            downloadNotification.setContentTitle("开始安装")
+            downloadNotification.setContentText("安装中...")
+            //设置进度为不确定，用于模拟安装
+            downloadNotification.setProgress(0, 0, true)
+            downloadNotification.notify(DownloadNotification.NOTIFY_ID)
+            downloadNotification.cancel(DownloadNotification.NOTIFY_ID);//设置关闭通知栏
+        }.start()
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        Log.i(TAG, "onDestroy: ")
+    }
+
+    override fun onDestroy() {
+        Log.i(TAG, "onDestroy: ")
+        downloadNotification.cancel(DownloadNotification.NOTIFY_ID)
+        super.onDestroy()
+    }
+
+    companion object {
+
     }
 }

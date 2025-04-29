@@ -32,6 +32,8 @@ import com.hynson.webview.WebviewActivity
 class MainVM : BaseVM() {
     var actionList = mutableListOf<((v: View, position: Int, cell: Cell) -> (Unit))?>()
 
+    var notificationActionList = mutableListOf<((v: View, position: Int, cell: Cell) -> (Unit))?>()
+
     private fun startActivity(context: Context, cls: Class<*>) {
         val intent = Intent()
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -43,6 +45,7 @@ class MainVM : BaseVM() {
         val contentList = ArrayList<Content>()
         initCustomView(context, contentList)
         initDialog(contentList)
+        initNotification(contentList)
         contentList.add(
             Content(
                 Content.ITEM_TYPE,
@@ -112,6 +115,14 @@ class MainVM : BaseVM() {
             Cell("PopupMenu", action = actionList[3])
         )
         contents.add(Content(Content.ITEM_TYPE, name = "Dialog Gather"))
+        contents.add(Content(Content.SECTION_TYPE, cells = customCells))
+    }
+
+    private fun initNotification(contents: MutableList<Content>){
+        val customCells = arrayListOf<Cell>(
+            Cell("DownLoadNotification", action = notificationActionList[0])
+        )
+        contents.add(Content(Content.ITEM_TYPE, name = "Notification"))
         contents.add(Content(Content.SECTION_TYPE, cells = customCells))
     }
 

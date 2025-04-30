@@ -27,10 +27,10 @@ ext {
             "kt-coroutines"   : '1.1.1',
             "nanohttpd"       : '2.2.0',
             "gson"            : 'com.google.code.gson:gson:2.9.0',
-            "quickadapter"    : 'io.github.cymchad:BaseRecyclerViewAdapterHelper:4.0.0-beta04',
+            "quickadapter"    : 'io.github.cymchad:BaseRecyclerViewAdapterHelper:4.0.3',
             "quickadapterv3"    : 'io.github.cymchad:BaseRecyclerViewAdapterHelper:3.0.14',
             "glide"           : 'com.github.bumptech.glide:glide:4.13.2',
-            "spi"             : 'com.google.auto.service:auto-service:1.0.1',
+            "spi"             : 'com.google.auto.service:auto-service:1.1.1',
             "rxjava"          : 'io.reactivex.rxjava2:rxjava:2.2.21',
             "rxandroid"       : 'io.reactivex.rxjava2:rxandroid:2.1.1'
     ]

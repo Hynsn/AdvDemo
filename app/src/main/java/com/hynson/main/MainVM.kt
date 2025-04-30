@@ -20,6 +20,7 @@ import com.hynson.detail.DetailActivity
 import com.hynson.floatkkey.FloatKeyActivity
 import com.hynson.gson.GsonActivity
 import com.hynson.mbedtls.MbedtlsActivity
+import com.hynson.mvvm.DialogActivity
 import com.hynson.mvvm.TestBaseActivity
 import com.hynson.mvvm.TestMVVMActivity
 import com.hynson.navigation.NavigationActivity
@@ -118,7 +119,7 @@ class MainVM : BaseVM() {
         contents.add(Content(Content.SECTION_TYPE, cells = customCells))
     }
 
-    private fun initNotification(contents: MutableList<Content>){
+    private fun initNotification(contents: MutableList<Content>) {
         val customCells = arrayListOf<Cell>(
             Cell("DownLoadNotification", action = notificationActionList[0])
         )
@@ -162,11 +163,14 @@ class MainVM : BaseVM() {
     }
 
     private fun initMvvmTest(context: Context, contents: MutableList<Content>) {
-        val customCells = arrayListOf<Cell>(Cell("不带VM的Activity") { _, pos, cell ->
-            startActivity(context, TestBaseActivity::class.java)
-        }, Cell("带VM的Activity") { _, pos, cell ->
-            startActivity(context, TestMVVMActivity::class.java)
-        })
+        val customCells = arrayListOf<Cell>(
+            Cell("DialogActivity") { _, pos, cell ->
+                startActivity(context, DialogActivity::class.java)
+            }, Cell("不带VM的Activity") { _, pos, cell ->
+                startActivity(context, TestBaseActivity::class.java)
+            }, Cell("带VM的Activity") { _, pos, cell ->
+                startActivity(context, TestMVVMActivity::class.java)
+            })
 
         contents.add(Content(Content.ITEM_TYPE, name = "Activity"))
         contents.add(Content(Content.SECTION_TYPE, cells = customCells))

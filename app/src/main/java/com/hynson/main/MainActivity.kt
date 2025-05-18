@@ -27,12 +27,14 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fastdroid.ktbase.BaseMvvmActivity
+import com.fastdroid.utils.Device
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.hynson.R
 import com.hynson.databinding.ActivityMainBinding
 import com.hynson.language.AppLanguage
 import com.hynson.language.LanguageAdapter
 import com.hynson.notification.DownloadNotification
+import com.hynson.utils.fm
 import java.util.Locale
 
 class MainActivity : BaseMvvmActivity<ActivityMainBinding, MainVM>() {
@@ -57,6 +59,7 @@ class MainActivity : BaseMvvmActivity<ActivityMainBinding, MainVM>() {
 
     override fun bindView() {
         super.bindView()
+
         bind.rvContents.apply {
             layoutManager = LinearLayoutManager(
                 context,
@@ -113,8 +116,12 @@ class MainActivity : BaseMvvmActivity<ActivityMainBinding, MainVM>() {
         val languages =
             listOf(AppLanguage(Locale.CHINESE, "中文"), AppLanguage(Locale.ENGLISH, "English"))
         val adapter = LanguageAdapter(this, R.layout.item_app_language, languages)
+        val screenInfo =
+            "Screen(${Device.getScreenSizeInInches(this).fm()},${Device.getScreenAspectRatio(this).fm()}"
+        val title =
+            "${getString(R.string.change_language, screenInfo)} )"
         val listDialog = AlertDialog.Builder(this).apply {
-            setTitle(R.string.change_language)
+            setTitle(title)
             setAdapter(adapter) { _, pos ->
                 Toast.makeText(
                     this@MainActivity,

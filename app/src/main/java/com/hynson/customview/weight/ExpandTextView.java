@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.hynson.R;
 
-import utils.Screen;
+import com.fastdroid.utils.Screen;
 
 /**
  * Created by lcodecore on 16/1/29.

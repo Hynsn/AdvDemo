@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.fastdroid.base.BaseActivity
 import com.hynson.test.databinding.ActivityMainBinding
 import com.google.gson.Gson
-import utils.Screen
+import com.fastdroid.utils.Screen
 import kotlin.collections.ArrayList
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {

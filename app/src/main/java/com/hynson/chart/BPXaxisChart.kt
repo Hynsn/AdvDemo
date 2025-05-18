@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.OverScroller
 import androidx.core.content.ContextCompat
 import com.hynson.R
-import utils.Screen
+import com.fastdroid.utils.Screen
 
 /**
  * Author: Hynsonhou
@@ -68,7 +68,7 @@ class BPXaxisChart (context: Context, attrs: AttributeSet) : View(context, attrs
 
         mInterval = getInterval(getDivisorCount(DateType.DAY))
 
-        setYaxisRefer(Screen.dp2px(context,20f).toFloat(),Screen.dp2px(context,30f).toFloat())
+        setYaxisRefer(Screen.dp2px(context,20f).toFloat(), Screen.dp2px(context,30f).toFloat())
 
         initScroll()
     }

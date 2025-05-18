@@ -3,19 +3,15 @@ package com.hynson.bpchart
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.core.view.marginStart
-import androidx.core.view.postDelayed
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.hynson.R
 import com.hynson.chart.BPChartData
 import com.hynson.chart.BPYaxisChart
-import utils.Screen
+import com.fastdroid.utils.Screen
 
 
 class ChartView(context: Context, attrs: AttributeSet) : FrameLayout(context, attrs) {

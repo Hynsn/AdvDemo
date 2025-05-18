@@ -6,8 +6,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.hynson.R
-import com.hynson.chart.BPXaxisChart
-import utils.Screen
+import com.fastdroid.utils.Screen
 
 /**
  * Author: Hynsonhou

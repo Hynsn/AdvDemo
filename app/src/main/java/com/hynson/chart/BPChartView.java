@@ -7,7 +7,6 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,7 +23,7 @@ import com.hynson.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import utils.Screen;
+import com.fastdroid.utils.Screen;
 
 public class BPChartView extends View {
 

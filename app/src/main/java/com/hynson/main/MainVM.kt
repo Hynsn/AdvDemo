@@ -136,6 +136,8 @@ class MainVM : BaseVM() {
             startActivity(context, FloatKeyActivity::class.java)
         }, Cell("Ble") { _, _, _ ->
             startActivity(context, com.hynson.ble.MainActivity::class.java)
+        }, Cell("WiFi") { _, _, _ ->
+            startActivity(context, com.hynson.wifi.WifiActivity::class.java)
         })
         contents.add(Content(Content.ITEM_TYPE, name = "Classic UI interactive"))
         contents.add(Content(Content.SECTION_TYPE, cells = customCells))

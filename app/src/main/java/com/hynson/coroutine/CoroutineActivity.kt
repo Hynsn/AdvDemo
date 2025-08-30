@@ -1,23 +1,24 @@
 package com.hynson.coroutine
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LifecycleOwner
+import com.fastdroid.ktbase.BaseActivity
 import com.hynson.R
+import com.hynson.databinding.ActivityCoroutineBinding
+import com.hynson.remoteconfig.RemoteConfigManager
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 fun curThread() = println("curThread: [${Thread.currentThread().name},${Thread.currentThread().id}]")
 
-class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
+class CoroutineActivity : BaseActivity<ActivityCoroutineBinding>(), CoroutineScope by MainScope() {
     val job = Job()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
 
-    var TAG = "CoroutineActivity"
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun initData(owner: LifecycleOwner, savedInstanceState: Bundle?) {
+        super.initData(owner, savedInstanceState)
 
-        setContentView(R.layout.activity_coroutine)
         curThread()
 
         /*button.setOnClickListener {
@@ -29,6 +30,9 @@ class CoroutineActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             }
             curThread()
         }*/
+        bind.btnRemoteconfig.setOnClickListener {
+            RemoteConfigManager.fetchAndActivate()
+        }
     }
 }
 /*

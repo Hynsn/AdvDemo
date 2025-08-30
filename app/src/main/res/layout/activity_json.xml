@@ -12,10 +12,18 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btn_coroutine"
+            android:id="@+id/btn_gson1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="协程" />
+            android:text="GsonTest1"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_gson2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GsonTest2"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_rxjava"
@@ -24,11 +32,5 @@
             android:text="RxJava"
             android:textAllCaps="false" />
 
-        <Button
-            android:id="@+id/btn_remoteconfig"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="RemoteConfig"
-            android:textAllCaps="false" />
     </LinearLayout>
 </layout>

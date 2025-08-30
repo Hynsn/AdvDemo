@@ -30,6 +30,7 @@
         <activity android:name=".activityresult.GetResultActivity"/>
         <activity
             android:name=".webview.WebviewActivity"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
 
@@ -60,6 +61,7 @@
             android:name=".main.MainActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
+            android:exported="true"
             android:screenOrientation="fullSensor">
 
             <intent-filter>

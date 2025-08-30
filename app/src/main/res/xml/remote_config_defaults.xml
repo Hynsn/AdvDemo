@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><defaults>
+  <entry>
+    <key>weight_unit</key>
+    <value>[{"code":"en","unit":["kg", "g"]},{"code":"cn","unit":["克", "千克", "kg", "公斤", "斤", "两", "吨"]}]</value>
+  </entry>
+</defaults>

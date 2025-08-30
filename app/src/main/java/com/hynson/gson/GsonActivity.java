@@ -4,9 +4,9 @@ import android.view.View;
 
 import com.fastdroid.base.BaseActivity;
 import com.hynson.R;
-import com.hynson.databinding.ActivityCoroutineBinding;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.hynson.databinding.ActivityJsonBinding;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -15,10 +15,10 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
-public class GsonActivity extends BaseActivity<ActivityCoroutineBinding> implements View.OnClickListener {
+public class GsonActivity extends BaseActivity<ActivityJsonBinding> implements View.OnClickListener {
     @Override
     protected int getLayout() {
-        return R.layout.activity_coroutine;
+        return R.layout.activity_json;
     }
 
     private Gson gson = new GsonBuilder()
@@ -28,7 +28,8 @@ public class GsonActivity extends BaseActivity<ActivityCoroutineBinding> impleme
     @Override
     protected void bindView() {
 
-        binding.btnCoroutine.setOnClickListener(this);
+        binding.btnGson1.setOnClickListener(this);
+        binding.btnGson2.setOnClickListener(this);
         binding.btnRxjava.setOnClickListener(this);
     }
 
@@ -40,11 +41,19 @@ public class GsonActivity extends BaseActivity<ActivityCoroutineBinding> impleme
                 rxjavaSingleTest();
             }
             break;
-            case R.id.btn_coroutine:
+            case R.id.btn_gson1:
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         gsonTest1();
+                    }
+                }).start();
+                break;
+            case R.id.btn_gson2:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        gsonTest2();
                     }
                 }).start();
                 break;

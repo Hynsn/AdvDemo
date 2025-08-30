@@ -1,11 +1,11 @@
 ext {
-    ext.kotlin_version = '1.7.22'
+    ext.kotlin_version = '2.0.21'
 
     droid = [
-            compileSdk: 33,
+            compileSdk: 34,
             buildTools: "34.0.0",
             targetSdk : 30,
-            minSdk    : 21,
+            minSdk    : 23,
             Code      : 1,
             Name      : "1.0.3"
     ]

@@ -57,6 +57,19 @@
         <activity android:name=".set.SettingActivity" />
         <activity android:name=".ble.MainActivity" />
         <activity android:name=".wifi.WifiActivity" />
+        <activity android:name=".nfc.NFCActivity"
+            android:exported="true"
+            android:launchMode="singleInstance" >
+            <intent-filter>
+<!--                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>-->
+<!--                <action android:name="android.nfc.action.TAG_DISCOVERED"/>-->
+<!--                <action android:name="android.nfc.action.TECH_DISCOVERED"/>-->
+<!--                <category android:name="android.intent.category.DEFAULT"/>-->
+<!--                <data android:mimeType="text/plain" />-->
+                <action android:name="android.nfc.action.TAG_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".main.MainActivity"
             android:configChanges="orientation|screenSize"
@@ -168,4 +181,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
+    <!--  NFC  -->
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-feature android:name="android.hardware.nfc" android:required="true" />
 </manifest>

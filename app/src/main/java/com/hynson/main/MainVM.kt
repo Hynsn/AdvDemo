@@ -136,6 +136,8 @@ class MainVM : BaseVM() {
             startActivity(context, FloatKeyActivity::class.java)
         }, Cell("Ble") { _, _, _ ->
             startActivity(context, com.hynson.ble.MainActivity::class.java)
+        }, Cell("NFC") { _, _, _ ->
+            startActivity(context, com.hynson.nfc.NFCActivity::class.java)
         }, Cell("WiFi") { _, _, _ ->
             startActivity(context, com.hynson.wifi.WifiActivity::class.java)
         })

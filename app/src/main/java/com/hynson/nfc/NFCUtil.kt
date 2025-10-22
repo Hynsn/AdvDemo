@@ -3,7 +3,7 @@ package com.hynson.nfc
 import android.app.Activity
 import android.app.PendingIntent
 import android.content.Intent
-import android.content.IntentFilter
+import android.nfc.FormatException
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
@@ -13,6 +13,8 @@ import android.nfc.tech.MifareUltralight
 import android.nfc.tech.Ndef
 import android.os.Build
 import android.util.Log
+import java.io.IOException
+import java.util.Arrays
 import kotlin.collections.contains
 import kotlin.collections.forEach
 import kotlin.experimental.and
@@ -24,6 +26,7 @@ object NFCUtil {
 //        NfcAdapter.ACTION_NDEF_DISCOVERED：NDEF 格式意图，适用于处理 NDEF 格式数据的 NFC 标签。
     private var nfcAdapter: NfcAdapter? = null
     private var readWrite = false
+    private var setPwd = false
     fun init(context: Activity) {
         nfcAdapter = NfcAdapter.getDefaultAdapter(context)
     }
@@ -32,8 +35,9 @@ object NFCUtil {
         return nfcAdapter?.isEnabled == true
     }
 
-    fun enableForegroundDispatch(activity: Activity, boolean: Boolean = true) {
-        readWrite = boolean
+    private fun enableForegroundDispatch(
+        activity: Activity,
+    ) {
         val mutable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.FLAG_MUTABLE
         } else {
@@ -49,6 +53,22 @@ object NFCUtil {
             mutable
         )
         nfcAdapter?.enableForegroundDispatch(activity, pendingIntent, null, null)
+    }
+
+    fun enableReadWriteForegroundDispatch(
+        activity: Activity,
+        boolean: Boolean = true
+    ) {
+        readWrite = boolean
+        enableForegroundDispatch(activity)
+    }
+
+    fun enableLockForegroundDispatch(
+        activity: Activity,
+        boolean: Boolean = true
+    ) {
+        setPwd = boolean
+        enableForegroundDispatch(activity)
     }
 
     fun disableForegroundDispatch(context: Activity) {
@@ -82,15 +102,18 @@ object NFCUtil {
     }
 
     fun handleIntent(intent: Intent) {
-        if (readWrite) {
-            Log.i(TAG, "handleIntent: 读取数据")
-            readNfc(intent)
+//        if (readWrite) {
+//            Log.i(TAG, "handleIntent: 读取数据")
+//            readNfc(intent)
+//        } else {
+//            Log.i(TAG, "handleIntent: 写数据")
+//            writeNfc(intent)
+//        }
+        if (setPwd) {
+            writePassword(intent, "1234")
         } else {
-            Log.i(TAG, "handleIntent: 写数据")
-            writeNfc(intent)
+            deletePassword(intent, "1234")
         }
-//        readNfc(intent)
-//        writeNfc(intent)
     }
 
     private fun writeNfc(intent: Intent) {
@@ -253,7 +276,251 @@ object NFCUtil {
         return sb.toString()
     }
 
-    private const val TAG = "NFCActivity"
+    /**
+     * 写入NFC设置密码
+     */
+    @OptIn(ExperimentalStdlibApi::class)
+    private fun writePassword(intent: Intent, pwdstr: String) {
+        var mfc: MifareUltralight? = null
+        intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)?.let {
+            mfc = MifareUltralight.get(it)
+        }
+        if (mfc == null) {
+            Log.i(TAG, "writePassword: mfc = null")
+            return
+        }
+        //创建默认为0的4字节数组
+        val pwd = Array<Byte>(4) { ((0).toByte()) }
+        val temp = pwdstr.toByteArray()
+        for ((index, e) in temp.withIndex()) {
+            pwd[index] = temp[index]
+        }
+        //得出的PWD即用户设置的密码
+        mfc.connect()
+
+        val pwd_default = byteArrayOf(0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte())
+        val pack = byteArrayOf(0.toByte(), 0.toByte())
+
+        try {
+
+            //先用默认密码进行询问
+            val response = mfc.transceive(
+                byteArrayOf(
+                    0x1B  //PWD_AUTH
+                    , pwd_default[0], pwd_default[1], pwd_default[2], pwd_default[3]
+                )
+            )
+            Log.i(TAG, "response: ${response.toHexString()}")
+
+            // Check if PACK is matching expected PACK
+            // This is a (not that) secure method to check if tag is genuine
+            if ((response != null) && (response.size >= 2)) {
+                val packResponse = Arrays.copyOf(response, 2)
+                if (!(pack[0] == packResponse[0] && pack[1] == packResponse[1])) {
+                    Log.i(TAG, "writePassword Tag could not be authenticated:\n$packResponse≠$pack")
+                } else {
+                    Log.i(TAG, "writePassword Tag could be authenticated:\n$packResponse≠$pack")
+                }
+            } else {
+                Log.i(TAG, "response: 不满足规则 ${response.toHexString()}")
+            }
+
+            Log.i(TAG, "writePassword: set PACK")
+            // set PACK:
+            mfc.transceive(
+                byteArrayOf(
+                    0xA2.toByte(),
+                    0x2C, /*PAGE 44*/
+                    pack[0], pack[1], 0, 0  // Write PACK into first 2 Bytes and 0 in RFUI bytes
+                )
+            )
+
+            // set PWD:  设置密码为用户设置的密码
+            mfc.transceive(
+                byteArrayOf(
+                    0xA2.toByte(),
+                    0x2B,  /*PAGE 43*/
+                    pwd[0],
+                    pwd[1],
+                    pwd[2],
+                    pwd[3]  // Write PACK into first 2 Bytes and 0 in RFUI bytes
+                )
+            )
+
+            // set AUTHLIM: 设置错误次数限制
+            val responseAuthLim = mfc.readPages(42)
+            if (responseAuthLim != null && responseAuthLim.size >= 16) {
+                val prot =
+                    false  // false = PWD_AUTH for write only, true = PWD_AUTH for read and write
+                val authLim = 0;  //0-7
+
+                mfc.transceive(
+                    byteArrayOf(
+                        0xA2.toByte(),
+                        42,
+                        (responseAuthLim[0] and 0x078 or (if (prot) 0x080.toByte() else 0x000) or ((authLim and 0x007).toByte())).toByte(),
+                        responseAuthLim[1],
+                        responseAuthLim[2],
+                        responseAuthLim[3]
+
+                        //将1-3位按原数据写会
+                    )
+                )
+            }
+
+            //设置Auth0  auth0实际控制是否启用密码保护
+            val responseAuth0 = mfc.readPages(41)
+
+            if (responseAuth0 != null && responseAuth0.size >= 16) {
+                val prot =
+                    false;  // false = PWD_AUTH for write only, true = PWD_AUTH for read and write
+                val auth0 = 0;
+
+
+                mfc.transceive(
+                    byteArrayOf(
+                        0xA2.toByte(),
+                        41,
+                        responseAuthLim[0],
+                        responseAuthLim[1],
+                        responseAuthLim[2],
+
+                        //将0-2位按原数据写会
+                        (auth0 and 0x0ff).toByte()
+                    )
+                )
+            }
+
+            Log.e("写密码完成", "写密码完成")
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } catch (e: FormatException) {
+            e.printStackTrace()
+        } finally {
+            mfc.close()
+        }
+    }
+
+    /**
+     * 删除NFC设置的密码保护
+     */
+    private fun deletePassword(intent: Intent, pwdstr: String) {
+        var mfc: MifareUltralight? = null
+        intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)?.let {
+            mfc = MifareUltralight.get(it)
+        }
+        if (mfc == null) {
+            Log.i(TAG, "deletePassword: mfc = null")
+            return
+        }
+
+        //创建默认为0的4字节数组
+        val pwd = Array<Byte>(4) { ((0).toByte()) }
+        val temp = pwdstr.toByteArray()
+        for ((index, e) in temp.withIndex()) {
+            pwd[index] = temp[index]
+        }
+        //得出的PWD即用户设置的密码
+        mfc.connect()
+
+        val pwd_default = byteArrayOf(0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte())
+        val pack = byteArrayOf(0.toByte(), 0.toByte())
+
+        try {
+            //用户设置的密码询问登录
+            val response = mfc.transceive(
+                byteArrayOf(
+                    0x1B, pwd[0], pwd[1], pwd[2], pwd[3]
+                )
+            )
+
+            // Check if PACK is matching expected PACK
+            // This is a (not that) secure method to check if tag is genuine
+            if ((response != null) && (response.size >= 2)) {
+                val packResponse = Arrays.copyOf(response, 2);
+                if (!(pack[0] == packResponse[0] && pack[1] == packResponse[1])) {
+                    Log.i(TAG, "Tag could not be authenticated:\n$packResponse≠$pack")
+                } else {
+                    Log.i(TAG, "密码校验正确")
+                }
+            } else {
+
+            }
+
+            //pack置为默认
+            mfc.transceive(
+                byteArrayOf(
+                    0xA2.toByte(),
+                    0x2C, /*PAGE 44*/
+                    pack[0], pack[1], 0, 0  // Write PACK into first 2 Bytes and 0 in RFUI bytes
+                )
+            )
+
+            //pwd置为默认
+            mfc.transceive(
+                byteArrayOf(
+                    0xA2.toByte(),
+                    0x2B,  /*PAGE 43*/
+                    pwd_default[0],
+                    pwd_default[1],
+                    pwd_default[2],
+                    pwd_default[3]  // Write PACK into first 2 Bytes and 0 in RFUI bytes
+                )
+            )
+
+            // set AUTHLIM:
+            //将AUTHLIM（第42页，字节0，位2-0）设置为失败的最大密码验证尝试次数
+            val responseAuthLim = mfc.readPages(42)
+            if (responseAuthLim != null && responseAuthLim.size >= 16) {
+                val prot =
+                    false  // false = PWD_AUTH for write only, true = PWD_AUTH for read and write
+                val authLim = 0;  //0-7
+
+                mfc.transceive(
+                    byteArrayOf(
+                        0xA2.toByte(),
+                        42,
+                        (responseAuthLim[0] and 0x078 or (if (prot) 0x080.toByte() else 0x000) or ((authLim and 0x007).toByte())).toByte(),
+                        responseAuthLim[1],
+                        responseAuthLim[2],
+                        responseAuthLim[3]
+
+                        //将1-3位按原数据写会
+                    )
+                )
+            }
+
+            //设置Auth0 如果auth0设置为FF则为禁用密码保护
+            val responseAuth0 = mfc.readPages(41)
+
+            if (responseAuth0 != null && responseAuth0.size >= 16) {
+
+                mfc.transceive(
+                    byteArrayOf(
+                        0xA2.toByte(),
+                        41,
+                        responseAuthLim[0],
+                        responseAuthLim[1],
+                        responseAuthLim[2],
+
+                        //将0-2位按原数据写会
+                        0x0ff.toByte()
+                    )
+                )
+            }
+            Log.i(TAG, "清除密码成功")
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } catch (e: FormatException) {
+            e.printStackTrace()
+        } finally {
+            mfc.close()
+        }
+    }
+
+
+    private const val TAG = "NFCUtil"
 }
 
 inline fun <reified T> Intent.parcelable(key: String): T? {

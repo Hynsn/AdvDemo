@@ -40,10 +40,10 @@ class NFCActivity : BaseMvvmActivity<ActivityNfcBinding, NFCViewModel>() {
         NFCUtil.init(this)
 
         bind.btnRead.setOnClickListener {
-            NFCUtil.enableForegroundDispatch(this, true)
+            NFCUtil.enableReadWriteForegroundDispatch(this, true)
         }
         bind.btnWrite.setOnClickListener {
-            NFCUtil.enableForegroundDispatch(this, false)
+            NFCUtil.enableReadWriteForegroundDispatch(this, false)
         }
         val key = KEY.fitByteArray(32)
         bind.btnEncrypt.setOnClickListener {
@@ -53,6 +53,12 @@ class NFCActivity : BaseMvvmActivity<ActivityNfcBinding, NFCViewModel>() {
         bind.btnDecrypt.setOnClickListener {
             val text = AESUtil.decrypt("z83k7mz9ue9aJo6umDBaz+lyRjI49+KwopbXrs/+PwM=", key)
             Log.i(TAG, "decrypt: ${text}")
+        }
+        bind.btnSetpwd.setOnClickListener {
+            NFCUtil.enableLockForegroundDispatch(this, true)
+        }
+        bind.btnDeletepwd.setOnClickListener {
+            NFCUtil.enableLockForegroundDispatch(this, false)
         }
     }
 

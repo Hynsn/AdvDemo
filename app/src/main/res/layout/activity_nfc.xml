@@ -24,6 +24,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_aes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/ll_nfc">
@@ -39,5 +40,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="解密" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/ll_aes">
+
+        <Button
+            android:id="@+id/btn_setpwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设置密码" />
+
+        <Button
+            android:id="@+id/btn_deletepwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除密码" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,7 +10,6 @@ import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.MifareClassic
 import android.nfc.tech.MifareUltralight
-import android.nfc.tech.MifareUltralight.PAGE_SIZE
 import android.nfc.tech.Ndef
 import android.os.Build
 import android.util.Log
@@ -107,33 +106,36 @@ object NFCUtil {
 
     @OptIn(ExperimentalStdlibApi::class)
     fun handleIntent(intent: Intent) {
-//        if (readWrite) {
-//            Log.i(TAG, "handleIntent: 读取数据")
-//            readNfc(intent)
-//        } else {
-//            Log.i(TAG, "handleIntent: 写数据")
-//            writeNfc(intent)
-//        }
-        val uid = getUid(intent)
-        if (uid?.isNotEmpty() == true) {
-            val allPwd = AESUtil.createPwd(uid)
-            val size = allPwd.size
-            val pwd = allPwd.copyOfRange(0, 4)
-            val pack = allPwd.copyOfRange(size - 2, size)
-            Log.i(TAG, "pwd: ${pwd.toHexString()}, pack: ${pack.toHexString()}")
-            var mfc: MifareUltralight? = null
-            intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)?.let {
-                mfc = MifareUltralight.get(it)
-            }
-            //        mfc.close()
-//        ndef?.connect()
-//        ndef?.writeNdefMessage(NdefMessage(NdefRecord.createUri("veo://hynson.com")))
-            if (setPwd) {
-                writePassword(mfc, pwd, pack)
-            } else {
-                deletePassword(mfc, pwd, pack)
-            }
+        if (readWrite) {
+            Log.i(TAG, "handleIntent: 读取数据")
+            readNfc(intent)
+        } else {
+            Log.i(TAG, "handleIntent: 写数据")
+            writeNfc(intent)
         }
+//        val uid = getUid(intent)
+//        if (uid?.isNotEmpty() == true) {
+//            val allPwd = AESUtil.createPwd(uid)
+//            val size = allPwd.size
+//            val pwd = allPwd.copyOfRange(0, 4)
+//            val pack = allPwd.copyOfRange(size - 2, size)
+//            Log.i(TAG, "pwd: ${pwd.toHexString()}, pack: ${pack.toHexString()}")
+//            var mfc: MifareUltralight? = null
+//            intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)?.let {
+//                mfc = MifareUltralight.get(it)
+//            }
+//
+//            if (setPwd) {
+//                val key = "ZW5kcmlkZVdpdGhORkM=".fitByteArray(32)
+//                val geo = AESUtil.encrypt("lat=125.215403&lng=-135.20025", key)
+//                Log.i(TAG, "handleIntent: ${geo.toByteArray().toHexString()}")
+//                val ret = writeNdefWithPWD(mfc, pwd, pack, NdefMessage(NdefRecord.createUri("veo://endride/nfc?$geo")))
+//                Log.i(TAG, "writeNdefWithPWD: $ret")
+//            } else {
+//                val ret = clearWithPWD(mfc, pwd, pack)
+//                Log.i(TAG, "clearWithPWD: $ret")
+//            }
+//        }
     }
 
     private fun writeNfc(intent: Intent) {
@@ -193,6 +195,17 @@ object NFCUtil {
                 val message = NdefMessageParser.parse(message)
                 Log.i(TAG, "message: $message")
                 for (record in message) {
+                    if (record is UriRecord) {
+                        val geo = record.uri.query
+                        Log.i(TAG, "URI:geo ${geo}")
+                        val key = "ZW5kcmlkZVdpdGhORkM=".fitByteArray(32)
+                        if (!geo.isNullOrEmpty()){
+                            val test = AESUtil.decrypt(geo,key)
+                            Log.i(TAG, "URI:ase ${test}")
+                        }
+                    } else if (record is TextRecord) {
+                        Log.i(TAG, "Text: ${record.text}")
+                    }
                     Log.i(TAG, "record: $record")
                 }
             }
@@ -366,86 +379,106 @@ object NFCUtil {
         this.addAll(other.map { it.toInt().toByte() })
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
+    private fun mfuWriteNdefMessage(mfu: MifareUltralight, ndefMessage: NdefMessage){
+        val def = ndefMessageToData(ndefMessage)
+        Log.i(TAG, "mfuWriteNdefMessage: ${def.toHexString()}")
+        val totalPages = (def.size + PAGE_SIZE - 1) / PAGE_SIZE // 计算需要写入的总页面数
+
+        for (i in 0 until totalPages) {
+            val start = i * PAGE_SIZE
+            val end = start + PAGE_SIZE
+            val pageData = def.copyOfRange(start, if (end < def.size) end else def.size)
+            val pageAddress = (START_PAGE + i).toByte()
+
+            val command = if (pageData.size < 4){
+                ByteArray(2 + pageData.size).paddedToPageSize(6)
+            } else {
+                ByteArray(2 + pageData.size)
+            }
+            command[0] = 0xA2.toByte() // 写入页面命令
+            command[1] = pageAddress // 写入页面命令
+            System.arraycopy(pageData, 0, command, 2, pageData.size)
+            Log.i(TAG, "command ${command.toHexString()}")
+            val cmdAck = mfu.transceive(command)
+            Log.i(TAG, "cmdAck ${cmdAck.toHexString()}")
+        }
+    }
+
     /**
      * 写入NFC设置密码
      */
     @OptIn(ExperimentalStdlibApi::class)
-    private fun writePassword(
-        mfc: MifareUltralight?,
-        pwd: ByteArray,
-        pack: ByteArray = byteArrayOf(0.toByte(), 0.toByte())
+    private fun writeNdefWithPWD(
+        mfu: MifareUltralight?,
+        pwd: ByteArray = byteArrayOf(0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte()),
+        pack: ByteArray = byteArrayOf(0.toByte(), 0.toByte()),
+        ndefMessage: NdefMessage? = null,
     ): Boolean {
-        if (mfc == null) {
-            Log.i(TAG, "writePassword: mfc = null")
+        if (mfu == null) {
+            Log.e(TAG, "writePassword: mfc = null")
+            return false
+        }
+        if (pwd.size < 4) {
+            Log.i(TAG, "pwd: size < 4")
             return false
         }
 
-        val pwd_default = byteArrayOf(0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte())
-
         try {
-            mfc.connect()
-            //先用默认密码进行询问
-            val response = mfc.transceive(
-                byteArrayOf(
-                    0x1B  //PWD_AUTH
-                    , pwd_default[0], pwd_default[1], pwd_default[2], pwd_default[3]
-                )
-            )
-            Log.i(TAG, "response: ${response.toHexString()}")
+            mfu.connect()
 
-            // Check if PACK is matching expected PACK
-            // This is a (not that) secure method to check if tag is genuine
-            if ((response != null) && (response.size >= 2)) {
-                val packResponse = Arrays.copyOf(response, 2)
-                if (!(pack[0] == packResponse[0] && pack[1] == packResponse[1])) {
-                    Log.i(
-                        TAG,
-                        "Tag could not be authenticated:\n${packResponse.toHexString()} ${pack.toHexString()}"
-                    )
-                } else {
-                    Log.i(
-                        TAG,
-                        "Tag could be authenticated:\n ${packResponse.toHexString()} ${pack.toHexString()}"
-                    )
-                }
+            val readAuth0Ack = mfu.readPages(131)
+            Log.i(TAG, "readAuth0Ack: ${readAuth0Ack.toHexString()}")
+            if (readAuth0Ack[3] == 0xFF.toByte()) {
+                Log.i(TAG, "密码保护未启用，直接写数据")
             } else {
-                Log.i(TAG, "response: 不满足规则 ${response.toHexString()}")
-            }
-
-            val def = ndefMessageToData(NdefMessage(NdefRecord.createUri("veo://hynson.com")))
-            val totalPages = (def.size + PAGE_SIZE - 1) / PAGE_SIZE // 计算需要写入的总页面数
-
-            for (i in 0 until totalPages) {
-                val start = i * PAGE_SIZE
-                val end = start + PAGE_SIZE
-                val pageData = def.copyOfRange(start, if (end < def.size) end else def.size)
-                val pageAddress = (START_PAGE + i).toByte()
-
-                val command = if (pageData.size < 4){
-                    ByteArray(2 + pageData.size).paddedToPageSize(6)
+                Log.i(TAG, "密码保护已启用，用默认密码进行询问")
+                //用默认密码进行询问
+                val authAck = mfu.transceive(
+                    byteArrayOf(
+                        0x1B  //PWD_AUTH
+                        , pwd[0], pwd[1], pwd[2], pwd[3]
+                    )
+                )
+                Log.i(TAG, "authAck: ${authAck.toHexString()}")
+                // Check if PACK is matching expected PACK
+                // This is a (not that) secure method to check if tag is genuine
+                if ((authAck != null) && (authAck.size >= 2)) {
+                    val packResponse = Arrays.copyOf(authAck, 2)
+                    if (!(pack[0] == packResponse[0] && pack[1] == packResponse[1])) {
+                        Log.i(
+                            TAG,
+                            "Tag could not be authenticated:\n${packResponse.toHexString()} ${pack.toHexString()}"
+                        )
+                        mfu.close()
+                        return false
+                    } else {
+                        Log.i(
+                            TAG,
+                            "Tag could be authenticated:\n ${packResponse.toHexString()} ${pack.toHexString()}"
+                        )
+                    }
                 } else {
-                    ByteArray(2 + pageData.size)
+                    Log.i(TAG, "response: 不满足规则 ${authAck.toHexString()}")
                 }
-                command[0] = 0xA2.toByte() // 写入页面命令
-                command[1] = pageAddress // 写入页面命令
-                System.arraycopy(pageData, 0, command, 2, pageData.size)
-                Log.i(TAG, "transceive ${command.toHexString()}")
-                val defRet = mfc.transceive(command)
-                Log.i(TAG, "defRet ${defRet.toHexString()}")
+            }
+            // write ndefMessage
+            if (ndefMessage != null) {
+                mfuWriteNdefMessage(mfu, ndefMessage)
             }
 
             // set PACK:
-            val packRet = mfc.transceive(
+            val packAck = mfu.transceive(
                 byteArrayOf(
                     0xA2.toByte(),
                     0x86.toByte(), /*PAGE 44*/
                     pack[0], pack[1], 0, 0  // Write PACK into first 2 Bytes and 0 in RFUI bytes
                 )
             )
-            Log.i(TAG, "writePassword: set PACK ${packRet.toHexString()}")
+            Log.i(TAG, "set PACK ${packAck.toHexString()}")
 
             // set PWD:  设置密码为用户设置的密码
-            val pwdRet = mfc.transceive(
+            val pwdAck = mfu.transceive(
                 byteArrayOf(
                     0xA2.toByte(),
                     0x85.toByte(),  /*PAGE 43*/
@@ -455,7 +488,7 @@ object NFCUtil {
                     pwd[3]  // Write PACK into first 2 Bytes and 0 in RFUI bytes
                 )
             )
-            Log.i(TAG, "writePassword: set PWD ${pwdRet.toHexString()}")
+            Log.i(TAG, "set PWD ${pwdAck.toHexString()}")
 
 /*            // set AUTHLIM: 设置错误次数限制
             val responseAuthLim = mfc.readPages(132)
@@ -479,15 +512,12 @@ object NFCUtil {
                 Log.i(TAG, "writePassword: set AUTHLIM ${authlimRet.toHexString()}")
             }*/
 
-            //设置Auth0  auth0实际控制是否启用密码保护
-            val responseAuth0 = mfc.readPages(131)
+            // 设置Auth0  auth0实际控制是否启用密码保护
+            val responseAuth0 = mfu.readPages(131)
 
             if (responseAuth0 != null && responseAuth0.size >= 16) {
-                val prot =
-                    false;  // false = PWD_AUTH for write only, true = PWD_AUTH for read and write
                 val auth0 = 0
-
-                val authRet = mfc.transceive(
+                val authAck = mfu.transceive(
                     byteArrayOf(
                         0xA2.toByte(),
                         0x83.toByte(),
@@ -498,17 +528,17 @@ object NFCUtil {
                         (auth0 and 0x0ff).toByte()
                     )
                 )
-                Log.i(TAG, "设置Auth0 ${authRet.toHexString()}")
+                Log.i(TAG, "set Auth0 ${authAck.toHexString()}")
             }
-            Log.i("写密码完成", "写密码完成")
-            mfc.close()
+            Log.i(TAG, "写密码完成")
+            mfu.close()
             return true
         } catch (e: IOException) {
             e.printStackTrace()
         } catch (e: FormatException) {
             e.printStackTrace()
         } finally {
-            mfc.close()
+            mfu.close()
         }
         return false
     }
@@ -524,60 +554,71 @@ object NFCUtil {
      * 删除NFC设置的密码保护
      */
     @OptIn(ExperimentalStdlibApi::class)
-    private fun deletePassword(
-        mfc: MifareUltralight?,
+    private fun clearWithPWD(
+        mfu: MifareUltralight?,
         pwd: ByteArray,
         pack: ByteArray = byteArrayOf(0.toByte(), 0.toByte())
-    ) {
-        if (mfc == null) {
+    ): Boolean {
+        if (mfu == null) {
             Log.i(TAG, "deletePassword: mfc = null")
-            return
+            return false
+        }
+        if (pwd.size < 4) {
+            Log.i(TAG, "pwd: size < 4")
+            return false
         }
 
-        //得出的PWD即用户设置的密码
-        mfc.connect()
-
-        val pwd_default = byteArrayOf(0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte())
-
         try {
-            //用户设置的密码询问登录
-            val response = mfc.transceive(
-                byteArrayOf(
-                    0x1B, pwd[0], pwd[1], pwd[2], pwd[3]
-                )
-            )
-
-            // Check if PACK is matching expected PACK
-            // This is a (not that) secure method to check if tag is genuine
-            if ((response != null) && (response.size >= 2)) {
-                val packResponse = Arrays.copyOf(response, 2);
-                if (!(pack[0] == packResponse[0] && pack[1] == packResponse[1])) {
-                    Log.i(
-                        TAG,
-                        "Tag could not be authenticated: ${packResponse.toHexString()}${pack.toHexString()}"
-                    )
-                } else {
-                    Log.i(
-                        TAG,
-                        "Tag could be authenticated: ${packResponse.toHexString()}${pack.toHexString()}"
-                    )
-                }
+            mfu.connect()
+            val pwd_default = byteArrayOf(0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte())
+            val readAuth0Ack = mfu.readPages(131)
+            Log.i(TAG, "readAuth0Ack: ${readAuth0Ack.toHexString()}")
+            if (readAuth0Ack[3] == 0xFF.toByte()) {
+                Log.i(TAG, "密码保护未启用，无需清除")
+                mfu.close()
+                return false
             } else {
-                Log.i(TAG, "response: 不满足规则 ${response.toHexString()}")
+                // 用户设置的密码询问登录
+                val response = mfu.transceive(
+                    byteArrayOf(
+                        0x1B, pwd[0], pwd[1], pwd[2], pwd[3]
+                    )
+                )
+
+                // Check if PACK is matching expected PACK
+                // This is a (not that) secure method to check if tag is genuine
+                if ((response != null) && (response.size >= 2)) {
+                    val packResponse = Arrays.copyOf(response, 2);
+                    if (!(pack[0] == packResponse[0] && pack[1] == packResponse[1])) {
+                        Log.i(
+                            TAG,
+                            "Tag could not be authenticated: ${packResponse.toHexString()}${pack.toHexString()}"
+                        )
+                        mfu.close()
+                        return false
+                    } else {
+                        Log.i(
+                            TAG,
+                            "Tag could be authenticated: ${packResponse.toHexString()}${pack.toHexString()}"
+                        )
+                    }
+                } else {
+                    Log.i(TAG, "response: 不满足规则 ${response.toHexString()}")
+                }
             }
 
-            //pack置为默认
-            val packRet = mfc.transceive(
+            // pack置为默认
+            val packAck = mfu.transceive(
                 byteArrayOf(
                     0xA2.toByte(),
                     0x86.toByte(), /*PAGE 44*/
                     pack[0], pack[1], 0, 0  // Write PACK into first 2 Bytes and 0 in RFUI bytes
                 )
             )
-            Log.i(TAG, "set PACK ${packRet.toHexString()}")
+            Log.i(TAG, "set PACK ${packAck.toHexString()}")
 
             //pwd置为默认
-            val pwdRet = mfc.transceive(
+            val pwdAck = mfu.transceive(
                 byteArrayOf(
                     0xA2.toByte(),
                     0x85.toByte(),  /*PAGE 43*/
@@ -587,7 +628,7 @@ object NFCUtil {
                     pwd_default[3]  // Write PACK into first 2 Bytes and 0 in RFUI bytes
                 )
             )
-            Log.i(TAG, "set PWD ${pwdRet.toHexString()}")
+            Log.i(TAG, "set PWD ${pwdAck.toHexString()}")
 /*            // set AUTHLIM:
             //将AUTHLIM（第42页，字节0，位2-0）设置为失败的最大密码验证尝试次数
             val responseAuthLim = mfc.readPages(132)
@@ -611,31 +652,32 @@ object NFCUtil {
             }*/
 
             //设置Auth0 如果auth0设置为FF则为禁用密码保护
-            val responseAuth0 = mfc.readPages(131)
+            val responseAuth0 = mfu.readPages(131)
 
             if (responseAuth0 != null && responseAuth0.size >= 16) {
-                val auth0Ret = mfc.transceive(
+                val auth0Ack = mfu.transceive(
                     byteArrayOf(
                         0xA2.toByte(),
                         0x83.toByte(),
                         0x04,
                         0x00,
                         0x00,
-                        //将0-2位按原数据写会
-                        0x0ff.toByte()
+                        0x0ff.toByte() //将0-2位按原数据写回
                     )
                 )
-                Log.i(TAG, "set Auth0 ${auth0Ret.toHexString()} ")
+                Log.i(TAG, "set Auth0 ${auth0Ack.toHexString()} ")
             }
             Log.i(TAG, "清除密码成功")
-
+            mfu.close()
+            return true
         } catch (e: IOException) {
             e.printStackTrace()
         } catch (e: FormatException) {
             e.printStackTrace()
         } finally {
-            mfc.close()
+            mfu.close()
         }
+        return false
     }
 
     private const val TAG = "NFCUtil"

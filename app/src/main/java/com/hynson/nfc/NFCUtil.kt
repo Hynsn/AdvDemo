@@ -335,7 +335,7 @@ object NFCUtil {
             val packRet = mfc.transceive(
                 byteArrayOf(
                     0xA2.toByte(),
-                    0x2C, /*PAGE 44*/
+                    0x86.toByte(), /*PAGE 44*/
                     pack[0], pack[1], 0, 0  // Write PACK into first 2 Bytes and 0 in RFUI bytes
                 )
             )
@@ -345,7 +345,7 @@ object NFCUtil {
             val pwdRet = mfc.transceive(
                 byteArrayOf(
                     0xA2.toByte(),
-                    0x2B,  /*PAGE 43*/
+                    0x85.toByte(),  /*PAGE 43*/
                     pwd[0],
                     pwd[1],
                     pwd[2],
@@ -354,8 +354,8 @@ object NFCUtil {
             )
             Log.i(TAG, "writePassword: set PWD ${pwdRet.toHexString()}")
 
-            // set AUTHLIM: 设置错误次数限制
-            val responseAuthLim = mfc.readPages(42)
+/*            // set AUTHLIM: 设置错误次数限制
+            val responseAuthLim = mfc.readPages(132)
             if (responseAuthLim != null && responseAuthLim.size >= 16) {
                 val prot =
                     false  // false = PWD_AUTH for write only, true = PWD_AUTH for read and write
@@ -364,7 +364,7 @@ object NFCUtil {
                 val authlimRet = mfc.transceive(
                     byteArrayOf(
                         0xA2.toByte(),
-                        42,
+                        0x84.toByte(),
                         (responseAuthLim[0] and 0x078 or (if (prot) 0x080.toByte() else 0x000) or ((authLim and 0x007).toByte())).toByte(),
                         responseAuthLim[1],
                         responseAuthLim[2],
@@ -374,10 +374,10 @@ object NFCUtil {
                     )
                 )
                 Log.i(TAG, "writePassword: set AUTHLIM ${authlimRet.toHexString()}")
-            }
+            }*/
 
             //设置Auth0  auth0实际控制是否启用密码保护
-            val responseAuth0 = mfc.readPages(41)
+            val responseAuth0 = mfc.readPages(131)
 
             if (responseAuth0 != null && responseAuth0.size >= 16) {
                 val prot =
@@ -387,11 +387,10 @@ object NFCUtil {
                 val authRet = mfc.transceive(
                     byteArrayOf(
                         0xA2.toByte(),
-                        41,
-                        responseAuthLim[0],
-                        responseAuthLim[1],
-                        responseAuthLim[2],
-
+                        0x83.toByte(),
+                        0x04,
+                        0x00,
+                        0x00,
                         //将0-2位按原数据写会
                         (auth0 and 0x0ff).toByte()
                     )
@@ -465,7 +464,7 @@ object NFCUtil {
             val packRet = mfc.transceive(
                 byteArrayOf(
                     0xA2.toByte(),
-                    0x2C, /*PAGE 44*/
+                    0x86.toByte(), /*PAGE 44*/
                     pack[0], pack[1], 0, 0  // Write PACK into first 2 Bytes and 0 in RFUI bytes
                 )
             )
@@ -475,7 +474,7 @@ object NFCUtil {
             val pwdRet = mfc.transceive(
                 byteArrayOf(
                     0xA2.toByte(),
-                    0x2B,  /*PAGE 43*/
+                    0x85.toByte(),  /*PAGE 43*/
                     pwd_default[0],
                     pwd_default[1],
                     pwd_default[2],
@@ -483,9 +482,9 @@ object NFCUtil {
                 )
             )
             Log.i(TAG, "set PWD ${pwdRet.toHexString()}")
-            // set AUTHLIM:
+/*            // set AUTHLIM:
             //将AUTHLIM（第42页，字节0，位2-0）设置为失败的最大密码验证尝试次数
-            val responseAuthLim = mfc.readPages(42)
+            val responseAuthLim = mfc.readPages(132)
             if (responseAuthLim != null && responseAuthLim.size >= 16) {
                 val prot =
                     false  // false = PWD_AUTH for write only, true = PWD_AUTH for read and write
@@ -494,7 +493,7 @@ object NFCUtil {
                 val authlimRet = mfc.transceive(
                     byteArrayOf(
                         0xA2.toByte(),
-                        42,
+                        0x84.toByte(),
                         (responseAuthLim[0] and 0x078 or (if (prot) 0x080.toByte() else 0x000) or ((authLim and 0x007).toByte())).toByte(),
                         responseAuthLim[1],
                         responseAuthLim[2],
@@ -503,20 +502,19 @@ object NFCUtil {
                     )
                 )
                 Log.i(TAG, "set AUTHLIM ${authlimRet.toHexString()}")
-            }
+            }*/
 
             //设置Auth0 如果auth0设置为FF则为禁用密码保护
-            val responseAuth0 = mfc.readPages(41)
+            val responseAuth0 = mfc.readPages(131)
 
             if (responseAuth0 != null && responseAuth0.size >= 16) {
                 val auth0Ret = mfc.transceive(
                     byteArrayOf(
                         0xA2.toByte(),
-                        41,
-                        responseAuthLim[0],
-                        responseAuthLim[1],
-                        responseAuthLim[2],
-
+                        0x83.toByte(),
+                        0x04,
+                        0x00,
+                        0x00,
                         //将0-2位按原数据写会
                         0x0ff.toByte()
                     )

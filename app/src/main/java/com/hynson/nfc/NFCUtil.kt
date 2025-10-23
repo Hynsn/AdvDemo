@@ -10,10 +10,12 @@ import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.MifareClassic
 import android.nfc.tech.MifareUltralight
+import android.nfc.tech.MifareUltralight.PAGE_SIZE
 import android.nfc.tech.Ndef
 import android.os.Build
 import android.util.Log
 import java.io.IOException
+import java.nio.ByteBuffer
 import java.util.Arrays
 import kotlin.collections.contains
 import kotlin.collections.forEach
@@ -24,6 +26,8 @@ object NFCUtil {
     //        NfcAdapter.ACTION_TAG_DISCOVERED：通用意图，适用于处理所有类型的 NFC 标签。
 //        NfcAdapter.ACTION_TECH_DISCOVERED：特定技术意图，适用于处理特定技术类型的 NFC 标签。
 //        NfcAdapter.ACTION_NDEF_DISCOVERED：NDEF 格式意图，适用于处理 NDEF 格式数据的 NFC 标签。
+    private const val PAGE_SIZE = 4 // MifareUltralight 页面大小为 4 字节
+    private const val START_PAGE = 0x04 // 从页面 4 开始写入数据
     private var nfcAdapter: NfcAdapter? = null
     private var readWrite = false
     private var setPwd = false
@@ -117,10 +121,17 @@ object NFCUtil {
             val pwd = allPwd.copyOfRange(0, 4)
             val pack = allPwd.copyOfRange(size - 2, size)
             Log.i(TAG, "pwd: ${pwd.toHexString()}, pack: ${pack.toHexString()}")
+            var mfc: MifareUltralight? = null
+            intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)?.let {
+                mfc = MifareUltralight.get(it)
+            }
+            //        mfc.close()
+//        ndef?.connect()
+//        ndef?.writeNdefMessage(NdefMessage(NdefRecord.createUri("veo://hynson.com")))
             if (setPwd) {
-                writePassword(intent, pwd, pack)
+                writePassword(mfc, pwd, pack)
             } else {
-                deletePassword(intent, pwd, pack)
+                deletePassword(mfc, pwd, pack)
             }
         }
     }
@@ -285,30 +296,94 @@ object NFCUtil {
         return sb.toString()
     }
 
+    fun ndefMessageToData(message: NdefMessage): ByteArray {
+        val recordsData = mutableListOf<Byte>()
+        val records = message.records
+
+        for ((index, record) in records.withIndex()) {
+            var header: Byte = 0
+            if (index == 0) header = header or 0x80.toByte() // MB
+            if (index == records.size - 1) header = header or 0x40.toByte() // ME
+            val payloadLength = record.payload.size
+            val useShortRecord = payloadLength <= 0xFF
+            if (useShortRecord) header = header or 0x10
+            val hasId = record.id.isNotEmpty()
+            if (hasId) header = header or 0x08
+            header = header or (record.tnf and 0x07).toByte()
+            recordsData.add(header)
+
+            // Type length
+            recordsData.add(record.type.size.toByte())
+
+            // Payload length (1 or 4 bytes)
+            if (useShortRecord) {
+                recordsData.add(payloadLength.toByte())
+            } else {
+                val len32 = ByteBuffer.allocate(4).putInt(payloadLength).array()
+                recordsData.addAll(len32.asList())
+            }
+
+            // Optional ID field
+            if (hasId) {
+                recordsData.add(record.id.size.toByte())
+                recordsData.addAll(record.id.asList())
+            }
+
+            recordsData.addAll(record.type.asList())
+            recordsData.addAll(record.payload.asList())
+        }
+
+        // Add NDEF TLV wrapper [0x03][LEN][RECORDS...][0xFE]
+        val ndef = mutableListOf<Byte>()
+        ndef.add(0x03.toByte())
+
+        val recordsDataArray = recordsData.toByteArray()
+        if (recordsDataArray.size <= 0xFE) {
+            ndef.add(recordsDataArray.size.toByte())
+        } else {
+            ndef.add(0xFF.toByte())
+            val len16 = ByteBuffer.allocate(2).putShort(recordsDataArray.size.toShort()).array()
+            ndef.addAll(len16.asList())
+        }
+
+        ndef.addAll(recordsData)
+        ndef.add(0xFE.toByte())
+
+        // Pad to 4-byte boundary
+        return ndef.toByteArray().paddedToPageSize(4)
+    }
+
+    fun ByteArray.paddedToPageSize(pageSize: Int): ByteArray {
+        val paddingSize = (pageSize - size % pageSize) % pageSize
+        return this + ByteArray(paddingSize)
+    }
+
+    fun List<Byte>.toByteArray(): ByteArray {
+        return ByteArray(size) { this[it].toInt().toByte() }
+    }
+
+    fun List<Byte>.addAll(other: List<Byte>) {
+        this.addAll(other.map { it.toInt().toByte() })
+    }
+
     /**
      * 写入NFC设置密码
      */
     @OptIn(ExperimentalStdlibApi::class)
     private fun writePassword(
-        intent: Intent,
+        mfc: MifareUltralight?,
         pwd: ByteArray,
         pack: ByteArray = byteArrayOf(0.toByte(), 0.toByte())
-    ) {
-        var mfc: MifareUltralight? = null
-        intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)?.let {
-            mfc = MifareUltralight.get(it)
-        }
+    ): Boolean {
         if (mfc == null) {
             Log.i(TAG, "writePassword: mfc = null")
-            return
+            return false
         }
-        //得出的PWD即用户设置的密码
-        mfc.connect()
 
         val pwd_default = byteArrayOf(0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte())
 
         try {
-
+            mfc.connect()
             //先用默认密码进行询问
             val response = mfc.transceive(
                 byteArrayOf(
@@ -335,6 +410,28 @@ object NFCUtil {
                 }
             } else {
                 Log.i(TAG, "response: 不满足规则 ${response.toHexString()}")
+            }
+
+            val def = ndefMessageToData(NdefMessage(NdefRecord.createUri("veo://hynson.com")))
+            val totalPages = (def.size + PAGE_SIZE - 1) / PAGE_SIZE // 计算需要写入的总页面数
+
+            for (i in 0 until totalPages) {
+                val start = i * PAGE_SIZE
+                val end = start + PAGE_SIZE
+                val pageData = def.copyOfRange(start, if (end < def.size) end else def.size)
+                val pageAddress = (START_PAGE + i).toByte()
+
+                val command = if (pageData.size < 4){
+                    ByteArray(2 + pageData.size).paddedToPageSize(6)
+                } else {
+                    ByteArray(2 + pageData.size)
+                }
+                command[0] = 0xA2.toByte() // 写入页面命令
+                command[1] = pageAddress // 写入页面命令
+                System.arraycopy(pageData, 0, command, 2, pageData.size)
+                Log.i(TAG, "transceive ${command.toHexString()}")
+                val defRet = mfc.transceive(command)
+                Log.i(TAG, "defRet ${defRet.toHexString()}")
             }
 
             // set PACK:
@@ -404,6 +501,8 @@ object NFCUtil {
                 Log.i(TAG, "设置Auth0 ${authRet.toHexString()}")
             }
             Log.i("写密码完成", "写密码完成")
+            mfc.close()
+            return true
         } catch (e: IOException) {
             e.printStackTrace()
         } catch (e: FormatException) {
@@ -411,6 +510,7 @@ object NFCUtil {
         } finally {
             mfc.close()
         }
+        return false
     }
 
     private fun getUid(intent: Intent): ByteArray? {
@@ -425,14 +525,10 @@ object NFCUtil {
      */
     @OptIn(ExperimentalStdlibApi::class)
     private fun deletePassword(
-        intent: Intent,
+        mfc: MifareUltralight?,
         pwd: ByteArray,
         pack: ByteArray = byteArrayOf(0.toByte(), 0.toByte())
     ) {
-        var mfc: MifareUltralight? = null
-        intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)?.let {
-            mfc = MifareUltralight.get(it)
-        }
         if (mfc == null) {
             Log.i(TAG, "deletePassword: mfc = null")
             return

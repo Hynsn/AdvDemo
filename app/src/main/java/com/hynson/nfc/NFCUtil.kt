@@ -101,6 +101,7 @@ object NFCUtil {
         }
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     fun handleIntent(intent: Intent) {
 //        if (readWrite) {
 //            Log.i(TAG, "handleIntent: 读取数据")
@@ -109,10 +110,18 @@ object NFCUtil {
 //            Log.i(TAG, "handleIntent: 写数据")
 //            writeNfc(intent)
 //        }
-        if (setPwd) {
-            writePassword(intent, "1234")
-        } else {
-            deletePassword(intent, "1234")
+        val uid = getUid(intent)
+        if (uid?.isNotEmpty() == true) {
+            val allPwd = AESUtil.createPwd(uid)
+            val size = allPwd.size
+            val pwd = allPwd.copyOfRange(0, 4)
+            val pack = allPwd.copyOfRange(size - 2, size)
+            Log.i(TAG, "pwd: ${pwd.toHexString()}, pack: ${pack.toHexString()}")
+            if (setPwd) {
+                writePassword(intent, pwd, pack)
+            } else {
+                deletePassword(intent, pwd, pack)
+            }
         }
     }
 
@@ -280,7 +289,11 @@ object NFCUtil {
      * 写入NFC设置密码
      */
     @OptIn(ExperimentalStdlibApi::class)
-    private fun writePassword(intent: Intent, pwdstr: String) {
+    private fun writePassword(
+        intent: Intent,
+        pwd: ByteArray,
+        pack: ByteArray = byteArrayOf(0.toByte(), 0.toByte())
+    ) {
         var mfc: MifareUltralight? = null
         intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)?.let {
             mfc = MifareUltralight.get(it)
@@ -289,17 +302,10 @@ object NFCUtil {
             Log.i(TAG, "writePassword: mfc = null")
             return
         }
-        //创建默认为0的4字节数组
-        val pwd = Array<Byte>(4) { ((0).toByte()) }
-        val temp = pwdstr.toByteArray()
-        for ((index, e) in temp.withIndex()) {
-            pwd[index] = temp[index]
-        }
         //得出的PWD即用户设置的密码
         mfc.connect()
 
         val pwd_default = byteArrayOf(0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte())
-        val pack = byteArrayOf(0.toByte(), 0.toByte())
 
         try {
 
@@ -407,11 +413,22 @@ object NFCUtil {
         }
     }
 
+    private fun getUid(intent: Intent): ByteArray? {
+        intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)?.let {
+            return it.id
+        }
+        return null
+    }
+
     /**
      * 删除NFC设置的密码保护
      */
     @OptIn(ExperimentalStdlibApi::class)
-    private fun deletePassword(intent: Intent, pwdstr: String) {
+    private fun deletePassword(
+        intent: Intent,
+        pwd: ByteArray,
+        pack: ByteArray = byteArrayOf(0.toByte(), 0.toByte())
+    ) {
         var mfc: MifareUltralight? = null
         intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)?.let {
             mfc = MifareUltralight.get(it)
@@ -421,17 +438,10 @@ object NFCUtil {
             return
         }
 
-        //创建默认为0的4字节数组
-        val pwd = Array<Byte>(4) { ((0).toByte()) }
-        val temp = pwdstr.toByteArray()
-        for ((index, e) in temp.withIndex()) {
-            pwd[index] = temp[index]
-        }
         //得出的PWD即用户设置的密码
         mfc.connect()
 
         val pwd_default = byteArrayOf(0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte())
-        val pack = byteArrayOf(0.toByte(), 0.toByte())
 
         try {
             //用户设置的密码询问登录
@@ -531,7 +541,6 @@ object NFCUtil {
             mfc.close()
         }
     }
-
 
     private const val TAG = "NFCUtil"
 }

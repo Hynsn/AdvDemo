@@ -1,6 +1,8 @@
 package com.hynson.nfc
 
 import android.util.Base64
+import android.util.Log
+import java.security.MessageDigest
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
@@ -12,6 +14,8 @@ fun String.fitByteArray(size: Int): ByteArray {
 }
 
 object AESUtil {
+    private const val TAG = "AESUtil"
+
     private const val AES = "AES"
     private const val AES_ECB_PKCS7_PADDING = "AES/ECB/PKCS7Padding"
 
@@ -36,5 +40,17 @@ object AESUtil {
         val decodedBytes = Base64.decode(encryptedData, Base64.DEFAULT)
         val decryptedBytes = cipher.doFinal(decodedBytes)
         return String(decryptedBytes)
+    }
+
+    @OptIn(ExperimentalStdlibApi::class)
+    fun createPwd(uid: ByteArray): ByteArray {
+        val tag = "VeoRideNTAG"
+        val old = uid + tag.toByteArray()
+        Log.i(TAG, "数据: ${old.toHexString()}")
+        val md = MessageDigest.getInstance("MD5")
+        // 对输入字符串进行哈希处理
+        val digest = md.digest(old)
+        Log.i(TAG, "md5: ${digest.toHexString()}")
+        return digest
     }
 }

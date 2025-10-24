@@ -52,7 +52,7 @@
             android:id="@+id/btn_setpwd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="设置密码" />
+            android:text="写入数据(带密码)" />
 
         <Button
             android:id="@+id/btn_deletepwd"

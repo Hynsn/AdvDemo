@@ -43,7 +43,7 @@ object AESUtil {
     }
 
     @OptIn(ExperimentalStdlibApi::class)
-    fun createPwd(uid: ByteArray): ByteArray {
+    fun createPwd(uid: ByteArray): Pair<ByteArray, ByteArray> {
         val tag = "VeoRideNTAG"
         val old = uid + tag.toByteArray()
         Log.i(TAG, "数据: ${old.toHexString()}")
@@ -51,6 +51,10 @@ object AESUtil {
         // 对输入字符串进行哈希处理
         val digest = md.digest(old)
         Log.i(TAG, "md5: ${digest.toHexString()}")
-        return digest
+        val size = digest.size
+        val pwd = digest.copyOfRange(0, 4)
+        val pack = digest.copyOfRange(size - 2, size)
+        Log.i(TAG, "pwd: ${pwd.toHexString()}, pack: ${pack.toHexString()}")
+        return Pair(pwd, pack)
     }
 }

@@ -16,6 +16,7 @@ import android.util.Log
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.util.Arrays
+import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.collections.contains
 import kotlin.collections.forEach
 import kotlin.experimental.and
@@ -28,8 +29,14 @@ object NFCUtil {
     private const val PAGE_SIZE = 4 // MifareUltralight 页面大小为 4 字节
     private const val START_PAGE = 0x04 // 从页面 4 开始写入数据
     private var nfcAdapter: NfcAdapter? = null
-    private var readWrite = false
-    private var setPwd = false
+    private const val READ = 0
+    const val WRITE = 1
+    const val WRITE_WITH_PWD = 2
+    const val CLEAR_PWD = 3
+    private var nfcAction = READ
+
+    private val nedfMessageQueue = ConcurrentLinkedQueue<NdefMessage>()
+
     fun init(context: Activity) {
         nfcAdapter = NfcAdapter.getDefaultAdapter(context)
     }
@@ -58,20 +65,16 @@ object NFCUtil {
         nfcAdapter?.enableForegroundDispatch(activity, pendingIntent, null, null)
     }
 
-    fun enableReadWriteForegroundDispatch(
+    fun enableForegroundDispatch(
         activity: Activity,
-        boolean: Boolean = true
+        message: NdefMessage? = null,
+        action: Int = READ
     ) {
-        readWrite = boolean
-        enableForegroundDispatch(activity)
-    }
-
-    fun enableLockForegroundDispatch(
-        activity: Activity,
-        boolean: Boolean = true
-    ) {
-        setPwd = boolean
-        enableForegroundDispatch(activity)
+        if (message!=null){
+            nedfMessageQueue.offer(message)
+        }
+        nfcAction = action
+        NFCUtil.enableForegroundDispatch(activity)
     }
 
     fun disableForegroundDispatch(context: Activity) {
@@ -87,58 +90,46 @@ object NFCUtil {
         context.startActivity(intent)
     }
 
-    private fun createNdefMessage(content: String): NdefMessage {
-        return try {
-            val payload = content.toByteArray()
-            val record = NdefRecord(
-                NdefRecord.TNF_MIME_MEDIA,
-                "text/plain".toByteArray(),
-                ByteArray(0),
-                payload
-            )
+    fun handleIntent(intent: Intent, messages: ((List<NdefMessage>) -> (Unit))? = null) {
+        val uid = getUid(intent)
+        if (nfcAction > WRITE && uid?.isNotEmpty() == true) {
+            val pwdPair = AESUtil.createPwd(uid)
+            var mfc: MifareUltralight? = null
+            intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)?.let {
+                mfc = MifareUltralight.get(it)
+            }
+            when (nfcAction) {
+                WRITE_WITH_PWD -> {
+                    // 写入密码保护
+                    while (nedfMessageQueue.isNotEmpty()) {
+                        val message = nedfMessageQueue.poll()
+                        val ret = writeNdefWithPWD(mfc, pwdPair.first, pwdPair.second, message)
+                        Log.i(TAG, "writeNdefWithPWD: $ret")
+                    }
+                }
 
-            NdefMessage(arrayOf(record))
-        } catch (e: Exception) {
-            Log.e(TAG, "创建NDEF消息失败", e)
-            NdefMessage(ByteArray(0))
-        }
-    }
-
-    @OptIn(ExperimentalStdlibApi::class)
-    fun handleIntent(intent: Intent) {
-        if (readWrite) {
-            Log.i(TAG, "handleIntent: 读取数据")
-            readNfc(intent)
+                CLEAR_PWD -> {
+                    // 删除密码保护
+                    val ret = clearWithPWD(mfc, pwdPair.first, pwdPair.second)
+                    Log.i(TAG, "clearWithPWD: $ret")
+                }
+            }
         } else {
-            Log.i(TAG, "handleIntent: 写数据")
-            writeNfc(intent)
+            if (nfcAction == WRITE) {
+                while (nedfMessageQueue.isNotEmpty()) {
+                    val message = nedfMessageQueue.poll()
+                    val ret = writeNdefMessage(intent, message)
+                    Log.i(TAG, "writeNdefMessage: $ret")
+                }
+            }
+            if (messages != null) {
+                Log.i(TAG, "handleIntent: 读取数据")
+                receiverNdefMessages(intent, messages)
+            }
         }
-//        val uid = getUid(intent)
-//        if (uid?.isNotEmpty() == true) {
-//            val allPwd = AESUtil.createPwd(uid)
-//            val size = allPwd.size
-//            val pwd = allPwd.copyOfRange(0, 4)
-//            val pack = allPwd.copyOfRange(size - 2, size)
-//            Log.i(TAG, "pwd: ${pwd.toHexString()}, pack: ${pack.toHexString()}")
-//            var mfc: MifareUltralight? = null
-//            intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)?.let {
-//                mfc = MifareUltralight.get(it)
-//            }
-//
-//            if (setPwd) {
-//                val key = "ZW5kcmlkZVdpdGhORkM=".fitByteArray(32)
-//                val geo = AESUtil.encrypt("lat=125.215403&lng=-135.20025", key)
-//                Log.i(TAG, "handleIntent: ${geo.toByteArray().toHexString()}")
-//                val ret = writeNdefWithPWD(mfc, pwd, pack, NdefMessage(NdefRecord.createUri("veo://endride/nfc?$geo")))
-//                Log.i(TAG, "writeNdefWithPWD: $ret")
-//            } else {
-//                val ret = clearWithPWD(mfc, pwd, pack)
-//                Log.i(TAG, "clearWithPWD: $ret")
-//            }
-//        }
     }
 
-    private fun writeNfc(intent: Intent) {
+    private fun writeNdefMessage(intent: Intent,message: NdefMessage): Boolean {
         if (NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action) {
             val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
             tag?.let {
@@ -148,26 +139,26 @@ object NFCUtil {
                         ndef.connect()
                         if (!ndef.isWritable) {
                             Log.e(TAG, "标签不可写")
-                            return
+                            ndef.close()
+                            return false
                         }
 //                        ndef.makeReadOnly()
-                        ndef.writeNdefMessage(NdefMessage(NdefRecord.createUri("veo://hynson.com")))
+                        ndef.writeNdefMessage(message)
+                        ndef.close()
                         Log.d(TAG, "写入成功")
+                        return true
                     } catch (e: Exception) {
                         Log.e(TAG, "写入NFC标签失败", e)
                     } finally {
-                        try {
-                            ndef.close()
-                        } catch (e: Exception) {
-                            Log.e(TAG, "关闭NFC连接失败", e)
-                        }
+                        ndef.close()
                     }
                 }
             }
         }
+        return false
     }
 
-    private fun readNfc(intent: Intent) {
+    private fun receiverNdefMessages(intent: Intent,messages:(List<NdefMessage>)->(Unit)) {
         val validActions = listOf(
             NfcAdapter.ACTION_TAG_DISCOVERED,
             NfcAdapter.ACTION_TECH_DISCOVERED,
@@ -190,25 +181,7 @@ object NFCUtil {
                 val msg = NdefMessage(arrayOf(record))
                 messages.add(msg)
             }
-
-            for (message in messages) {
-                val message = NdefMessageParser.parse(message)
-                Log.i(TAG, "message: $message")
-                for (record in message) {
-                    if (record is UriRecord) {
-                        val geo = record.uri.query
-                        Log.i(TAG, "URI:geo ${geo}")
-                        val key = "ZW5kcmlkZVdpdGhORkM=".fitByteArray(32)
-                        if (!geo.isNullOrEmpty()){
-                            val test = AESUtil.decrypt(geo,key)
-                            Log.i(TAG, "URI:ase ${test}")
-                        }
-                    } else if (record is TextRecord) {
-                        Log.i(TAG, "Text: ${record.text}")
-                    }
-                    Log.i(TAG, "record: $record")
-                }
-            }
+            messages(messages)
         }
     }
 
@@ -432,8 +405,8 @@ object NFCUtil {
             if (readAuth0Ack[3] == 0xFF.toByte()) {
                 Log.i(TAG, "密码保护未启用，直接写数据")
             } else {
-                Log.i(TAG, "密码保护已启用，用默认密码进行询问")
-                //用默认密码进行询问
+                Log.i(TAG, "密码保护已启用，用密码进行询问")
+                // 用密码进行询问
                 val authAck = mfu.transceive(
                     byteArrayOf(
                         0x1B  //PWD_AUTH

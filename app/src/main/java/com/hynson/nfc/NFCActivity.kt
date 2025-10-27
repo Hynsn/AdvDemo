@@ -40,7 +40,8 @@ class NFCActivity : BaseMvvmActivity<ActivityNfcBinding, NFCViewModel>() {
     public override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         Log.i(TAG, "onNewIntent: ${intent.action}")
-        NFCUtil.handleIntent(intent, messages = messageParse)
+        val pwdPair = AESUtil.generatePwdPair(NFCUtil.getUid(intent))
+        NFCUtil.handleIntent(intent, pwdPair, messages = messageParse)
     }
 
     override fun onResume() {

@@ -74,7 +74,7 @@ object NFCUtil {
             nedfMessageQueue.offer(message)
         }
         nfcAction = action
-        NFCUtil.enableForegroundDispatch(activity)
+        enableForegroundDispatch(activity)
     }
 
     fun disableForegroundDispatch(context: Activity) {
@@ -90,10 +90,8 @@ object NFCUtil {
         context.startActivity(intent)
     }
 
-    fun handleIntent(intent: Intent, messages: ((List<NdefMessage>) -> (Unit))? = null) {
-        val uid = getUid(intent)
-        if (nfcAction > WRITE && uid?.isNotEmpty() == true) {
-            val pwdPair = AESUtil.createPwd(uid)
+    fun handleIntent(intent: Intent, pwdPair: Pair<ByteArray, ByteArray>?, messages: ((List<NdefMessage>) -> (Unit))? = null) {
+        if (nfcAction > WRITE && pwdPair != null) {
             var mfc: MifareUltralight? = null
             intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)?.let {
                 mfc = MifareUltralight.get(it)
@@ -176,7 +174,7 @@ object NFCUtil {
                 val empty = ByteArray(0)
                 val id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID)
                 val tag = intent.parcelable<Tag>(NfcAdapter.EXTRA_TAG) ?: return
-                val payload = NFCUtil.dumpTagData(tag).toByteArray()
+                val payload = dumpTagData(tag).toByteArray()
                 val record = NdefRecord(NdefRecord.TNF_UNKNOWN, empty, id, payload)
                 val msg = NdefMessage(arrayOf(record))
                 messages.add(msg)
@@ -516,7 +514,7 @@ object NFCUtil {
         return false
     }
 
-    private fun getUid(intent: Intent): ByteArray? {
+    fun getUid(intent: Intent): ByteArray? {
         intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)?.let {
             return it.id
         }

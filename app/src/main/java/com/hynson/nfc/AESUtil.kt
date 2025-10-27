@@ -43,7 +43,8 @@ object AESUtil {
     }
 
     @OptIn(ExperimentalStdlibApi::class)
-    fun createPwd(uid: ByteArray): Pair<ByteArray, ByteArray> {
+    fun generatePwdPair(uid: ByteArray?): Pair<ByteArray, ByteArray>? {
+        if (uid == null || uid.isEmpty()) return null
         val tag = "VeoRideNTAG"
         val old = uid + tag.toByteArray()
         Log.i(TAG, "数据: ${old.toHexString()}")

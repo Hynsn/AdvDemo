@@ -5,6 +5,7 @@ import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.os.Bundle
 import android.util.Log
+import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.fastdroid.ktbase.BaseMvvmActivity
@@ -40,8 +41,28 @@ class NFCActivity : BaseMvvmActivity<ActivityNfcBinding, NFCViewModel>() {
     public override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         Log.i(TAG, "onNewIntent: ${intent.action}")
-        val pwdPair = AESUtil.generatePwdPair(NFCUtil.getUid(intent))
-        NFCUtil.handleIntent(intent, pwdPair, messages = messageParse)
+        val uid = NFCUtil.getUid(intent)
+        if (uid != null) {
+            val pwdPair = AESUtil.generatePwdPair(uid)
+            val key = "ZW5kcmlkZVdpdGhORkM=".fitByteArray(32)
+            val newNdefRecord = mutableListOf<NdefRecord>()
+            for (record in NFCUtil.ndefRecords) {
+                val url = record.toUri()
+                // action=endride&lat=125.215403&lng=-135.20025
+                val start = "action=endride&lat=125.215403&lng=-135.20025"
+                val data = "$start&cardId=${uid.toHexString()}"
+                val geo = AESUtil.encrypt(data, key)
+                val newUrl = "${url.toString().substringBefore('?')}?${geo}"
+                Log.i(TAG, "newUrl: $newUrl")
+                newNdefRecord.add(NdefRecord.createUri(newUrl))
+            }
+            NFCUtil.handleIntent(
+                intent,
+                newNdefRecord.toTypedArray(),
+                pwdPair,
+                messages = messageParse
+            )
+        }
     }
 
     override fun onResume() {
@@ -69,7 +90,7 @@ class NFCActivity : BaseMvvmActivity<ActivityNfcBinding, NFCViewModel>() {
         bind.btnWrite.setOnClickListener {
             NFCUtil.enableForegroundDispatch(
                 this,
-                message = NdefMessage(NdefRecord.createUri("veo://hynson.com")),
+                record = NdefRecord.createUri("veo://hynson.com"),
                 action = NFCUtil.WRITE
             )
         }
@@ -79,14 +100,16 @@ class NFCActivity : BaseMvvmActivity<ActivityNfcBinding, NFCViewModel>() {
             Log.i(TAG, "decrypt: ${ret}")
         }
         bind.btnDecrypt.setOnClickListener {
-            val text = AESUtil.decrypt("z83k7mz9ue9aJo6umDBaz+lyRjI49+KwopbXrs/+PwM=", key)
-            Log.i(TAG, "decrypt: ${text}")
+            val oldUrl =
+                "https://veo.go.link/llt4N?thfnkaJWlZ7h4USoW/asrwcNZlbUga2t8PBr5/77rqxHGpOHliFCFFhQOeokFNLywfxI4Pgmt2nQTZgWwtRJwJqWIwM/xmvEGDZvxkTBMYY=".toUri()
+            val geo = oldUrl.query
+            if (geo != null) {
+                val text = AESUtil.decrypt(geo, key)
+                Log.i(TAG, "decrypt: ${text}")
+            }
         }
         bind.btnSetpwd.setOnClickListener {
-            val key = "ZW5kcmlkZVdpdGhORkM=".fitByteArray(32)
-            val geo = AESUtil.encrypt("lat=125.215403&lng=-135.20025", key)
-            Log.i(TAG, "handleIntent: ${geo.toByteArray().toHexString()}")
-            val message = NdefMessage(NdefRecord.createUri("veo://endride/nfc?$geo"))
+            val message = NdefRecord.createUri("https://veo.go.link/llt4N?params=")
             NFCUtil.enableForegroundDispatch(
                 this,
                 message,

@@ -16,7 +16,6 @@ import android.util.Log
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.util.Arrays
-import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.collections.contains
 import kotlin.collections.forEach
 import kotlin.experimental.and
@@ -34,8 +33,7 @@ object NFCUtil {
     const val WRITE_WITH_PWD = 2
     const val CLEAR_PWD = 3
     private var nfcAction = READ
-
-    private val nedfMessageQueue = ConcurrentLinkedQueue<NdefMessage>()
+    val ndefRecords = mutableListOf<NdefRecord>()
 
     fun init(context: Activity) {
         nfcAdapter = NfcAdapter.getDefaultAdapter(context)
@@ -67,11 +65,11 @@ object NFCUtil {
 
     fun enableForegroundDispatch(
         activity: Activity,
-        message: NdefMessage? = null,
+        record: NdefRecord? = null,
         action: Int = READ
     ) {
-        if (message!=null){
-            nedfMessageQueue.offer(message)
+        if (record != null) {
+            ndefRecords.add(record)
         }
         nfcAction = action
         enableForegroundDispatch(activity)
@@ -90,7 +88,12 @@ object NFCUtil {
         context.startActivity(intent)
     }
 
-    fun handleIntent(intent: Intent, pwdPair: Pair<ByteArray, ByteArray>?, messages: ((List<NdefMessage>) -> (Unit))? = null) {
+    fun handleIntent(
+        intent: Intent,
+        newRecord: Array<NdefRecord>? = null,
+        pwdPair: Pair<ByteArray, ByteArray>?,
+        messages: ((List<NdefMessage>) -> (Unit))? = null
+    ) {
         if (nfcAction > WRITE && pwdPair != null) {
             var mfc: MifareUltralight? = null
             intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)?.let {
@@ -98,10 +101,15 @@ object NFCUtil {
             }
             when (nfcAction) {
                 WRITE_WITH_PWD -> {
-                    // 写入密码保护
-                    while (nedfMessageQueue.isNotEmpty()) {
-                        val message = nedfMessageQueue.poll()
-                        val ret = writeNdefWithPWD(mfc, pwdPair.first, pwdPair.second, message)
+                    val records =
+                        if (newRecord?.isNotEmpty() == true) newRecord else ndefRecords.toTypedArray()
+                    if (records.isNotEmpty()) {
+                        val ret = writeNdefWithPWD(
+                            mfc,
+                            pwdPair.first,
+                            pwdPair.second,
+                            NdefMessage(records)
+                        )
                         Log.i(TAG, "writeNdefWithPWD: $ret")
                     }
                 }
@@ -114,9 +122,8 @@ object NFCUtil {
             }
         } else {
             if (nfcAction == WRITE) {
-                while (nedfMessageQueue.isNotEmpty()) {
-                    val message = nedfMessageQueue.poll()
-                    val ret = writeNdefMessage(intent, message)
+                if (ndefRecords.isNotEmpty()) {
+                    val ret = writeNdefMessage(intent, NdefMessage(ndefRecords.toTypedArray()))
                     Log.i(TAG, "writeNdefMessage: $ret")
                 }
             }
@@ -127,7 +134,7 @@ object NFCUtil {
         }
     }
 
-    private fun writeNdefMessage(intent: Intent,message: NdefMessage): Boolean {
+    private fun writeNdefMessage(intent: Intent, message: NdefMessage): Boolean {
         if (NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action) {
             val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
             tag?.let {
@@ -156,7 +163,7 @@ object NFCUtil {
         return false
     }
 
-    private fun receiverNdefMessages(intent: Intent,messages:(List<NdefMessage>)->(Unit)) {
+    private fun receiverNdefMessages(intent: Intent, messages: (List<NdefMessage>) -> (Unit)) {
         val validActions = listOf(
             NfcAdapter.ACTION_TAG_DISCOVERED,
             NfcAdapter.ACTION_TECH_DISCOVERED,
@@ -351,7 +358,7 @@ object NFCUtil {
     }
 
     @OptIn(ExperimentalStdlibApi::class)
-    private fun mfuWriteNdefMessage(mfu: MifareUltralight, ndefMessage: NdefMessage){
+    private fun mfuWriteNdefMessage(mfu: MifareUltralight, ndefMessage: NdefMessage) {
         val def = ndefMessageToData(ndefMessage)
         Log.i(TAG, "mfuWriteNdefMessage: ${def.toHexString()}")
         val totalPages = (def.size + PAGE_SIZE - 1) / PAGE_SIZE // 计算需要写入的总页面数
@@ -362,7 +369,7 @@ object NFCUtil {
             val pageData = def.copyOfRange(start, if (end < def.size) end else def.size)
             val pageAddress = (START_PAGE + i).toByte()
 
-            val command = if (pageData.size < 4){
+            val command = if (pageData.size < 4) {
                 ByteArray(2 + pageData.size).paddedToPageSize(6)
             } else {
                 ByteArray(2 + pageData.size)
@@ -541,7 +548,8 @@ object NFCUtil {
 
         try {
             mfu.connect()
-            val pwd_default = byteArrayOf(0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte())
+            val pwd_default =
+                byteArrayOf(0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte())
             val readAuth0Ack = mfu.readPages(131)
             Log.i(TAG, "readAuth0Ack: ${readAuth0Ack.toHexString()}")
             if (readAuth0Ack[3] == 0xFF.toByte()) {
@@ -663,5 +671,11 @@ inline fun <reified T> Intent.parcelable(key: String): T? {
         )
 
         else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
+    }
+}
+
+fun ByteArray.toHexString(separator: String = ":"): String {
+    return this.joinToString(separator) { byte ->
+        String.format("%02X", byte)
     }
 }

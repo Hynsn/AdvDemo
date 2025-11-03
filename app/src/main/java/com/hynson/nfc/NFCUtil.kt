@@ -12,6 +12,7 @@ import android.nfc.tech.MifareClassic
 import android.nfc.tech.MifareUltralight
 import android.nfc.tech.Ndef
 import android.os.Build
+import android.provider.Settings
 import android.util.Log
 import java.io.IOException
 import java.nio.ByteBuffer
@@ -27,6 +28,8 @@ object NFCUtil {
 //        NfcAdapter.ACTION_NDEF_DISCOVERED：NDEF 格式意图，适用于处理 NDEF 格式数据的 NFC 标签。
     private const val PAGE_SIZE = 4 // MifareUltralight 页面大小为 4 字节
     private const val START_PAGE = 0x04 // 从页面 4 开始写入数据
+    private const val END_PAGE = 0x81 // 从页面 4 开始写入数据
+
     private var nfcAdapter: NfcAdapter? = null
     private const val READ = 0
     const val WRITE = 1
@@ -35,8 +38,9 @@ object NFCUtil {
     private var nfcAction = READ
     val ndefRecords = mutableListOf<NdefRecord>()
 
-    fun init(context: Activity) {
+    fun init(context: Activity): Boolean {
         nfcAdapter = NfcAdapter.getDefaultAdapter(context)
+        return nfcAdapter != null
     }
 
     fun isEnabled(): Boolean {
@@ -45,7 +49,7 @@ object NFCUtil {
 
     private fun enableForegroundDispatch(
         activity: Activity,
-    ) {
+    ) :Boolean{
         val mutable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.FLAG_MUTABLE
         } else {
@@ -60,19 +64,29 @@ object NFCUtil {
             intent,
             mutable
         )
-        nfcAdapter?.enableForegroundDispatch(activity, pendingIntent, null, null)
+        try {
+            nfcAdapter?.enableForegroundDispatch(activity, pendingIntent, null, null)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        }
+
+        return true
     }
 
     fun enableForegroundDispatch(
         activity: Activity,
         record: NdefRecord? = null,
         action: Int = READ
-    ) {
+    ) : Boolean{
         if (record != null) {
+            if (ndefRecords.isNotEmpty()){
+                ndefRecords.clear()
+            }
             ndefRecords.add(record)
         }
         nfcAction = action
-        enableForegroundDispatch(activity)
+        return enableForegroundDispatch(activity)
     }
 
     fun disableForegroundDispatch(context: Activity) {
@@ -81,17 +95,17 @@ object NFCUtil {
 
     fun openNFCSettings(context: Activity) {
         val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            Intent(android.provider.Settings.Panel.ACTION_NFC)
+            Intent(Settings.Panel.ACTION_NFC)
         } else {
-            Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS)
+            Intent(Settings.ACTION_WIRELESS_SETTINGS)
         }
         context.startActivity(intent)
     }
 
     fun handleIntent(
         intent: Intent,
-        newRecord: Array<NdefRecord>? = null,
         pwdPair: Pair<ByteArray, ByteArray>?,
+        newRecord: Array<NdefRecord>? = null,
         messages: ((List<NdefMessage>) -> (Unit))? = null
     ) {
         if (nfcAction > WRITE && pwdPair != null) {
@@ -369,17 +383,21 @@ object NFCUtil {
             val pageData = def.copyOfRange(start, if (end < def.size) end else def.size)
             val pageAddress = (START_PAGE + i).toByte()
 
-            val command = if (pageData.size < 4) {
-                ByteArray(2 + pageData.size).paddedToPageSize(6)
+            if (pageAddress <= END_PAGE) {
+                val command = if (pageData.size < 4) {
+                    ByteArray(2 + pageData.size).paddedToPageSize(6)
+                } else {
+                    ByteArray(2 + pageData.size)
+                }
+                command[0] = 0xA2.toByte() // 写入页面命令
+                command[1] = pageAddress // 写入页面命令
+                System.arraycopy(pageData, 0, command, 2, pageData.size)
+                Log.i(TAG, "command ${command.toHexString()}")
+                val cmdAck = mfu.transceive(command)
+                Log.i(TAG, "cmdAck ${cmdAck.toHexString()}")
             } else {
-                ByteArray(2 + pageData.size)
+                throw IllegalArgumentException("over size ")
             }
-            command[0] = 0xA2.toByte() // 写入页面命令
-            command[1] = pageAddress // 写入页面命令
-            System.arraycopy(pageData, 0, command, 2, pageData.size)
-            Log.i(TAG, "command ${command.toHexString()}")
-            val cmdAck = mfu.transceive(command)
-            Log.i(TAG, "cmdAck ${cmdAck.toHexString()}")
         }
     }
 

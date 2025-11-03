@@ -27,7 +27,7 @@ object AESUtil {
         val cipher = Cipher.getInstance(AES_ECB_PKCS7_PADDING)
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
         val encryptedBytes = cipher.doFinal(data.toByteArray())
-        return Base64.encodeToString(encryptedBytes, Base64.NO_WRAP)
+        return Base64.encodeToString(encryptedBytes, Base64.NO_WRAP or Base64.URL_SAFE)
     }
 
     fun decrypt(encryptedData: String, key: ByteArray): String {
@@ -37,7 +37,7 @@ object AESUtil {
         val secretKey = SecretKeySpec(key, AES)
         val cipher = Cipher.getInstance(AES_ECB_PKCS7_PADDING)
         cipher.init(Cipher.DECRYPT_MODE, secretKey)
-        val decodedBytes = Base64.decode(encryptedData, Base64.NO_WRAP)
+        val decodedBytes = Base64.decode(encryptedData, Base64.NO_WRAP or Base64.URL_SAFE)
         val decryptedBytes = cipher.doFinal(decodedBytes)
         return String(decryptedBytes)
     }

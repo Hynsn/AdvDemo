@@ -1,13 +1,20 @@
 package com.hynson.webview;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
 import android.webkit.WebMessage;
 import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -19,12 +26,19 @@ import com.hynson.databinding.ActivityWebviewBinding;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Calendar;
+import java.util.Locale;
 
 
 public class WebviewActivity extends BaseActivity<ActivityWebviewBinding> {
+    private final static int  REQUEST_SELECT_FILE = 2;
+    private final static int FILECHOOSER_RESULTCODE = 1;
+    private ValueCallback<Uri[]> uploadMessage; //多选文件回调
+    private ValueCallback<Uri> mUploadMessage ; //单选文件回调
     final static String TAG = WebviewActivity.class.getSimpleName();
 
     @Override
@@ -33,9 +47,91 @@ public class WebviewActivity extends BaseActivity<ActivityWebviewBinding> {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            if (requestCode == REQUEST_SELECT_FILE){
+                if (uploadMessage == null || intent == null) {
+                    //若没有选择文件就回退  执行清空  不进行这步操作无法再次选择文件
+                    uploadMessage.onReceiveValue(null);
+                    uploadMessage = null;
+                    return;
+                }
+                //由于用户可能单选或多选   单选getData  多选时getClipData()
+                if(intent.getData() != null){
+                    uploadMessage.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultCode, intent));
+                }else if(intent.getClipData() != null){
+                    Uri[] uris = new Uri[intent.getClipData().getItemCount()];
+                    for(int i=0;i<intent.getClipData().getItemCount();i++){
+                        uris[i] = intent.getClipData().getItemAt(i).getUri();
+                    }
+                    uploadMessage.onReceiveValue(uris);
+                }
+                uploadMessage = null;
+            }
+        }else if (requestCode == FILECHOOSER_RESULTCODE){
+            if (null == mUploadMessage || intent == null) {
+                //若没有选择文件就回退  执行清空  不进行这步操作无法再次选择文件
+                mUploadMessage.onReceiveValue(null);
+                mUploadMessage= null;
+                return;
+            }
+            // Use MainActivity.RESULT_OK if you're implementing WebView inside Fragment
+            // Use RESULT_OK only if you're implementing WebView inside an Activity
+            Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
+            mUploadMessage.onReceiveValue(result);
+            mUploadMessage = null;
+        }else
+            Toast.makeText(getBaseContext(), "Failed to Upload Image", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
     protected void bindView() {
         WebSettings settings = binding.webv.getSettings();
         settings.setJavaScriptEnabled(true);
+        settings.setAllowFileAccess(true);
+        settings.setAllowContentAccess(true);
+        settings.setAllowFileAccessFromFileURLs(true);
+        settings.setAllowUniversalAccessFromFileURLs(true);
+        binding.webv.setWebChromeClient(new WebChromeClient() {
+            // 用于处理文件选择
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+                if (uploadMessage != null) {
+                    uploadMessage.onReceiveValue(null);
+                    uploadMessage = null;
+                }
+
+                uploadMessage = filePathCallback;
+
+                Log.i(TAG, "onShowFileChooser:"+fileChooserParams.isCaptureEnabled());
+
+                Intent intent = fileChooserParams.createIntent();
+//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
+                try {
+                    startActivityForResult(intent, REQUEST_SELECT_FILE);
+                } catch (ActivityNotFoundException e) {
+                    uploadMessage = null;
+                    Toast.makeText(getApplicationContext(), "Cannot Open File Chooser", Toast.LENGTH_LONG).show();
+                    return false;
+                }
+//                takePhoto();
+
+//                String acceptType = fileChooserParams.getAcceptTypes()[0];
+//                File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "imageCapture+" + System.currentTimeMillis() + ".jpg");
+////这个变量是存放在当前的Activity中
+//                captureUri = AppUtils.getPathUri(MainActivity.this, file.getPath());
+//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                intent.putExtra(MediaStore.EXTRA_OUTPUT, captureUri);
+//                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//                startActivityForResult(intent, CATURE_REQUEST);
+
+
+                return true;
+            }
+        });
 
 //        binding.webv.setWebChromeClient(new WebChromeClient(){
 //            @Override
@@ -71,7 +167,10 @@ public class WebviewActivity extends BaseActivity<ActivityWebviewBinding> {
         binding.webv.addJavascriptInterface(this, "back");
 
         //"file:///android_asset/js.html"
-        binding.webv.loadUrl("file:///android_asset/list.html");
+//        binding.webv.loadUrl("http://192.168.74.95:5173/");
+        binding.webv.loadUrl("https://help-center-dev.veoride.com/");
+
+//        binding.webv.loadUrl("file:///android_asset/list.html");
         //允许webview对文件的操作
         settings.setAllowUniversalAccessFromFileURLs(true);
         settings.setAllowFileAccess(true);
@@ -115,6 +214,13 @@ public class WebviewActivity extends BaseActivity<ActivityWebviewBinding> {
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("cmd", "张三");
                     jsonObject.put("msg", "170cm");
+                    binding.webv.evaluateJavascript("javascript:sendMessage(" + jsonObject + ")", new ValueCallback<String>() {
+                        @Override
+                        public void onReceiveValue(String value) {
+                            //此处为 js 返回的结果
+                            Log.i(TAG, "onReceiveValue: " + value);
+                        }
+                    });
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         String url = "file:///android_asset/webmessage.html";
                         binding.webv.postWebMessage(new WebMessage(jsonObject.toString()), Uri.parse(url));

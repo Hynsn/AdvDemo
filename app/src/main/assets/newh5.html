@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H5与原生通信</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .panel-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #1a2a6c;
+            border-bottom: 2px solid #fdbb2d;
+            padding-bottom: 8px;
+        }
+
+        .log-container {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background: #f9f9f9;
+            margin-bottom: 15px;
+        }
+
+        .log-entry {
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .native-to-js {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+        }
+
+        .js-to-native {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+        }
+
+        .timestamp {
+            font-size: 0.8rem;
+            color: #666;
+            margin-right: 10px;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+        }
+
+        button {
+            padding: 12px 20px;
+            background: #1a2a6c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #2a3a9c;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        }
+
+        .code-example {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .code-example .keyword {
+            color: #f92672;
+        }
+
+        .code-example .string {
+            color: #a6e22e;
+        }
+
+        .code-example .comment {
+            color: #75715e;
+        }
+
+        .info-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+
+            .panel {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="content">
+        <div class="panel">
+            <h2 class="panel-title">通信日志</h2>
+            <div class="log-container" id="logContainer">
+                <!-- 日志条目将在这里动态添加 -->
+            </div>
+
+            <div class="controls">
+                <button id="clearLogs">清空日志</button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2 class="panel-title">模拟原生调用JS</h2>
+            <p>模拟原生应用执行以下JS代码：</p>
+            <div class="code-example">
+                <span class="keyword">val</span> js = <span class="string">"window.dispatchEvent(new CustomEvent('native_response', { detail: $detail }))"</span>
+            </div>
+
+            <div class="controls">
+                <textarea id="nativeData" placeholder='输入要发送的数据，例如：{"message": "Hello from Native!", "code": 200}'>{"message": "Hello from Native!", "code": 200}</textarea>
+                <button id="simulateNative">模拟原生调用JS</button>
+            </div>
+
+            <h2 class="panel-title" style="margin-top: 20px;">JS调用原生</h2>
+            <div class="controls">
+                <textarea id="jsData" placeholder='输入要发送给原生的数据，例如：{"action": "getUserInfo", "params": {}}'>{"action": "getUserInfo", "params": {}}</textarea>
+                <button id="callNative">JS调用原生</button>
+                <input type="file" accept="image/*" capture="camera">
+                <input type="file" accept="image/*">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 获取DOM元素
+    const logContainer = document.getElementById('logContainer');
+    const clearLogsBtn = document.getElementById('clearLogs');
+    const simulateNativeBtn = document.getElementById('simulateNative');
+    const callNativeBtn = document.getElementById('callNative');
+    const nativeDataInput = document.getElementById('nativeData');
+    const jsDataInput = document.getElementById('jsData');
+
+    // 添加日志条目
+    function addLogEntry(message, data,type) {
+        const timestamp = new Date().toLocaleTimeString();
+        const logEntry = document.createElement('div');
+        const resp = JSON.parse(data);
+        var imgbase64 = 'data:image/png;base64,' + resp.data.base64;
+        logEntry.className = `log-entry ${type}`;
+        if(resp.type == 'map_snapshot_result'){
+            logEntry.innerHTML = `
+                <span class="timestamp">${timestamp}</span>
+                <img src="${imgbase64}" alt="dot" class="log-dot" width="100%" height="160">
+            `;
+        }
+        else {
+            logEntry.innerHTML = `
+                <span class="timestamp">${timestamp}</span>
+                <span class="message">${data}</span>
+            `;
+        }
+
+        logContainer.appendChild(logEntry);
+        logContainer.scrollTop = logContainer.scrollHeight;
+    }
+
+    // 监听原生调用JS的事件
+    window.addEventListener('native_response', function(event) {
+        const detail = JSON.stringify(event.detail, null, 2);
+        addLogEntry(`原生调用JS: `, detail,'native-to-js');
+        //addLogEntry(detail, 'native-to-js');
+    });
+
+    // 模拟原生调用JS
+    simulateNativeBtn.addEventListener('click', function() {
+        try {
+            const detail = JSON.parse(nativeDataInput.value);
+            const jsCode = `window.dispatchEvent(new CustomEvent('native_response', { detail: ${JSON.stringify(detail)} }))`;
+
+            // 执行JS代码
+            eval(jsCode);
+
+            addLogEntry(`执行JS代码: `, jsCode,'native-to-js');
+        } catch (error) {
+            alert('数据格式错误，请输入有效的JSON');
+        }
+    });
+
+    // 清空日志
+    clearLogsBtn.addEventListener('click', function() {
+        logContainer.innerHTML = '';
+    });
+
+    // 初始化示例日志
+    window.addEventListener('load', function() {
+        addLogEntry('页面加载完成，通信日志已就绪', null,'js-to-native');
+    });
+    callNativeBtn.addEventListener('click', function() {
+        //scanQrCode();
+        //geoCode();
+        getMapSnapshot();
+    });
+    function scanQrCode(){
+        const jsonString = "{\"action\":\"openQRScanner\",\"data\":\"abc123\",\"callbackId\":\"123456\"}";
+        let result;
+
+        try {
+            result = JSON.parse(jsonString);
+            window.AndroidBridge.jsBridge(jsonString)
+            console.log(result); // 输出解析后的对象
+        } catch (error) {
+            console.error("解析JSON时出错:", error);
+        }
+    };
+    function geoCode(){
+        //const jsonString = "{\"action\":\"geoCode\",\"callbackId\":\"123456\",\"data\":{\"latLngs\":[{\"lat\":22.799031,\"lng\":113.928318},{\"lat\":22.799031,\"lng\":113.928318},{\"lat\":22.799031,\"lng\":113.928318}]}}";
+        const jsonString = "{\"action\":\"geoCode\",\"callbackId\":\"123456\",\"data\":{\"latLngs\":[{\"lat\":34.0194,\"lng\":-118.4912},{\"lat\":34.0150,\"lng\":-118.4867}]}}";
+        let result;
+
+        try {
+            result = JSON.parse(jsonString);
+            window.AndroidBridge.jsBridge(jsonString)
+            console.log(result); // 输出解析后的对象
+        } catch (error) {
+            console.error("解析JSON时出错:", error);
+        }
+    }
+    function getMapSnapshot(){
+        const jsonString = "{\"action\":\"getMapSnapshot\",\"callbackId\":\"123456\"}";
+        let result;
+
+        try {
+            result = JSON.parse(jsonString);
+            window.AndroidBridge.jsBridge(jsonString)
+            console.log(result); // 输出解析后的对象
+        } catch (error) {
+            console.error("解析JSON时出错:", error);
+        }
+    }
+</script>
+</body>
+</html>

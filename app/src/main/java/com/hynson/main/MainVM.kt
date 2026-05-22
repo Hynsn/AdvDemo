@@ -113,7 +113,8 @@ class MainVM : BaseVM() {
             Cell("AlertDialog", action = actionList[0]),
             Cell("BottomSheetDialog", action = actionList[1]),
             Cell("Dialog", action = actionList[2]),
-            Cell("PopupMenu", action = actionList[3])
+            Cell("DialogFragment", action = actionList[3]),
+            Cell("PopupMenu", action = actionList[4])
         )
         contents.add(Content(Content.ITEM_TYPE, name = "Dialog Gather"))
         contents.add(Content(Content.SECTION_TYPE, cells = customCells))

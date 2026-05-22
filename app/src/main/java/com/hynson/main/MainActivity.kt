@@ -31,6 +31,7 @@ import com.fastdroid.utils.Device
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.hynson.R
 import com.hynson.databinding.ActivityMainBinding
+import com.hynson.dialog.InputDialogFragment
 import com.hynson.language.AppLanguage
 import com.hynson.language.LanguageAdapter
 import com.hynson.notification.DownloadNotification
@@ -88,6 +89,7 @@ class MainActivity : BaseMvvmActivity<ActivityMainBinding, MainVM>() {
             { v, p, cell -> showAlertDialog() },
             { v, p, cell -> showBottomSheetDialog() },
             { v, p, cell -> showBottomDialog() },
+            { v, p, cell -> showDialogFragment() },
             { v, p, cell -> showPopupMenu(v) })
         vm.notificationActionList = arrayListOf(
             { v, p, cell -> showDownloadNotification() }
@@ -212,6 +214,12 @@ class MainActivity : BaseMvvmActivity<ActivityMainBinding, MainVM>() {
         dialog.findViewById<View>(R.id.tv_take_photo).setOnClickListener { dialog.dismiss() }
         dialog.findViewById<View>(R.id.tv_take_pic).setOnClickListener { dialog.dismiss() }
         dialog.findViewById<View>(R.id.tv_cancel).setOnClickListener { dialog.dismiss() }
+    }
+
+    private fun showDialogFragment(){
+        InputDialogFragment
+            .newInstance("Tom", "Lee")
+            .show(supportFragmentManager, "InputDialogFragment")
     }
 
     private val downloadNotification by lazy {
